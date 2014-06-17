@@ -2,13 +2,13 @@
 
 dir
 49702
-https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/2.3.2/src/main/java/de/unibi/agai/clparser/exception
+https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/exception
 https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai
 
 
 
-2012-08-10T17:31:15.503686Z
-39923
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -26,13 +26,115 @@ mpohling
 
 f91b01f2-5627-0410-89d7-e7fb581d7fe3
 
+CLParserRuntimeException.java
+file
+
+
+
+
+2014-06-17T12:30:18.921332Z
+b13fb8ef4a4652385072277c6f59d304
+2013-07-18T19:31:20.472378Z
+47112
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+531
+
+ParsingException.java
+file
+
+
+
+
+2014-06-17T12:30:18.921332Z
+84e355c62d8f6aa07d8b97798be9a5e8
+2012-08-10T17:31:15.503686Z
+39923
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+486
+
+CommandInitializationException.java
+file
+
+
+
+
+2014-06-17T12:30:18.921332Z
+34fafa44b88a0fa3316523b30a48a4d7
+2013-07-18T19:31:20.472378Z
+47112
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+707
+
 BadArgumentException.java
 file
 
 
 
 
-2014-06-17T12:30:19.005332Z
+2014-06-17T12:30:18.921332Z
 f6df13159f1e27595522437b8770f7b7
 2012-08-10T17:31:15.503686Z
 39923
@@ -60,16 +162,50 @@ mpohling
 
 620
 
+ValidationException.java
+file
+
+
+
+
+2014-06-17T12:30:18.921332Z
+cc08f026b5d806b648f21cf5ae91df7b
+2013-07-18T19:31:20.472378Z
+47112
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+652
+
 CLParserException.java
 file
 
 
 
 
-2014-06-17T12:30:19.005332Z
-6bb95224b11af14256c80ee171e6a3bc
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.921332Z
+1408d5d947cb4f46321fd5de0a47a283
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -92,39 +228,5 @@ mpohling
 
 
 
-775
-
-ParsingException.java
-file
-
-
-
-
-2014-06-17T12:30:19.005332Z
-84e355c62d8f6aa07d8b97798be9a5e8
-2012-08-10T17:31:15.503686Z
-39923
-mpohling
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-486
+766
 

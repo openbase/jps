@@ -4,48 +4,141 @@
  */
 package de.unibi.agai.clparser;
 
-import de.unibi.agai.clparser.command.PrintHelpCommand;
+import de.unibi.agai.clparser.command.CLPrintHelp;
+import de.unibi.agai.clparser.exception.BadArgumentException;
+import de.unibi.agai.clparser.exception.CLParserException;
+import de.unibi.agai.clparser.exception.CLParserRuntimeException;
+import de.unibi.agai.clparser.exception.CommandInitializationException;
+import de.unibi.agai.clparser.exception.ParsingException;
+import de.unibi.agai.clparser.exception.ValidationException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author mpohling
- * 
- * TODOList:
- * TODO make command default values setable
- * TODO resolve command loading order to provide recusiv command value usage.
+ *
  */
 public class CLParser {
 
 	private static final Logger LOGGER = Logger.getLogger(CLParser.class);
+	private static Set<Class<? extends AbstractRunCommand>> registeredCommandClasses = new HashSet<Class<? extends AbstractRunCommand>>();
 	private static HashMap<Class<? extends AbstractRunCommand>, AbstractRunCommand> runCommands = new HashMap<Class<? extends AbstractRunCommand>, AbstractRunCommand>();
+	private static HashMap<Class<? extends AbstractRunCommand>, Object> overwrittenDefaultValueMap = new HashMap<Class<? extends AbstractRunCommand>, Object>();
 	private static String programName = "";
+	private static boolean argumentsAnalyzed = false;
 
+	static {
+		registerCommand(CLPrintHelp.class);
+	}
+
+	/**
+	 * Set the application name. The name is displayed in the help screen in the
+	 * command usage example.
+	 *
+	 * @param name the application name
+	 */
 	public static void setProgramName(String name) {
 		programName = name;
-		addCommand(new PrintHelpCommand());
-
 	}
 
-	//FIXME: Calls recusive getAttribute without check!!
+	/**
+	 * @deprecated use registerCommand(Class<? extends AbstractRunCommand>
+	 * commandClass) instead!
+	 * @param command
+	 */
 	public static void addCommand(AbstractRunCommand command) {
-		runCommands.put(command.getClass(), command);
+		registerCommand(command.getClass());
 	}
 
+	/**
+	 * Register the given command and overwrite the default value of the given
+	 * command.
+	 *
+	 * Do not use this method after calling the analyze method, otherwise
+	 * recursive command usage is not effected by the new default value!
+	 *
+	 * @param <V>
+	 * @param <C>
+	 * @param commandClass
+	 * @param defaultValue
+	 */
+	public static synchronized <V, C extends AbstractRunCommand<V>> void registerCommand(Class<C> commandClass, V defaultValue) {
+		if (argumentsAnalyzed) {
+			LOGGER.warn("Command modification after argumend analysis detected! Read CLParser doc for more information.");
+
+		}
+		registeredCommandClasses.add(commandClass);
+		overwrittenDefaultValueMap.put(commandClass, defaultValue);
+	}
+
+	/**
+	 * Overwrites the default value of the given command without displaying the
+	 * command in the help overview, For overwriting a regular command default
+	 * value, use the command registration method instead.
+	 *
+	 * Do not use this method after calling the analyze method, otherwise
+	 * recursive command usage is not effected by the new default value!
+	 *
+	 * @param <V>
+	 * @param <C>
+	 * @param commandClass
+	 * @param defaultValue
+	 */
+	public static synchronized <V, C extends AbstractRunCommand<V>> void overwriteDefaultValue(Class<C> commandClass, V defaultValue) {
+		if (argumentsAnalyzed) {
+			LOGGER.warn("Command modification after argumend analysis detected! Read CLParser doc for more information.");
+		}
+		overwrittenDefaultValueMap.put(commandClass, defaultValue);
+	}
+
+	/**
+	 * Register new command line command.
+	 *
+	 * @param commandClass
+	 */
+	public static void registerCommand(Class<? extends AbstractRunCommand> commandClass) {
+		if (argumentsAnalyzed) {
+			LOGGER.warn("Command modification after argumend analysis detected! Read CLParser doc for more information.");
+		}
+		registeredCommandClasses.add(commandClass);
+	}
+
+	/**
+	 * Analyze the input arguments and setup all registered CLCommands. If one
+	 * argument could not be handled or something else goes wrong this methods
+	 * calls System.exit(255);
+	 *
+	 * Make sure all desired commands are registered before calling this method.
+	 * Otherwise the commands will not be listed in the help screen.
+	 *
+	 * @param args
+	 */
 	public static void analyseAndExitOnError(String[] args) {
-		if (!CLParser.analyse(args)) {
+		try {
+			CLParser.analyse(args);
+		} catch (CLParserException ex) {
 			CLParser.printHelp();
+			printError(ex);
 			LOGGER.info("Exit...");
 			System.exit(255);
 		}
 	}
+	
+	private static void printError(Throwable cause) {
+		LOGGER.error(cause.getMessage());
+		Throwable innerCause = cause.getCause();
+		if(innerCause != null) {
+			printError(innerCause);
+		}
+	}
 
-	public static boolean analyse(String[] args) {
-
+	private static void printValueModification(String[] args) {
 		String argsString = "";
 		for (String arg : args) {
 			if (arg.startsWith("--")) {
@@ -60,17 +153,65 @@ public class CLParser {
 		argsString += "\n";
 
 		LOGGER.info("[command line value modification]" + argsString);
-		argsString += "\n";
+	}
+
+	private static void initCommands() throws CLParserException {
+		for (Class<? extends AbstractRunCommand> commandClass : registeredCommandClasses) {
+			if (!runCommands.containsKey(commandClass)) {
+				initCommand(commandClass);
+			}
+		}
+	}
+
+	private static void initCommand(Class<? extends AbstractRunCommand> commandClass) throws CLParserException {
+		try {
+			if (!registeredCommandClasses.contains(commandClass)) {
+				registeredCommandClasses.add(commandClass);
+			}
+			AbstractRunCommand newInstance = commandClass.newInstance();
+			if (overwrittenDefaultValueMap.containsKey(commandClass)) {
+				newInstance.overwriteDefaultValue(overwrittenDefaultValueMap.get(commandClass));
+			}
+			runCommands.put(commandClass, newInstance);
+
+		} catch (Exception ex) {
+			throw new CommandInitializationException("Could not init " + commandClass.getSimpleName(), ex);
+		}
+	}
+
+	/**
+	 * Analyze the input arguments and setup all registered CLCommands.
+	 *
+	 * Make sure all desired commands are registered before calling this method.
+	 * Otherwise the commands will not be listed in the help screen.
+	 *
+	 * @param args
+	 * @throws CLParserException
+	 */
+	public static void analyse(String[] args) throws CLParserException {
+		argumentsAnalyzed = true;
+		try {
+			printValueModification(args);
+			initCommands();
+			parseArguments(args);
+		} catch (Exception ex) {
+			throw new CLParserException("Coult not analyse arguments: " + ex.getMessage(), ex);
+		}
+
+	}
+
+	private static void parseArguments(String[] args) throws CLParserException {
 
 		AbstractRunCommand lastCommand = null;
 		for (String arg : args) {
 			arg = arg.trim();
-			if (arg.equals("--")) {
+			if (arg.equals("--")) { // handle final pattern
 				break;
 			}
-			if (arg.startsWith("-") || arg.startsWith("--")) {
+			if (arg.startsWith("-") || arg.startsWith("--")) { // handle command
 				boolean unknownCommand = true;
 				for (AbstractRunCommand command : runCommands.values()) {
+
 					if (command.match(arg)) {
 						lastCommand = command;
 						lastCommand.reset(); // In case of command overwriting during script recursion. Example: -p 5 -p 9 
@@ -79,14 +220,11 @@ public class CLParser {
 					}
 				}
 				if (unknownCommand) {
-
-					LOGGER.error("unknown parameter: " + arg);
-					return false;
+					throw new ParsingException("unknown parameter: " + arg);
 				}
 			} else {
 				if (lastCommand == null) {
-					LOGGER.error("= bad parameter: " + arg);
-					return false;
+					throw new ParsingException("= bad parameter: " + arg);
 				}
 				lastCommand.addArgument(arg);
 			}
@@ -94,30 +232,67 @@ public class CLParser {
 
 		for (AbstractRunCommand command : runCommands.values()) {
 			if (command.isIdentifiered()) {
-				if (!command.parseArguments()) {
-					return false;
+				try {
+					command.parseArguments();
+				} catch (Exception ex) {
+					throw new BadArgumentException("Could not parse " + command + "!", ex);
 				}
 			}
+		}
+
+		for (AbstractRunCommand command : runCommands.values()) {
+			command.updateValue();
+		}
+
+		for (AbstractRunCommand command : runCommands.values()) {
 			try {
 				command.validate();
 			} catch (Exception ex) {
-				LOGGER.error("Could not validate " + command + "! " + ex.getClass().getSimpleName() + ": " + ex.getMessage());
-				return false;
+				throw new ValidationException("Could not validate " + command + "!", ex);
 			}
 		}
-		return true;
 	}
 
-	public static synchronized <C extends AbstractRunCommand> C getAttribute(Class<C> commandClass) {
-		if (commandClass == null) {
-			throw new NullPointerException("Could not getAttribute for Nullpointer!");
+	/**
+	 * Returns the current value of the given command line class.
+	 *
+	 * If the command is never registered but the class is known in the
+	 * classpath, the method returns the default value. In any case of error an
+	 *
+	 * @param <C>
+	 * @param commandClass command class which defines the command.
+	 * @return the current value of the given command type.
+	 * @throws CLParserRuntimeException Method throws this Exception in any
+	 * error case. For more details of the error access the
+	 * innerCLParserException delivered by the CLParserRuntimeException.
+	 */
+	public static synchronized <C extends AbstractRunCommand> C getAttribute(Class<C> commandClass) throws CLParserRuntimeException {
+		try {
+			if (commandClass == null) {
+				throw new NullPointerException("Nullpointer for commandClass given!");
+			}
+
+			if (!runCommands.containsKey(commandClass)) {
+				initCommand(commandClass);
+			}
+			return (C) runCommands.get(commandClass);
+		} catch (CLParserException ex) {
+			throw new CLParserRuntimeException("Could not getAttribute for " + commandClass.getSimpleName() + "!", ex);
 		}
-		if (!runCommands.containsKey(commandClass)) {
-			throw new RuntimeException("Could not getAttribute for " + commandClass.getSimpleName() + ". Command not registrated!");
-		}
-		return (C) runCommands.get(commandClass);
 	}
 
+	/**
+	 * Returns the configurated application name.
+	 *
+	 * @return the application name.
+	 */
+	public static String getProgramName() {
+		return programName;
+	}
+
+	/**
+	 * Method prints the help screen.
+	 */
 	public static void printHelp() {
 		String help = "usage: " + programName;
 		String header = "";
@@ -139,9 +314,6 @@ public class CLParser {
 	}
 
 	private static String getDefault(AbstractRunCommand command) {
-		if (command.getArgumentIdentifiers().length == 0) {
-			return "[Default: disabled]";
-		}
 		return "[Default: " + command.getExample() + "]";
 	}
 
@@ -169,19 +341,4 @@ public class CLParser {
 		}
 		return text;
 	}
-//	private static String getDefault(AbstractRunCommand command) {
-//		String buffer = "[default: ";
-//			if(command.getArgumentIdentifiers().length == 0) {
-//				buffer += "disabled";
-//			} else {
-//				for(int i=0; i<command.getArgumentIdentifiers().length;i++) {
-//					buffer +=command.getArgumentIdentifiers()[i] + "=" + command.getDefaultValues()[i];
-//					if(i<command.getArgumentIdentifiers().length-1) {
-//						buffer += " ";
-//					}
-//				}
-//			}
-//			buffer += "]";
-//		return buffer;
-//	}
 }

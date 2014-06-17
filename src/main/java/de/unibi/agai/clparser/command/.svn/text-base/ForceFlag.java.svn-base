@@ -8,19 +8,24 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author
- * mpohling
+ * @author mpohling
  */
-public class ForceCommand extends AbstractFlag {
+public class ForceFlag extends AbstractCLBoolean {
 
 	private final Logger LOGGER = Logger.getLogger(getClass());
-	
 	public final static String[] COMMAND_IDENTIFIERS = {"-f", "--force"};
 
-	public ForceCommand() {
+	public ForceFlag() {
 		super(COMMAND_IDENTIFIERS);
 	}
-	
+
+	@Override
+	protected void validate() throws Exception {
+		if (getValue()) {
+			LOGGER.info("Force mode enabled!");
+		}
+	}
+
 	@Override
 	public String getDescription() {
 		return "Enables force mode.";

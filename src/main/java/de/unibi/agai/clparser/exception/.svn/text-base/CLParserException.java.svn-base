@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
  * @author
  * mpohling
  */
-public abstract class CLParserException extends Exception {
+public class CLParserException extends Exception {
 
 	private final Logger LOGGER = Logger.getLogger(getClass());
 

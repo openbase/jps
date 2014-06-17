@@ -10,40 +10,45 @@ import de.unibi.agai.tools.FileHandler.AutoMode;
 import de.unibi.agai.tools.FileHandler.ExistenceHandling;
 import de.unibi.agai.tools.FileHandler.FileType;
 import java.io.File;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author mpohling
  */
-public abstract class AbstractSetFile extends AbstractRunCommand<File> {
+public abstract class AbstractCLFile extends AbstractRunCommand<File> {
 
 	private final Logger LOGGER = Logger.getLogger(getClass());
-
 	private final AutoMode autoCreateMode;
 	private final ExistenceHandling existenceHandling;
 	private FileType type;
 
-	AbstractSetFile(String[] commandIdentifier, String[] argumentIdentifiers, File[] defaultValues, ExistenceHandling existenceHandling, AutoMode autoCreateMode, FileType type) {
-		this(commandIdentifier, argumentIdentifiers, defaultValues, existenceHandling, autoCreateMode);
+	AbstractCLFile(String[] commandIdentifier, String[] argumentIdentifiers, ExistenceHandling existenceHandling, AutoMode autoCreateMode, FileType type) {
+		this(commandIdentifier, argumentIdentifiers, existenceHandling, autoCreateMode);
 		this.type = type;
 	}
 
-	public AbstractSetFile(String[] commandIdentifier, String[] argumentIdentifiers, File[] defaultValues, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
-		super(commandIdentifier, argumentIdentifiers, defaultValues);
+	public AbstractCLFile(String[] commandIdentifier, String[] argumentIdentifiers, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
+		super(commandIdentifier, argumentIdentifiers);
 		this.existenceHandling = existenceHandling;
 		this.autoCreateMode = autoCreateMode;
 		this.type = FileType.File;
 	}
 
 	@Override
-	protected File parse(String arg) throws Exception {
-		return new File(arg);
+	protected File parse(List<String> arguments) throws Exception {
+		return new File(getOneArgumentResult());
 	}
 
 	@Override
 	public void validate() throws Exception {
-		FileHandler.handle(values[0], type, existenceHandling, autoCreateMode);
+		try {
+			FileHandler.handle(getValue(), type, existenceHandling, autoCreateMode);
+		} catch (Exception ex) {
+			LOGGER.info("Use parameter "+getCommandIdentifiers()[0]+" to adjust handling policy for "+getValue());
+			throw ex;
+		}
 	}
 
 	public AutoMode getAutoCreateMode() {
@@ -60,6 +65,6 @@ public abstract class AbstractSetFile extends AbstractRunCommand<File> {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName()+"[Type:" + type + "|ExistenceHandling:" + existenceHandling + "|AutoMode:" + autoCreateMode + "]";
+		return getClass().getSimpleName() + "[Type:" + type + "|ExistenceHandling:" + existenceHandling + "|AutoMode:" + autoCreateMode + "]";
 	}
 }

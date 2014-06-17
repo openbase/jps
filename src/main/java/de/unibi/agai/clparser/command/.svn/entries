@@ -2,13 +2,13 @@
 
 dir
 49702
-https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/2.3.2/src/main/java/de/unibi/agai/clparser/command
+https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command
 https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai
 
 
 
-2012-08-10T17:31:15.503686Z
-39923
+2013-08-15T13:24:20.447031Z
+47318
 mpohling
 
 
@@ -26,16 +26,16 @@ mpohling
 
 f91b01f2-5627-0410-89d7-e7fb581d7fe3
 
-AbstractRunCommandInteger.java
+AbstractCLInteger.java
 file
 
 
 
 
-2014-06-17T12:30:18.989332Z
-2d3e1126ee7a8907ae00bf01eb43b5b5
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+af0af93ef2e6a181b19d397937ecbe67
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -58,18 +58,18 @@ mpohling
 
 
 
-699
+767
 
-DebugModeFlag.java
+AbstractCLLong.java
 file
 
 
 
 
-2014-06-17T12:30:18.989332Z
-d4b32fd3b61fc7c9812a9895c2f3e754
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+90c1e107a640615354ef5eea86c0a3f3
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -92,7 +92,109 @@ mpohling
 
 
 
-545
+756
+
+AbstractCLEnum.java
+file
+
+
+
+
+2014-06-17T12:30:18.861332Z
+2ccc34e144491b5db8671cf8fd047eca
+2013-07-18T19:31:20.472378Z
+47112
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+803
+
+AbstractCLDirectory.java
+file
+
+
+
+
+2014-06-17T12:30:18.861332Z
+180af30ddf78c8d4a88b5bc699632028
+2013-07-18T19:31:20.472378Z
+47112
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+754
+
+AbstractCLFloat.java
+file
+
+
+
+
+2014-06-17T12:30:18.861332Z
+138dc9626d2d44fcf23e7657ee3af330
+2013-07-18T19:31:20.472378Z
+47112
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+762
 
 SetPrefix.java
 file
@@ -100,10 +202,10 @@ file
 
 
 
-2014-06-17T12:30:18.989332Z
-b5b88fe91bd96cb5faf720219e573e9b
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+eeff7462ba620dae3bbc2fbebea3b22e
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -126,18 +228,18 @@ mpohling
 
 
 
-1102
+1028
 
-AbstractFlag.java
+AbstractCLString.java
 file
 
 
 
 
-2014-06-17T12:30:18.989332Z
-34a630e31b1d093b31174c08f6cebb14
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+c009d61c8a2695074f0b74fb6091f214
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -160,18 +262,18 @@ mpohling
 
 
 
-712
+744
 
-AbstractRunCommandFloat.java
+AbstractCLDouble.java
 file
 
 
 
 
-2014-06-17T12:30:18.989332Z
-c62cea456fd4bb2769e8eda2722bd04d
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+c779af38f569897488ab64df010fff64
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -194,75 +296,7 @@ mpohling
 
 
 
-689
-
-ForceCommand.java
-file
-
-
-
-
-2014-06-17T12:30:18.989332Z
-286130805a8be0bf0532bd007d11094d
-2012-08-10T17:31:15.503686Z
-39923
-mpohling
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-535
-
-AbstractSetFile.java
-file
-
-
-
-
-2014-06-17T12:30:18.989332Z
-48a907d56f780ba56d3221ec1d5d4769
-2012-08-10T17:31:15.503686Z
-39923
-mpohling
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1976
+768
 
 ShowGUIFlag.java
 file
@@ -270,10 +304,10 @@ file
 
 
 
-2014-06-17T12:30:18.989332Z
-0a3b5434ec110c1376d91cfc1b9395d1
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+bd18904c4edb0a14d006859318ec432b
+2013-08-15T13:24:20.447031Z
+47318
 mpohling
 
 
@@ -296,18 +330,18 @@ mpohling
 
 
 
-749
+770
 
-SetMemoryCommand.java
+AbstractCLFile.java
 file
 
 
 
 
-2014-06-17T12:30:18.989332Z
-5acd1604cfaec5bbe7cb61002a8d9f68
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+c64ee5597e65f0b9a53f56d86e1cf529
+2013-08-15T13:24:20.447031Z
+47318
 mpohling
 
 
@@ -330,18 +364,18 @@ mpohling
 
 
 
-883
+2114
 
-AbstractSetDirectory.java
+AbstractCLBoolean.java
 file
 
 
 
 
-2014-06-17T12:30:18.989332Z
-f2f8266c9b5aa9b54550eec65a4311ed
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+56f1cebb6d7fdd921c2e7d924dd9af3d
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -364,18 +398,18 @@ mpohling
 
 
 
-815
+996
 
-PrintHelpCommand.java
+CLPrintHelp.java
 file
 
 
 
 
-2014-06-17T12:30:18.989332Z
-c075ff82d5e324a41bcb6ad7eba20b28
-2012-08-10T17:31:15.503686Z
-39923
+2014-06-17T12:30:18.861332Z
+f661ddef98558f80c52bb92acbd0558b
+2013-07-18T19:31:20.472378Z
+47112
 mpohling
 
 
@@ -398,5 +432,107 @@ mpohling
 
 
 
-1003
+1110
+
+DebugModeFlag.java
+file
+
+
+
+
+2014-06-17T12:30:18.861332Z
+2ff0b1d55dbcb52299c8850dc4e3b64a
+2013-08-15T13:24:20.447031Z
+47318
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+674
+
+CLMemory.java
+file
+
+
+
+
+2014-06-17T12:30:18.861332Z
+e00d96bf44b9657a8c83be0efccf5002
+2013-08-09T09:32:32.613983Z
+47272
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+726
+
+ForceFlag.java
+file
+
+
+
+
+2014-06-17T12:30:18.861332Z
+4f4c54da0c02659f92d71998095635ff
+2013-08-15T13:24:20.447031Z
+47318
+mpohling
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+652
 

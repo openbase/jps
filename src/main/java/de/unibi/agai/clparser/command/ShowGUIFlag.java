@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
  *
  * @author mpohling
  */
-public class ShowGUIFlag extends AbstractFlag {
+public class ShowGUIFlag extends AbstractCLBoolean {
 	
 	private final Logger LOGGER = Logger.getLogger(getClass());
 	public final static String[] COMMAND_IDENTIFIERS = {"-g", "--gui"};
@@ -22,8 +22,8 @@ public class ShowGUIFlag extends AbstractFlag {
 	
 	@Override
 	protected void validate() throws Exception {
-		if(!isIdentifiered()) {
-			LOGGER.info("GUI disabled. Set "+COMMAND_IDENTIFIERS[1]+" as program parameter to display the GUI");
+		if(!isIdentifiered() && !getValue()) {
+			LOGGER.info("GUI disabled. Set "+COMMAND_IDENTIFIERS[1]+" as program parameter to display the GUI.");
 		}
 	}
 	

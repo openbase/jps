@@ -4,7 +4,7 @@
 
     <groupId>de.unibi.agai</groupId>
     <artifactId>CLParser</artifactId>
-    <version>2.3.2</version>
+    <version>3.0.2</version>
     <packaging>jar</packaging>
 
     <name>CLParser</name>
@@ -32,8 +32,8 @@
     </build> 
     
     <scm>
-			<developerConnection>scm:svn:https://code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/2.3.2</developerConnection>
-        <url>https://code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/2.3.2</url>
+			<developerConnection>scm:svn:https://code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/3.0.2</developerConnection>
+        <url>https://code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/3.0.2</url>
     </scm>
     <licenses>
         <license>
@@ -90,5 +90,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

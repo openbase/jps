@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
  *
  * @author mpohling
  */
-public class DebugModeFlag extends AbstractFlag {
+public class DebugModeFlag extends AbstractCLBoolean {
 	
 
 	private final Logger LOGGER = Logger.getLogger(getClass());
@@ -20,6 +20,13 @@ public class DebugModeFlag extends AbstractFlag {
 
 	public DebugModeFlag() {
 		super(COMMAND_IDENTIFIERS);
+	}
+	
+	@Override
+	protected void validate() throws Exception {
+		if(getValue()) {
+			LOGGER.info("Debug mode enabled!");
+		}
 	}
 	
 	@Override

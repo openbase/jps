@@ -12,26 +12,25 @@ import org.apache.log4j.Logger;
  *
  * @author mpohling
  */
-public class SetPrefix extends AbstractSetDirectory {
+public class SetPrefix extends AbstractCLDirectory {
 
 	private static final Logger LOGGER = Logger.getLogger(SetPrefix.class);
 
 	public final static String[] COMMAND_IDENTIFIERS = {"-p", "--prefix"};
 	public final static String[] ARGUMENT_IDENTIFIERS = {"PREFIX"};
-	public final static File[] DEFAULT_VALUES = {loadGlobalPrefix()};
 
 	public SetPrefix() {
-		super(COMMAND_IDENTIFIERS, ARGUMENT_IDENTIFIERS, DEFAULT_VALUES, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
+		super(COMMAND_IDENTIFIERS, ARGUMENT_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
 	}
 	
-	public static File loadGlobalPrefix() {
+	@Override
+	protected File getCommandDefaultValue() {
 		String globalPrefix = System.getenv("prefix");
 		if(globalPrefix == null) {
 			LOGGER.warn("Could not load global prefix! Use execution folder instead.");
 			return new File(".");
 		}
 		return new File(globalPrefix);
-		
 	}
 
 	@Override
