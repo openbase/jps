@@ -9,7 +9,7 @@ import de.unibi.agai.clparser.AbstractRunCommand;
 import de.unibi.agai.clparser.CLParser;
 import de.unibi.agai.clparser.exception.BadArgumentException;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class CLPrintHelp extends AbstractRunCommand<Void> {
 
-	private final Logger LOGGER = Logger.getLogger(getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	public final static String[] COMMAND_IDENTIFIERS = {"-h", "--help"};
 	public final static String[] ARGUMENT_IDENTIFIERS = {};

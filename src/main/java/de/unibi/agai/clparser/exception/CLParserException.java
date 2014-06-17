@@ -4,7 +4,7 @@
  */
 package de.unibi.agai.clparser.exception;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class CLParserException extends Exception {
 
-	private final Logger LOGGER = Logger.getLogger(getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	public CLParserException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);

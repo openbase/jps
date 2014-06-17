@@ -9,7 +9,7 @@ import de.unibi.agai.clparser.exception.ParsingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractRunCommand<V> implements Comparable<AbstractRunCommand> { // <Value,ActionClass>
 
-	private final Logger LOGGER = Logger.getLogger(getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	private static final String NOT_IDENTIFIERED = "";
 
 	public enum ValueType {

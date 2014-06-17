@@ -1,95 +1,101 @@
 K 25
 svn:wc:ra_dav:version-url
-V 96
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command
-END
-AbstractCLInteger.java
-K 25
-svn:wc:ra_dav:version-url
-V 119
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLInteger.java
-END
-AbstractCLLong.java
-K 25
-svn:wc:ra_dav:version-url
-V 116
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLLong.java
-END
-AbstractCLEnum.java
-K 25
-svn:wc:ra_dav:version-url
-V 116
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLEnum.java
-END
-AbstractCLDirectory.java
-K 25
-svn:wc:ra_dav:version-url
-V 121
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLDirectory.java
-END
-AbstractCLFloat.java
-K 25
-svn:wc:ra_dav:version-url
-V 117
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLFloat.java
+V 91
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command
 END
 SetPrefix.java
 K 25
 svn:wc:ra_dav:version-url
-V 111
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/SetPrefix.java
+V 106
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/SetPrefix.java
 END
 AbstractCLString.java
 K 25
 svn:wc:ra_dav:version-url
-V 118
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLString.java
+V 113
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLString.java
 END
 AbstractCLDouble.java
 K 25
 svn:wc:ra_dav:version-url
-V 118
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLDouble.java
+V 113
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLDouble.java
 END
 ShowGUIFlag.java
 K 25
 svn:wc:ra_dav:version-url
-V 113
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/ShowGUIFlag.java
+V 108
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/ShowGUIFlag.java
 END
 AbstractCLFile.java
 K 25
 svn:wc:ra_dav:version-url
-V 116
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLFile.java
+V 111
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLFile.java
 END
 AbstractCLBoolean.java
 K 25
 svn:wc:ra_dav:version-url
-V 119
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/AbstractCLBoolean.java
+V 114
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLBoolean.java
 END
 CLPrintHelp.java
 K 25
 svn:wc:ra_dav:version-url
-V 113
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/CLPrintHelp.java
+V 108
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/CLPrintHelp.java
 END
 DebugModeFlag.java
 K 25
 svn:wc:ra_dav:version-url
-V 115
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/DebugModeFlag.java
+V 110
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/DebugModeFlag.java
 END
 CLMemory.java
 K 25
 svn:wc:ra_dav:version-url
-V 110
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/CLMemory.java
+V 105
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/CLMemory.java
 END
 ForceFlag.java
 K 25
 svn:wc:ra_dav:version-url
+V 106
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/ForceFlag.java
+END
+AbstractCLInteger.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLInteger.java
+END
+AbstractCLLong.java
+K 25
+svn:wc:ra_dav:version-url
 V 111
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/command/ForceFlag.java
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLLong.java
+END
+CLPropertyFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/CLPropertyFile.java
+END
+AbstractCLEnum.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLEnum.java
+END
+AbstractCLDirectory.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLDirectory.java
+END
+AbstractCLFloat.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/command/AbstractCLFloat.java
 END

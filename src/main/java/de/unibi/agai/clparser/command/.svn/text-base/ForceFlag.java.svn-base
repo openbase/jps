@@ -4,7 +4,7 @@
  */
 package de.unibi.agai.clparser.command;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  */
 public class ForceFlag extends AbstractCLBoolean {
 
-	private final Logger LOGGER = Logger.getLogger(getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	public final static String[] COMMAND_IDENTIFIERS = {"-f", "--force"};
 
 	public ForceFlag() {

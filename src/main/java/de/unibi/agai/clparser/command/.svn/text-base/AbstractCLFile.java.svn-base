@@ -5,13 +5,14 @@
 package de.unibi.agai.clparser.command;
 
 import de.unibi.agai.clparser.AbstractRunCommand;
+import de.unibi.agai.clparser.exception.ExceptionInfoTag;
 import de.unibi.agai.tools.FileHandler;
 import de.unibi.agai.tools.FileHandler.AutoMode;
 import de.unibi.agai.tools.FileHandler.ExistenceHandling;
 import de.unibi.agai.tools.FileHandler.FileType;
 import java.io.File;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -19,7 +20,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractCLFile extends AbstractRunCommand<File> {
 
-	private final Logger LOGGER = Logger.getLogger(getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	private final AutoMode autoCreateMode;
 	private final ExistenceHandling existenceHandling;
 	private FileType type;
@@ -46,8 +47,7 @@ public abstract class AbstractCLFile extends AbstractRunCommand<File> {
 		try {
 			FileHandler.handle(getValue(), type, existenceHandling, autoCreateMode);
 		} catch (Exception ex) {
-			LOGGER.info("Use parameter "+getCommandIdentifiers()[0]+" to adjust handling policy for "+getValue());
-			throw ex;
+			throw new ExceptionInfoTag("Use parameter "+getCommandIdentifiers()[0]+" to adjust handling policy for "+getValue(), ex);
 		}
 	}
 

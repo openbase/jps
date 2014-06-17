@@ -6,7 +6,7 @@ package de.unibi.agai.clparser.command;
 
 import de.unibi.agai.tools.FileHandler;
 import java.io.File;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  */
 public class SetPrefix extends AbstractCLDirectory {
 
-	private static final Logger LOGGER = Logger.getLogger(SetPrefix.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SetPrefix.class);
 
 	public final static String[] COMMAND_IDENTIFIERS = {"-p", "--prefix"};
 	public final static String[] ARGUMENT_IDENTIFIERS = {"PREFIX"};
@@ -27,8 +27,9 @@ public class SetPrefix extends AbstractCLDirectory {
 	protected File getCommandDefaultValue() {
 		String globalPrefix = System.getenv("prefix");
 		if(globalPrefix == null) {
-			LOGGER.warn("Could not load global prefix! Use execution folder instead.");
-			return new File(".");
+			File executionFolder = new File(".");
+			LOGGER.warn("Could not load global prefix! Use execution folder["+executionFolder.getAbsolutePath()+"] instead.");
+			return executionFolder;
 		}
 		return new File(globalPrefix);
 	}

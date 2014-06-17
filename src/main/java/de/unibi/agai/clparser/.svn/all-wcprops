@@ -1,17 +1,17 @@
 K 25
 svn:wc:ra_dav:version-url
-V 88
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser
+V 83
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser
 END
 AbstractRunCommand.java
 K 25
 svn:wc:ra_dav:version-url
-V 112
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/AbstractRunCommand.java
+V 107
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/AbstractRunCommand.java
 END
 CLParser.java
 K 25
 svn:wc:ra_dav:version-url
-V 102
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser/CLParser.java
+V 97
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser/CLParser.java
 END

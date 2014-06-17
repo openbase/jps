@@ -5,28 +5,46 @@
 package de.unibi.agai.clparser;
 
 import de.unibi.agai.clparser.command.CLPrintHelp;
+import de.unibi.agai.clparser.command.CLPropertyFile;
 import de.unibi.agai.clparser.exception.BadArgumentException;
 import de.unibi.agai.clparser.exception.CLParserException;
 import de.unibi.agai.clparser.exception.CLParserRuntimeException;
 import de.unibi.agai.clparser.exception.CommandInitializationException;
 import de.unibi.agai.clparser.exception.ParsingException;
 import de.unibi.agai.clparser.exception.ValidationException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
+ * Command Line Parser, this is the central lib controller used to initialize
+ * and manage all command line values.
  *
- * @author mpohling
+ * @author Divine <DivineThreepwood@gmail.com>
+ *
+ *
+ * CLParser Library can be used for managing the argument handling of a specific
+ * programm. The argument definition is realized by registrating classes which
+ * extends the AbstractRunCommand. Common argument types are supported by the
+ * basic commands (e.g. Integer, Boolean, String...).
+ *
+ * The library supports the generation of an command overview page. These is
+ * reachable with the preregistrated --help or -h command.
+ *
  *
  */
 public class CLParser {
 
-	private static final Logger LOGGER = Logger.getLogger(CLParser.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CLParser.class);
 	private static Set<Class<? extends AbstractRunCommand>> registeredCommandClasses = new HashSet<Class<? extends AbstractRunCommand>>();
 	private static HashMap<Class<? extends AbstractRunCommand>, AbstractRunCommand> runCommands = new HashMap<Class<? extends AbstractRunCommand>, AbstractRunCommand>();
 	private static HashMap<Class<? extends AbstractRunCommand>, Object> overwrittenDefaultValueMap = new HashMap<Class<? extends AbstractRunCommand>, Object>();
@@ -129,11 +147,11 @@ public class CLParser {
 			System.exit(255);
 		}
 	}
-	
+
 	private static void printError(Throwable cause) {
 		LOGGER.error(cause.getMessage());
 		Throwable innerCause = cause.getCause();
-		if(innerCause != null) {
+		if (innerCause != null) {
 			printError(innerCause);
 		}
 	}
@@ -340,5 +358,26 @@ public class CLParser {
 			}
 		}
 		return text;
+	}
+
+	public void saveProperties() {
+		Properties properties = new Properties();
+
+		for (AbstractRunCommand command : runCommands.values()) {
+
+			/* check if property is modifiered */
+			if (command.getCommandDefaultValue() != command.getValue()) {
+				properties.put(command.getClass().getName(), command.getValue());
+			}
+
+			try {
+				FileOutputStream fos = new FileOutputStream(CLParser.getAttribute(CLPropertyFile.class).getValue());
+				properties.store(fos, "MyCommands");
+			} catch (IOException ex) {
+				LOGGER.error("Could not save properties!", ex);
+			}
+
+		}
+
 	}
 }

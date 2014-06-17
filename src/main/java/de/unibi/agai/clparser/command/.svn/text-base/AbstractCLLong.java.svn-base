@@ -7,7 +7,7 @@ package de.unibi.agai.clparser.command;
 import de.unibi.agai.clparser.AbstractRunCommand;
 import de.unibi.agai.clparser.exception.BadArgumentException;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractCLLong extends AbstractRunCommand<Long> {
 
-	private final Logger LOGGER = Logger.getLogger(getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	public AbstractCLLong(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);

@@ -1,11 +1,11 @@
 K 25
 svn:wc:ra_dav:version-url
-V 88
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/test/java/de/unibi/agai/clparser
+V 83
+/scm/ai/!svn/ver/47272/software/CLParser/trunk/src/test/java/de/unibi/agai/clparser
 END
 CLParserTest.java
 K 25
 svn:wc:ra_dav:version-url
-V 106
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/test/java/de/unibi/agai/clparser/CLParserTest.java
+V 101
+/scm/ai/!svn/ver/47272/software/CLParser/trunk/src/test/java/de/unibi/agai/clparser/CLParserTest.java
 END

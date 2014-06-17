@@ -1,11 +1,11 @@
 K 25
 svn:wc:ra_dav:version-url
-V 85
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/tools
+V 80
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/tools
 END
 FileHandler.java
 K 25
 svn:wc:ra_dav:version-url
-V 102
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/tools/FileHandler.java
+V 97
+/scm/ai/!svn/ver/49201/software/CLParser/trunk/src/main/java/de/unibi/agai/tools/FileHandler.java
 END

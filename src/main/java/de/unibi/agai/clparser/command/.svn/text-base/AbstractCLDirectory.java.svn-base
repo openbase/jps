@@ -7,7 +7,7 @@ package de.unibi.agai.clparser.command;
 import de.unibi.agai.tools.FileHandler;
 import de.unibi.agai.tools.FileHandler.AutoMode;
 import de.unibi.agai.tools.FileHandler.ExistenceHandling;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractCLDirectory extends AbstractCLFile {
 
-	private final Logger LOGGER = Logger.getLogger(getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	
 	public AbstractCLDirectory(String[] commandIdentifier, String[] argumentIdentifiers, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
 		super(commandIdentifier, argumentIdentifiers, existenceHandling ,autoCreateMode, FileHandler.FileType.Directory);

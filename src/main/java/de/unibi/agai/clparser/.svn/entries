@@ -2,13 +2,13 @@
 
 dir
 49702
-https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/tags/3.0.2/src/main/java/de/unibi/agai/clparser
+https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai/software/CLParser/trunk/src/main/java/de/unibi/agai/clparser
 https://mpohling@code.ai.techfak.uni-bielefeld.de/scm/ai
 
 
 
-2013-08-15T13:24:20.447031Z
-47318
+2014-03-13T01:34:16.070674Z
+49201
 mpohling
 
 
@@ -32,10 +32,10 @@ file
 
 
 
-2014-06-17T12:30:18.925332Z
-4a2204ad2bcae6912d03258902ac2ef0
-2013-07-18T19:31:20.472378Z
-47112
+2014-06-17T12:30:18.257332Z
+7280a4e20897def053ed7de9207a0319
+2014-03-13T01:34:16.070674Z
+49201
 mpohling
 
 
@@ -58,7 +58,7 @@ mpohling
 
 
 
-5125
+5157
 
 CLParser.java
 file
@@ -66,10 +66,10 @@ file
 
 
 
-2014-06-17T12:30:18.925332Z
-d7c4a04219e3edd1abdd9cef01f608b6
-2013-07-18T19:31:20.472378Z
-47112
+2014-06-17T12:30:18.257332Z
+a41db9b03dd06bee0ee6e479e86e5e68
+2014-03-13T01:34:16.070674Z
+49201
 mpohling
 
 
@@ -92,7 +92,7 @@ mpohling
 
 
 
-10612
+11976
 
 command
 dir

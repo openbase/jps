@@ -1,11 +1,11 @@
 K 25
 svn:wc:ra_dav:version-url
-V 70
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/resources
+V 65
+/scm/ai/!svn/ver/40844/software/CLParser/trunk/src/main/resources
 END
 log4j.properties
 K 25
 svn:wc:ra_dav:version-url
-V 87
-/scm/ai/!svn/ver/47320/software/CLParser/tags/3.0.2/src/main/resources/log4j.properties
+V 82
+/scm/ai/!svn/ver/40844/software/CLParser/trunk/src/main/resources/log4j.properties
 END
