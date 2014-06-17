@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/scm/ai/!svn/ver/43780/software/CLParser/tags/2.3.2/src/main/java/de/unibi/agai/clparser/exception
+END
+CLParserException.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/scm/ai/!svn/ver/43780/software/CLParser/tags/2.3.2/src/main/java/de/unibi/agai/clparser/exception/CLParserException.java
+END
+ParsingException.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/scm/ai/!svn/ver/43780/software/CLParser/tags/2.3.2/src/main/java/de/unibi/agai/clparser/exception/ParsingException.java
+END
+BadArgumentException.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/scm/ai/!svn/ver/43780/software/CLParser/tags/2.3.2/src/main/java/de/unibi/agai/clparser/exception/BadArgumentException.java
+END
