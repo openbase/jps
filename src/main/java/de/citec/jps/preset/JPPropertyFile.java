@@ -7,7 +7,6 @@ package de.citec.jps.preset;
 import de.citec.jps.core.JPService;
 import de.citec.jps.tools.FileHandler;
 import java.io.File;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -15,7 +14,6 @@ import org.slf4j.Logger; import org.slf4j.LoggerFactory;
  */
 public class JPPropertyFile extends AbstractJPFile {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	public final static String[] COMMAND_IDENTIFIERS = {"--properties"};
 	public final static String[] ARGUMENT_IDENTIFIERS = {"FILE"};
 

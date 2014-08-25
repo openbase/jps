@@ -7,8 +7,6 @@ package de.citec.jps.preset;
 import de.citec.jps.core.AbstractJavaProperty;
 import de.citec.jps.exception.BadArgumentException;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	public final static String[] ARGUMENT_IDENTIFIERS = {"BOOLEAN"};
 
 	public AbstractJPBoolean(String[] COMMAND_IDENTIFIERS) {

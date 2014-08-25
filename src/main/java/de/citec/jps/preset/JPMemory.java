@@ -12,8 +12,6 @@ import org.slf4j.Logger; import org.slf4j.LoggerFactory;
  */
 public class JPMemory extends AbstractJPString {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
-	
 	public final static String[] COMMAND_IDENTIFIERS = {"-a", "--activememory"};
 	public final static String[] ARGUMENT_IDENTIFIERS = {"ActiveMemoryName"};
 

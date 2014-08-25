@@ -12,7 +12,6 @@ import de.citec.jps.tools.FileHandler.ExistenceHandling;
 import de.citec.jps.tools.FileHandler.FileType;
 import java.io.File;
 import java.util.List;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -20,7 +19,6 @@ import org.slf4j.Logger; import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	private final AutoMode autoCreateMode;
 	private final ExistenceHandling existenceHandling;
 	private FileType type;
