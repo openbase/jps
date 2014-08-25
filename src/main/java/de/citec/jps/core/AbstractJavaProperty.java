@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJavaProperty> { // <Value,ActionClass>
 
-	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	private static final String NOT_IDENTIFIERED = "";
 
 	public enum ValueType {
@@ -68,8 +68,8 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		try {
 			setValue(parse(Collections.unmodifiableList(arguments)), ValueType.CommandLine);
 		} catch (Exception ex) {
-			LOGGER.error("Could not parse argument[" + identifier + "]!");
-			LOGGER.info("Right syntax would be: " + getSyntax() + "\n");
+			logger.error("Could not parse argument[" + identifier + "]!");
+			logger.info("Right syntax would be: " + getSyntax() + "\n");
 			throw new ParsingException("Could not parse argument[" + identifier + "]!", ex);
 		}
 		parsed = true;
