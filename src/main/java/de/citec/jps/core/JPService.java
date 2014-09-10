@@ -346,22 +346,22 @@ public class JPService {
 		return text;
 	}
 
-	public void saveProperties() {
-		Properties properties = new Properties();
-
-		for (AbstractJavaProperty property : runProperties.values()) {
-
-			/* check if property is modifiered */
-			if (property.getPropertyDefaultValue() != property.getValue()) {
-				properties.put(property.getClass().getName(), property.getValue());
-			}
-
-			try {
-				FileOutputStream fos = new FileOutputStream(JPService.getAttribute(JPPropertyFile.class).getValue());
-				properties.store(fos, "MyProperties");
-			} catch (IOException ex) {
-				LOGGER.error("Could not save properties!", ex);
-			}
-		}
-	}
+//	public void saveProperties() {
+//		Properties properties = new Properties();
+//
+//		for (AbstractJavaProperty property : runProperties.values()) {
+//
+//			/* check if property is modifiered */
+//			if (property.getPropertyDefaultValue() != property.getValue()) {
+//				properties.put(property.getClass().getName(), property.getValue());
+//			}
+//
+//			try {
+//				FileOutputStream fos = new FileOutputStream(JPService.getAttribute(JPPropertyFile.class).getValue());
+//				properties.store(fos, "MyProperties");
+//			} catch (IOException ex) {
+//				LOGGER.error("Could not save properties!", ex);
+//			}
+//		}
+//	}
 }
