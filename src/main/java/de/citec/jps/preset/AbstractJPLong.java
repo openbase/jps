@@ -10,11 +10,16 @@ import java.util.List;
 
 /**
  *
- * @author
- * mpohling
+ * @author mpohling
  */
 public abstract class AbstractJPLong extends AbstractJavaProperty<Long> {
+    
+    public final static String[] ARGUMENT_IDENTIFIERS = {"LONG"};
 
+	public AbstractJPLong(String[] commandIdentifier) {
+        this(commandIdentifier, ARGUMENT_IDENTIFIERS);
+    }
+    
 	public AbstractJPLong(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}

@@ -13,7 +13,13 @@ import java.util.List;
  * @author mpohling
  */
 public abstract class AbstractJPInteger extends AbstractJavaProperty<Integer> {
+    
+    public final static String[] ARGUMENT_IDENTIFIERS = {"INTEGER"};
 
+	public AbstractJPInteger(String[] commandIdentifier) {
+        this(commandIdentifier, ARGUMENT_IDENTIFIERS);
+    }
+    
 	public AbstractJPInteger(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}

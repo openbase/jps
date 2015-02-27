@@ -40,7 +40,8 @@ import org.slf4j.LoggerFactory;
  */
 public class JPService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JPService.class);
+    
+	private static final Logger logger = LoggerFactory.getLogger(JPService.class);
 	private static Set<Class<? extends AbstractJavaProperty>> registeredPropertyClasses = new HashSet<Class<? extends AbstractJavaProperty>>();
 	private static HashMap<Class<? extends AbstractJavaProperty>, AbstractJavaProperty> runProperties = new HashMap<Class<? extends AbstractJavaProperty>, AbstractJavaProperty>();
 	private static HashMap<Class<? extends AbstractJavaProperty>, Object> overwrittenDefaultValueMap = new HashMap<Class<? extends AbstractJavaProperty>, Object>();
@@ -84,7 +85,7 @@ public class JPService {
 	 */
 	public static synchronized <V, C extends AbstractJavaProperty<V>> void registerProperty(Class<C> propertyClass, V defaultValue) {
 		if (argumentsAnalyzed) {
-			LOGGER.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
+			logger.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
 
 		}
 		registeredPropertyClasses.add(propertyClass);
@@ -106,7 +107,7 @@ public class JPService {
 	 */
 	public static synchronized <V, C extends AbstractJavaProperty<V>> void overwriteDefaultValue(Class<C> propertyClass, V defaultValue) {
 		if (argumentsAnalyzed) {
-			LOGGER.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
+			logger.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
 		}
 		overwrittenDefaultValueMap.put(propertyClass, defaultValue);
 	}
@@ -118,7 +119,7 @@ public class JPService {
 	 */
 	public static void registerProperty(Class<? extends AbstractJavaProperty> propertyClass) {
 		if (argumentsAnalyzed) {
-			LOGGER.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
+			logger.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
 		}
 		registeredPropertyClasses.add(propertyClass);
 	}
@@ -139,13 +140,13 @@ public class JPService {
 		} catch (JPServiceException ex) {
 			JPService.printHelp();
 			printError(ex);
-			LOGGER.info("Exit "+applicationName);
+			logger.info("Exit "+applicationName);
 			System.exit(255);
 		}
 	}
 
 	private static void printError(Throwable cause) {
-		LOGGER.error(cause.getMessage());
+		logger.error(cause.getMessage());
 		Throwable innerCause = cause.getCause();
 		if (innerCause != null) {
 			printError(innerCause);
@@ -166,7 +167,7 @@ public class JPService {
 		}
 		argsString += "\n";
 
-		LOGGER.info("[command line value modification]" + argsString);
+		logger.info("[command line value modification]" + argsString);
 	}
 
 	private static void initProperties() throws JPServiceException {
@@ -266,12 +267,12 @@ public class JPService {
 			}
 		}
 	}
-
-	/**
+    
+    /**
 	 * Returns the current value of the given property line class.
 	 *
 	 * If the property is never registered but the class is known in the
-	 * classpath, the method returns the default value. In any case of error an
+	 * classpath, the method returns the default value. 
 	 *
 	 * @param <C>
 	 * @param propertyClass property class which defines the property.
@@ -280,8 +281,8 @@ public class JPService {
 	 * error case. For more details of the error access the
 	 * innerCLParserException delivered by the CLParserRuntimeException.
 	 */
-	public static synchronized <C extends AbstractJavaProperty> C getAttribute(Class<C> propertyClass) throws JPServiceRuntimeException {
-		try {
+    public static synchronized <C extends AbstractJavaProperty> C getProperty(Class<C> propertyClass) throws JPServiceRuntimeException {
+        try {
 			if (propertyClass == null) {
 				throw new NullPointerException("Nullpointer for propertyClass given!");
 			}
@@ -293,6 +294,25 @@ public class JPService {
 		} catch (JPServiceException ex) {
 			throw new JPServiceRuntimeException("Could not getAttribute for " + propertyClass.getSimpleName() + "!", ex);
 		}
+    }
+
+	/**
+	 * Returns the current value of the given property line class.
+	 *
+	 * If the property is never registered but the class is known in the
+	 * classpath, the method returns the default value.
+	 *
+	 * @param <C>
+	 * @param propertyClass property class which defines the property.
+	 * @return the current value of the given property type.
+	 * @throws JPServiceRuntimeException Method throws this Exception in any
+	 * error case. For more details of the error access the
+	 * innerCLParserException delivered by the CLParserRuntimeException.
+     * @deprecated methode is deprecated and will be removed in next release. Please use getProperty instead!
+	 */
+    @Deprecated
+	public static synchronized <C extends AbstractJavaProperty> C getAttribute(Class<C> propertyClass) throws JPServiceRuntimeException {
+		return getProperty(propertyClass);
 	}
 
 	/**
@@ -314,7 +334,7 @@ public class JPService {
 			help += "\t\t" + newLineFormatter(property.getDescription(), "\n\t\t", 100);
 			help += "\n";
 		}
-		LOGGER.info(help);
+		logger.info(help);
 	}
 
 	private static String getDefault(AbstractJavaProperty property) {

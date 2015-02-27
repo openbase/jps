@@ -14,6 +14,11 @@ import java.util.List;
  */
 public abstract class AbstractJPString extends AbstractJavaProperty<String> {
 
+    public final static String[] ARGUMENT_IDENTIFIERS = {"STRING"};
+    
+	public AbstractJPString(String[] commandIdentifier) {
+        this(commandIdentifier, ARGUMENT_IDENTIFIERS);
+    }
 	public AbstractJPString(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}

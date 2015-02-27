@@ -15,6 +15,8 @@ import java.util.List;
  */
 public abstract class AbstractJPDouble extends AbstractJavaProperty<Double> {
 
+    public final static String[] ARGUMENT_IDENTIFIERS = {"DOUBLE"};
+    
 	public AbstractJPDouble(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}

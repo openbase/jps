@@ -14,6 +14,8 @@ import java.util.List;
  * @param <E> property related enum type.
  */
 public abstract class AbstractJPEnum<E extends Enum<E>> extends AbstractJavaProperty<E> {
+    
+    public final static String[] ARGUMENT_IDENTIFIERS = {"ENUM"};
 
 	public AbstractJPEnum(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);

@@ -13,7 +13,13 @@ import java.util.List;
  * @author mpohling
  */
 public abstract class AbstractJPFloat extends AbstractJavaProperty<Float> {
+    
+    private final static String[] ARGUMENT_IDENTIFIERS = {"FLOAT"};
 
+	public AbstractJPFloat(String[] commandIdentifier) {
+        this(commandIdentifier, ARGUMENT_IDENTIFIERS);
+    }
+    
 	public AbstractJPFloat(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}

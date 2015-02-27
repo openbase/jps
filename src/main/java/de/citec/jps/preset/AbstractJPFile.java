@@ -18,6 +18,8 @@ import java.util.List;
  * @author mpohling
  */
 public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
+    
+    private static final String[] ARGUMENT_IDENTIFIERS = {"FILE"};
 
 	private final AutoMode autoCreateMode;
 	private final ExistenceHandling existenceHandling;
@@ -28,6 +30,10 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 		this.type = type;
 	}
 
+	public AbstractJPFile(String[] commandIdentifier, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
+        this(commandIdentifier, ARGUMENT_IDENTIFIERS, existenceHandling, autoCreateMode);
+    }
+    
 	public AbstractJPFile(String[] commandIdentifier, String[] argumentIdentifiers, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
 		super(commandIdentifier, argumentIdentifiers);
 		this.existenceHandling = existenceHandling;
