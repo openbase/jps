@@ -19,6 +19,10 @@ public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
 	public AbstractJPBoolean(String[] COMMAND_IDENTIFIERS) {
 		super(COMMAND_IDENTIFIERS, ARGUMENT_IDENTIFIERS);
 	}
+    
+    public AbstractJPBoolean(String[] commandIdentifier, String[] argumentIdentifiers) {
+		super(commandIdentifier, argumentIdentifiers);
+	}
 
 	@Override
 	protected Boolean parse(List<String> arguments) throws BadArgumentException {
