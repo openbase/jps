@@ -15,13 +15,12 @@ import java.io.File;
 public class JPPropertyFile extends AbstractJPFile {
 
 	public final static String[] COMMAND_IDENTIFIERS = {"--properties"};
-	public final static String[] ARGUMENT_IDENTIFIERS = {"FILE"};
 
 	public static FileHandler.ExistenceHandling existenceHandling = FileHandler.ExistenceHandling.CanExist;
 	public static FileHandler.AutoMode autoMode = FileHandler.AutoMode.On;
 	
 	public JPPropertyFile() {
-		super(COMMAND_IDENTIFIERS, ARGUMENT_IDENTIFIERS, existenceHandling, autoMode);
+		super(COMMAND_IDENTIFIERS, existenceHandling, autoMode);
 	}
 
 	@Override

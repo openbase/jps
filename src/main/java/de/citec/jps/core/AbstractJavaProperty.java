@@ -34,10 +34,21 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 	private ValueType valueType, defaultValueType;
 	private boolean parsed;
 
+    /**
+     * 
+     * @param propertyIdentifier
+     * @param argumentIdentifiers
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
+     */
+    @Deprecated
 	public AbstractJavaProperty(String[] propertyIdentifier, String[] argumentIdentifiers) {
+        this(propertyIdentifier);
+    }
+    
+	public AbstractJavaProperty(String[] propertyIdentifier) {
 		this.propertyIdentifiers = propertyIdentifier;
-		this.argumentIdentifiers = argumentIdentifiers;
-		this.arguments = new ArrayList<String>(argumentIdentifiers.length);
+		this.argumentIdentifiers = generateArgumentIdentifiers();
+		this.arguments = new ArrayList<>(argumentIdentifiers.length);
 		this.identifier = NOT_IDENTIFIERED;
 		this.applicationDefaultValue = null;
 		this.defaultValueType = ValueType.PropertyDefault;
@@ -127,6 +138,8 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 				return getPropertyDefaultValue();
 		}
 	}
+    
+    protected abstract String[] generateArgumentIdentifiers();
 
 	protected String[] getPropertyIdentifiers() {
 		return propertyIdentifiers;

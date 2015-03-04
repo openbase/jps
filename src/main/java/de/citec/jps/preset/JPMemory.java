@@ -11,10 +11,9 @@ package de.citec.jps.preset;
 public class JPMemory extends AbstractJPString {
 
 	public final static String[] COMMAND_IDENTIFIERS = {"-a", "--activememory"};
-	public final static String[] ARGUMENT_IDENTIFIERS = {"ActiveMemoryName"};
 
 	public JPMemory() {
-		super(COMMAND_IDENTIFIERS, ARGUMENT_IDENTIFIERS);
+		super(COMMAND_IDENTIFIERS);
 	}
 	
 	@Override

@@ -16,13 +16,25 @@ public abstract class AbstractJPLong extends AbstractJavaProperty<Long> {
     
     public final static String[] ARGUMENT_IDENTIFIERS = {"LONG"};
 
-	public AbstractJPLong(String[] commandIdentifier) {
-        this(commandIdentifier, ARGUMENT_IDENTIFIERS);
-    }
-    
+    /**
+     *
+     * @param commandIdentifier
+     * @param argumentIdentifiers
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
+     */
+    @Deprecated
 	public AbstractJPLong(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}
+    
+	public AbstractJPLong(String[] commandIdentifier) {
+        super(commandIdentifier);
+    }
+    
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        return ARGUMENT_IDENTIFIERS;
+    }
 	
 	@Override
 	protected Long parse(List<String> arguments) throws BadArgumentException {

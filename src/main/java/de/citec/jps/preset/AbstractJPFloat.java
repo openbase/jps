@@ -16,13 +16,25 @@ public abstract class AbstractJPFloat extends AbstractJavaProperty<Float> {
     
     private final static String[] ARGUMENT_IDENTIFIERS = {"FLOAT"};
 
-	public AbstractJPFloat(String[] commandIdentifier) {
-        this(commandIdentifier, ARGUMENT_IDENTIFIERS);
-    }
-    
+    /**
+     *
+     * @param commandIdentifier
+     * @param argumentIdentifiers
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
+     */
+    @Deprecated
 	public AbstractJPFloat(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}
+    
+	public AbstractJPFloat(String[] commandIdentifier) {
+        super(commandIdentifier);
+    }
+
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        return ARGUMENT_IDENTIFIERS;
+    }
 	
 	@Override
 	protected Float parse(List<String> arguments) throws BadArgumentException {

@@ -16,12 +16,25 @@ public abstract class AbstractJPString extends AbstractJavaProperty<String> {
 
     public final static String[] ARGUMENT_IDENTIFIERS = {"STRING"};
     
-	public AbstractJPString(String[] commandIdentifier) {
-        this(commandIdentifier, ARGUMENT_IDENTIFIERS);
-    }
+    /**
+     *
+     * @param commandIdentifier
+     * @param argumentIdentifiers
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
+     */
+    @Deprecated
 	public AbstractJPString(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}
+    
+	public AbstractJPString(String[] commandIdentifier) {
+        super(commandIdentifier);
+    }
+    
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        return ARGUMENT_IDENTIFIERS;
+    }
 	
 	@Override
 	protected String parse(List<String> arguments) throws BadArgumentException {

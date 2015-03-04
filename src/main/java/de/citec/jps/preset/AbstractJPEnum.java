@@ -6,6 +6,7 @@ package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
 import de.citec.jps.exception.BadArgumentException;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
@@ -15,14 +16,26 @@ import java.util.List;
  */
 public abstract class AbstractJPEnum<E extends Enum<E>> extends AbstractJavaProperty<E> {
 
-    public final static String[] ARGUMENT_IDENTIFIERS = {"ENUM"};
-
-    public AbstractJPEnum(String[] commandIdentifier) {
-        super(commandIdentifier, ARGUMENT_IDENTIFIERS);
-    }
-    
+    /**
+     *
+     * @param commandIdentifier
+     * @param argumentIdentifiers
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument
+     * identifier modification.
+     */
+    @Deprecated
     public AbstractJPEnum(String[] commandIdentifier, String[] argumentIdentifiers) {
         super(commandIdentifier, argumentIdentifiers);
+    }
+
+    public AbstractJPEnum(String[] commandIdentifier) {
+        super(commandIdentifier);
+    }
+
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        String[] id = {detectTypeClass().getSimpleName().toUpperCase()};
+        return id;
     }
 
     @Override
@@ -32,5 +45,11 @@ public abstract class AbstractJPEnum<E extends Enum<E>> extends AbstractJavaProp
         } catch (IllegalArgumentException ex) {
             return Enum.valueOf(getDefaultValue().getDeclaringClass(), getOneArgumentResult().toUpperCase());
         }
+    }
+
+    public Class<E> detectTypeClass() {
+        return (Class<E>) ((ParameterizedType) getClass()
+                .getGenericSuperclass())
+                .getActualTypeArguments()[0];
     }
 }

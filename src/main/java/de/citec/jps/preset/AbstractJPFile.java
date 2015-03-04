@@ -25,12 +25,21 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 	private final ExistenceHandling existenceHandling;
 	private FileType type;
 
-	public AbstractJPFile(String[] commandIdentifier, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
-        this(commandIdentifier, ARGUMENT_IDENTIFIERS, existenceHandling, autoCreateMode);
+    /**
+     *
+     * @param commandIdentifier
+     * @param argumentIdentifiers
+     * @param existenceHandling
+     * @param autoCreateMode
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
+     */
+    @Deprecated
+	public AbstractJPFile(String[] commandIdentifier, String[] argumentIdentifiers, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
+        this(commandIdentifier, existenceHandling, autoCreateMode);
     }
     
-	public AbstractJPFile(String[] commandIdentifier, String[] argumentIdentifiers, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
-		super(commandIdentifier, argumentIdentifiers);
+	public AbstractJPFile(String[] commandIdentifier, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
+		super(commandIdentifier);
 		this.existenceHandling = existenceHandling;
 		this.autoCreateMode = autoCreateMode;
 		this.type = FileType.File;
@@ -40,6 +49,11 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 		this(commandIdentifier, argumentIdentifiers, existenceHandling, autoCreateMode);
 		this.type = type;
 	}
+    
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        return ARGUMENT_IDENTIFIERS;
+    }
 
 	@Override
 	protected File parse(List<String> arguments) throws Exception {

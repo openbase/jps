@@ -17,13 +17,25 @@ public abstract class AbstractJPDouble extends AbstractJavaProperty<Double> {
 
     public final static String[] ARGUMENT_IDENTIFIERS = {"DOUBLE"};
     
-	public AbstractJPDouble(String[] commandIdentifier) {
-        super(commandIdentifier, ARGUMENT_IDENTIFIERS);
-    }
-    
+    /**
+     *
+     * @param commandIdentifier
+     * @param argumentIdentifiers
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
+     */
+    @Deprecated
 	public AbstractJPDouble(String[] commandIdentifier, String[] argumentIdentifiers) {
 		super(commandIdentifier, argumentIdentifiers);
 	}
+    
+	public AbstractJPDouble(String[] commandIdentifier) {
+        super(commandIdentifier);
+    }
+    
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        return ARGUMENT_IDENTIFIERS;
+    }
 	
 	@Override
 	protected Double parse(List<String> arguments) throws BadArgumentException {

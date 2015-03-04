@@ -14,27 +14,39 @@ import java.util.List;
  */
 public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
 
-	public final static String[] ARGUMENT_IDENTIFIERS = {"BOOLEAN"};
+    public final static String[] ARGUMENT_IDENTIFIERS = {"BOOLEAN"};
 
-	public AbstractJPBoolean(String[] COMMAND_IDENTIFIERS) {
-		super(COMMAND_IDENTIFIERS, ARGUMENT_IDENTIFIERS);
-	}
-    
+    /**
+     *
+     * @param commandIdentifier
+     * @param argumentIdentifiers
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
+     */
+    @Deprecated
     public AbstractJPBoolean(String[] commandIdentifier, String[] argumentIdentifiers) {
-		super(commandIdentifier, argumentIdentifiers);
-	}
+        super(commandIdentifier, argumentIdentifiers);
+    }
 
-	@Override
-	protected Boolean parse(List<String> arguments) throws BadArgumentException {
-		checkArgumentCount(0, 1);
-		if (arguments.isEmpty()) { // parse as flag
-			return true;
-		}
-		return Boolean.parseBoolean(arguments.get(0)); // parse as argument
-	}
-	
-	@Override
-	protected Boolean getPropertyDefaultValue() {
-		return false;
-	}
+    public AbstractJPBoolean(String[] commandIdentifier) {
+        super(commandIdentifier);
+    }
+
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        return ARGUMENT_IDENTIFIERS;
+    }
+
+    @Override
+    protected Boolean parse(List<String> arguments) throws BadArgumentException {
+        checkArgumentCount(0, 1);
+        if (arguments.isEmpty()) { // parse as flag
+            return true;
+        }
+        return Boolean.parseBoolean(arguments.get(0)); // parse as argument
+    }
+
+    @Override
+    protected Boolean getPropertyDefaultValue() {
+        return false;
+    }
 }

@@ -14,10 +14,9 @@ import java.io.File;
 public class JPPrefix extends AbstractJPDirectory {
 
 	public final static String[] COMMAND_IDENTIFIERS = {"-p", "--prefix"};
-	public final static String[] ARGUMENT_IDENTIFIERS = {"PREFIX"};
 
 	public JPPrefix() {
-		super(COMMAND_IDENTIFIERS, ARGUMENT_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
+		super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
 	}
 	
 	@Override

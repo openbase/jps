@@ -14,22 +14,19 @@ import java.util.List;
  *
  * @author divine
  */
-public class JPHelp extends AbstractJavaProperty<Void> {
+public final class JPHelp extends AbstractJavaProperty<Void> {
 
 	public final static String[] COMMAND_IDENTIFIERS = {"-h", "--help"};
 	public final static String[] ARGUMENT_IDENTIFIERS = {};
 
 	public JPHelp() {
-		super(COMMAND_IDENTIFIERS, ARGUMENT_IDENTIFIERS);
+		super(COMMAND_IDENTIFIERS);
 	}
 
-	@Override
-	protected void validate() throws Exception {
-		if(isIdentifiered()) {
-			JPService.printHelp();
-			System.exit(0);
-		}
-	}
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        return ARGUMENT_IDENTIFIERS;
+    }
 	
 	@Override
 	protected Void getPropertyDefaultValue() {
@@ -41,6 +38,14 @@ public class JPHelp extends AbstractJavaProperty<Void> {
 		return null;
 	}
 
+	@Override
+	protected void validate() throws Exception {
+		if(isIdentifiered()) {
+			JPService.printHelp();
+			System.exit(0);
+		}
+	}
+    
 	@Override
 	public String getDescription() {
 		return "Print this help screen.";

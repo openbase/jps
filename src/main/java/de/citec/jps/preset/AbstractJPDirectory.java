@@ -16,10 +16,25 @@ public abstract class AbstractJPDirectory extends AbstractJPFile {
     
     private static final String[] ARGUMENT_IDENTIFIERS = {"DIRECTORY"};
 
-	public AbstractJPDirectory(String[] commandIdentifier, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
-        this(commandIdentifier, ARGUMENT_IDENTIFIERS, existenceHandling, autoCreateMode);
-    }
+    /**
+     *
+     * @param commandIdentifier
+     * @param argumentIdentifiers
+     * @param existenceHandling
+     * @param autoCreateMode
+     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
+     */
+    @Deprecated
 	public AbstractJPDirectory(String[] commandIdentifier, String[] argumentIdentifiers, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
 		super(commandIdentifier, argumentIdentifiers, existenceHandling ,autoCreateMode, FileHandler.FileType.Directory);
 	}
+    
+	public AbstractJPDirectory(String[] commandIdentifier, ExistenceHandling existenceHandling, AutoMode autoCreateMode) {
+        super(commandIdentifier, existenceHandling, autoCreateMode);
+    }
+    
+    @Override
+    protected String[] generateArgumentIdentifiers() {
+        return ARGUMENT_IDENTIFIERS;
+    }
 }
