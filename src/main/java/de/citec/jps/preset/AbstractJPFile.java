@@ -45,8 +45,8 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 		this.type = FileType.File;
 	}
     
-	AbstractJPFile(String[] commandIdentifier, String[] argumentIdentifiers, ExistenceHandling existenceHandling, AutoMode autoCreateMode, FileType type) {
-		this(commandIdentifier, argumentIdentifiers, existenceHandling, autoCreateMode);
+	AbstractJPFile(String[] commandIdentifier, ExistenceHandling existenceHandling, AutoMode autoCreateMode, FileType type) {
+		this(commandIdentifier, existenceHandling, autoCreateMode);
 		this.type = type;
 	}
     
