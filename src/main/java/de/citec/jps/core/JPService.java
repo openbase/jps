@@ -210,7 +210,7 @@ public class JPService {
 			initProperties();
 			parseArguments(args);
 		} catch (Exception ex) {
-			throw new JPServiceException("Coult not analyse arguments: " + ex.getMessage(), ex);
+			throw new JPServiceException("Could not analyse arguments: " + ex.getMessage(), ex);
 		}
 
 	}
