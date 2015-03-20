@@ -4,7 +4,7 @@
 
     <groupId>de.citec</groupId>
     <artifactId>jps</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>Java Properties Service</description>
     <name>JPS</name>
