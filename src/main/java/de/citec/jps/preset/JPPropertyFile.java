@@ -25,7 +25,7 @@ public class JPPropertyFile extends AbstractJPFile {
 
 	@Override
 	protected File getPropertyDefaultValue() {
-		return new File(System.getProperty("user.home")+System.getProperty("path.separator")+".clparser"+System.getProperty("path.separator")+JPService.getApplicationName()+".properties");
+		return new File(System.getProperty("user.home")+System.getProperty("path.separator")+".JPService"+System.getProperty("path.separator")+JPService.getApplicationName()+".properties");
 	}
 
 	@Override

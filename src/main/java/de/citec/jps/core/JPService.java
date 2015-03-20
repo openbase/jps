@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * Java Property Service, this is the central lib controller used to initialize
  * and manage all properties.
  *
- * @author Divine <DivineThreepwood@gmail.com>
+ * @author Divine Threepwood
  *
  *
  * JPS Library can be used for managing the properties of an application. 
@@ -85,7 +85,7 @@ public class JPService {
 	 */
 	public static synchronized <V, C extends AbstractJavaProperty<V>> void registerProperty(Class<C> propertyClass, V defaultValue) {
 		if (argumentsAnalyzed) {
-			logger.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
+			logger.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
 
 		}
 		registeredPropertyClasses.add(propertyClass);
@@ -107,7 +107,7 @@ public class JPService {
 	 */
 	public static synchronized <V, C extends AbstractJavaProperty<V>> void overwriteDefaultValue(Class<C> propertyClass, V defaultValue) {
 		if (argumentsAnalyzed) {
-			logger.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
+			logger.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
 		}
 		overwrittenDefaultValueMap.put(propertyClass, defaultValue);
 	}
@@ -119,7 +119,7 @@ public class JPService {
 	 */
 	public static void registerProperty(Class<? extends AbstractJavaProperty> propertyClass) {
 		if (argumentsAnalyzed) {
-			logger.warn("Property modification after argumend analysis detected! Read CLParser doc for more information.");
+			logger.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
 		}
 		registeredPropertyClasses.add(propertyClass);
 	}

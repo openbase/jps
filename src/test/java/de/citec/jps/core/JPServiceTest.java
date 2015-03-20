@@ -33,7 +33,7 @@ public class JPServiceTest {
 
     @Before
     public void setUp() {
-        JPService.setApplicationName("CLParser UnitTest");
+        JPService.setApplicationName("JPService UnitTest");
     }
 
     @After
@@ -41,7 +41,7 @@ public class JPServiceTest {
     }
 
     /**
-     * Test of registerCommand method, of class CLParser.
+     * Test of registerCommand method, of class JPService.
      */
     @Test
     public void testDebugFlag() throws JPServiceException {
@@ -53,7 +53,7 @@ public class JPServiceTest {
     }
 
     /**
-     * Test of registerCommand method, of class CLParser.
+     * Test of registerCommand method, of class JPService.
      */
     @Test
     public void testParsingError() {
@@ -67,7 +67,7 @@ public class JPServiceTest {
     }
 
     /**
-     * Test of registerCommand method, of class CLParser.
+     * Test of registerCommand method, of class JPService.
      */
     @Test
     public void testApplicationDefaultValue() throws JPServiceException {
