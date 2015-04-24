@@ -21,8 +21,8 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
     
     private static final String[] ARGUMENT_IDENTIFIERS = {"FILE"};
 
-	private final AutoMode autoCreateMode;
-	private final ExistenceHandling existenceHandling;
+	private AutoMode autoCreateMode;
+	private ExistenceHandling existenceHandling;
 	private FileType type;
 
     /**
@@ -76,6 +76,14 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 	public ExistenceHandling getExistenceHandling() {
 		return existenceHandling;
 	}
+
+    protected void setAutoCreateMode(final AutoMode autoCreateMode) {
+        this.autoCreateMode = autoCreateMode;
+    }
+
+    protected void setExistenceHandling(final ExistenceHandling existenceHandling) {
+        this.existenceHandling = existenceHandling;
+    }
 
 	public FileType getType() {
 		return type;
