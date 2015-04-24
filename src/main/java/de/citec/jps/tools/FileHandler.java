@@ -6,6 +6,7 @@ package de.citec.jps.tools;
 
 import java.io.File;
 import java.io.IOException;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 
 /**
@@ -104,9 +105,13 @@ public class FileHandler {
 						throw new IOException("Could not get delete permissions for " + file.getAbsolutePath());
 					}
 					LOGGER.info("Delete existing " + type.name() + " " + file.getAbsolutePath());
-					if (!file.delete()) {
-						throw new IOException("Could not delete " + file.getAbsolutePath());
-					}
+                    if(type ==FileType.File) {
+                        if (!file.delete()) {
+                            throw new IOException("Could not delete " + file.getAbsolutePath());
+                        }
+                    } else if(type == FileType.Directory) {
+                        FileUtils.deleteDirectory(file);
+                    }
 				}
 				create(file, type, creator);
 				break;
