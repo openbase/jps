@@ -6,6 +6,7 @@ package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
 import de.citec.jps.exception.ExceptionInfoTag;
+import de.citec.jps.exception.ValidationException;
 import de.citec.jps.tools.FileHandler;
 import de.citec.jps.tools.FileHandler.AutoMode;
 import de.citec.jps.tools.FileHandler.ExistenceHandling;
@@ -61,11 +62,11 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 	}
 
 	@Override
-	public void validate() throws Exception {
+	public void validate() throws ValidationException {
 		try {
 			FileHandler.handle(getValue(), type, existenceHandling, autoCreateMode);
 		} catch (Exception ex) {
-			throw new ExceptionInfoTag("Use parameter "+getPropertyIdentifiers()[0]+" to adjust handling policy for "+getValue(), ex);
+			throw new ValidationException("Could not validate "+getValue()+"!", ex);
 		}
 	}
 

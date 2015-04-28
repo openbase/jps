@@ -19,14 +19,7 @@ public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
     /**
      *
      * @param commandIdentifier
-     * @param argumentIdentifiers
-     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
      */
-    @Deprecated
-    public AbstractJPBoolean(String[] commandIdentifier, String[] argumentIdentifiers) {
-        super(commandIdentifier, argumentIdentifiers);
-    }
-
     public AbstractJPBoolean(String[] commandIdentifier) {
         super(commandIdentifier);
     }

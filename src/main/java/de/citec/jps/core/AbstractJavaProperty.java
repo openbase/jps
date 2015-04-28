@@ -6,6 +6,7 @@ package de.citec.jps.core;
 
 import de.citec.jps.exception.BadArgumentException;
 import de.citec.jps.exception.ParsingException;
+import de.citec.jps.exception.ValidationException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -122,12 +123,12 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		for (String arg : arguments) {
 			display = display + "|" + arg;
 		}
-		display = display + "]";
+		display += "]";
 		return display;
 	}
 
 	protected boolean isIdentifiered() {
-		return !identifier.equals("");
+		return !identifier.isEmpty();
 	}
 
 	public V getDefaultValue() {
@@ -201,9 +202,9 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 	/**
 	 * Can be overwritten for value validation. Method is called after parsing.
 	 *
-	 * @throws Exception
+	 * @throws ValidationException
 	 */
-	protected void validate() throws Exception {
+	protected void validate() throws ValidationException {
 	}
 
 	protected abstract V getPropertyDefaultValue();

@@ -7,6 +7,7 @@ package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
 import de.citec.jps.core.JPService;
+import de.citec.jps.exception.ValidationException;
 
 /**
  *
@@ -21,7 +22,7 @@ public class JPReadOnly extends AbstractJPBoolean {
     }
 
     @Override
-    public void validate() throws Exception {
+    public void validate() throws ValidationException {
         super.validate();
         if (!getValueType().equals((AbstractJavaProperty.ValueType.PropertyDefault))) {
             logger.warn(JPService.getApplicationName() + " started in read only mode!");
