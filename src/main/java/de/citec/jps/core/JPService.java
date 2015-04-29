@@ -14,6 +14,7 @@ import de.citec.jps.exception.ValidationException;
 import de.citec.jps.preset.JPTestMode;
 import de.citec.jps.preset.JPVerbose;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -188,7 +189,8 @@ public class JPService {
         loadedProperties.clear();
 
         try {
-            for (Class<? extends AbstractJavaProperty> propertyClass : registeredPropertyClasses) {
+            Collection<Class<? extends AbstractJavaProperty>> currentlyregisteredPropertyClasses = new HashSet(registeredPropertyClasses);
+            for (Class<? extends AbstractJavaProperty> propertyClass : currentlyregisteredPropertyClasses) {
                 if (!initializedProperties.containsKey(propertyClass)) {
                     initProperty(propertyClass);
                 }
