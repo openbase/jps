@@ -199,6 +199,10 @@ public class JPService {
             if (args != null) {
                 parseArguments(args);
             }
+            
+            //print help if required.
+            getProperty(JPHelp.class);
+            
         } catch (Exception ex) {
             throw new JPServiceException("Could not init registered properties!", ex);
         }
