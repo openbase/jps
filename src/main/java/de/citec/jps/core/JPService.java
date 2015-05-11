@@ -48,6 +48,10 @@ public class JPService {
     private static boolean argumentsAnalyzed = false;
 
     static {
+        initJPSDefaultProperties();
+    }
+    
+    private static void initJPSDefaultProperties() {
         registerProperty(JPHelp.class);
         registerProperty(JPVerbose.class);
     }
@@ -199,10 +203,10 @@ public class JPService {
             if (args != null) {
                 parseArguments(args);
             }
-            
+
             //print help if required.
             getProperty(JPHelp.class);
-            
+
         } catch (Exception ex) {
             throw new JPServiceException("Could not init registered properties!", ex);
         }
@@ -440,4 +444,11 @@ public class JPService {
 //			}
 //		}
 //	}
+    public static void reset() {
+        registeredPropertyClasses.clear();
+        initializedProperties.clear();
+        loadedProperties.clear();
+        overwrittenDefaultValueMap.clear();
+        initJPSDefaultProperties();
+    }
 }

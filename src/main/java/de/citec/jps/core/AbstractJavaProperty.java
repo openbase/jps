@@ -31,6 +31,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 	protected final String[] argumentIdentifiers;
 	protected final List<String> arguments;
 	private V value;
+	private V parsedValue;
 	private V applicationDefaultValue;
 	private ValueType valueType, defaultValueType;
 	private boolean parsed;
@@ -53,7 +54,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		this.identifier = NOT_IDENTIFIERED;
 		this.applicationDefaultValue = null;
 		this.defaultValueType = ValueType.PropertyDefault;
-		this.setValue(getPropertyDefaultValue(), ValueType.PropertyDefault);
+        this.valueType = ValueType.PropertyDefault;
 		this.reset();
 	}
 
@@ -78,7 +79,8 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 
 	protected void parseArguments() throws ParsingException {
 		try {
-			setValue(parse(Collections.unmodifiableList(arguments)), ValueType.CommandLine);
+            valueType = ValueType.CommandLine;
+			parsedValue = parse(Collections.unmodifiableList(arguments));
 		} catch (Exception ex) {
 			logger.error("Could not parse argument[" + identifier + "]!");
 			logger.info("Right syntax would be: " + getSyntax() + "\n");
@@ -91,22 +93,28 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		return value;
 	}
 
-	private void setValue(V value, ValueType valueType) {
+	protected void setValue(V value, ValueType valueType) {
 		this.value = value;
 		this.valueType = valueType;
 	}
 
 	protected void updateValue() {
+        V newValue;
 		switch (valueType) {
 			case PropertyDefault:
-				this.value = getPropertyDefaultValue();
+				newValue = getPropertyDefaultValue();
 				break;
 			case ApplicationDefault:
-				this.value = applicationDefaultValue;
+                newValue = applicationDefaultValue;
 				break;
 			case CommandLine:
+                newValue = parsedValue;
 				break;
+            default:
+                throw new AssertionError(valueType + " is an unknown state!");
+                       
 		}
+        setValue(newValue, valueType);
 	}
 
 	protected void overwriteDefaultValue(V defaultValue) {
