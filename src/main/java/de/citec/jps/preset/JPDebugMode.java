@@ -13,7 +13,7 @@ import de.citec.jps.exception.ValidationException;
  */
 public class JPDebugMode extends AbstractJPBoolean {
 	
-	public final static String[] COMMAND_IDENTIFIERS = {"-d", "--DebugMode"};
+	public final static String[] COMMAND_IDENTIFIERS = {"-d", "--debug"};
 
 	public JPDebugMode() {
 		super(COMMAND_IDENTIFIERS);

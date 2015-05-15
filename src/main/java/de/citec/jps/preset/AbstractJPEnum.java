@@ -16,18 +16,6 @@ import java.util.List;
  */
 public abstract class AbstractJPEnum<E extends Enum<E>> extends AbstractJavaProperty<E> {
 
-    /**
-     *
-     * @param commandIdentifier
-     * @param argumentIdentifiers
-     * @deprecated overwrite generateArgumentIdentifiers(); for default argument
-     * identifier modification.
-     */
-    @Deprecated
-    public AbstractJPEnum(String[] commandIdentifier, String[] argumentIdentifiers) {
-        super(commandIdentifier, argumentIdentifiers);
-    }
-
     public AbstractJPEnum(String[] commandIdentifier) {
         super(commandIdentifier);
     }

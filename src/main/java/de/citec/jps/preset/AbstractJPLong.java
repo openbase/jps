@@ -15,17 +15,6 @@ import java.util.List;
 public abstract class AbstractJPLong extends AbstractJavaProperty<Long> {
     
     public final static String[] ARGUMENT_IDENTIFIERS = {"LONG"};
-
-    /**
-     *
-     * @param commandIdentifier
-     * @param argumentIdentifiers
-     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
-     */
-    @Deprecated
-	public AbstractJPLong(String[] commandIdentifier, String[] argumentIdentifiers) {
-		super(commandIdentifier, argumentIdentifiers);
-	}
     
 	public AbstractJPLong(String[] commandIdentifier) {
         super(commandIdentifier);

@@ -15,17 +15,6 @@ import java.util.List;
 public abstract class AbstractJPFloat extends AbstractJavaProperty<Float> {
     
     private final static String[] ARGUMENT_IDENTIFIERS = {"FLOAT"};
-
-    /**
-     *
-     * @param commandIdentifier
-     * @param argumentIdentifiers
-     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
-     */
-    @Deprecated
-	public AbstractJPFloat(String[] commandIdentifier, String[] argumentIdentifiers) {
-		super(commandIdentifier, argumentIdentifiers);
-	}
     
 	public AbstractJPFloat(String[] commandIdentifier) {
         super(commandIdentifier);

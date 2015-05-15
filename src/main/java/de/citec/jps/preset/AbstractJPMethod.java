@@ -17,7 +17,7 @@ import java.util.List;
  */
 public abstract class AbstractJPMethod<C> extends AbstractJavaProperty<Method> {
 
-    public final static String[] ARGUMENT_IDENTIFIERS = {"METHODE"};
+    public final static String[] ARGUMENT_IDENTIFIERS = {"METHOD"};
     private final Class<? extends AbstractJPClass<C>> jpClass;
 
     public AbstractJPMethod(String[] commandIdentifier, Class<? extends AbstractJPClass<C>> jpClass) {

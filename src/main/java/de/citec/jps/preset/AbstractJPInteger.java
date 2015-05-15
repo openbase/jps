@@ -15,17 +15,6 @@ import java.util.List;
 public abstract class AbstractJPInteger extends AbstractJavaProperty<Integer> {
     
     public final static String[] ARGUMENT_IDENTIFIERS = {"INTEGER"};
-
-    /**
-     *
-     * @param commandIdentifier
-     * @param argumentIdentifiers
-     * @deprecated overwrite generateArgumentIdentifiers(); for default argument identifier modification.
-     */
-    @Deprecated
-	public AbstractJPInteger(String[] commandIdentifier, String[] argumentIdentifiers) {
-		super(commandIdentifier, argumentIdentifiers);
-	}
     
 	public AbstractJPInteger(String[] commandIdentifier) {
         super(commandIdentifier);
