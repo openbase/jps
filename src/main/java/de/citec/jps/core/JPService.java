@@ -437,7 +437,7 @@ public class JPService {
 //			}
 //
 //			try {
-//				FileOutputStream fos = new FileOutputStream(JPService.getAttribute(JPPropertyFile.class).getValue());
+//				FileOutputStream fos = new FileOutputStream(JPService.getProperty(JPPropertyFile.class).getValue());
 //				properties.store(fos, "MyProperties");
 //			} catch (IOException ex) {
 //				LOGGER.error("Could not save properties!", ex);
