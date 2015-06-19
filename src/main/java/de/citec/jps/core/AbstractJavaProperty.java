@@ -147,7 +147,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		return argumentIdentifiers;
 	}
 
-	public String getExample() {
+	public String getDefaultExample() {
 		return propertyIdentifiers[0] + " " + getDefaultValue();
 	}
 

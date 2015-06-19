@@ -50,7 +50,7 @@ public class JPService {
     static {
         initJPSDefaultProperties();
     }
-    
+
     private static void initJPSDefaultProperties() {
         registerProperty(JPHelp.class);
         registerProperty(JPVerbose.class);
@@ -379,6 +379,7 @@ public class JPService {
      * Method prints the help screen.
      */
     public static void printHelp() {
+
         String help = "usage: " + applicationName;
         String header = "";
         List<AbstractJavaProperty> propertyList = new ArrayList(initializedProperties.values());
@@ -388,17 +389,20 @@ public class JPService {
         }
         help += newLineFormatter(header, "\n\t", 100);;
         help += "\nwhere:\n";
-        for (AbstractJavaProperty property : propertyList) {
-            help += "\t" + property.getSyntax() + " " + getDefault(property);
+
+        AbstractJavaProperty loadedProperty;
+        for (Class<? extends AbstractJavaProperty> propertyClass : registeredPropertyClasses) {
+            loadedProperty = getProperty(propertyClass);
+            help += "\t" + loadedProperty.getSyntax() + " " + getDefault(loadedProperty);
             help += "\n ";
-            help += "\t\t" + newLineFormatter(property.getDescription(), "\n\t\t", 100);
+            help += "\t\t" + newLineFormatter(loadedProperty.getDescription(), "\n\t\t", 100);
             help += "\n";
         }
         logger.info(help);
     }
 
     private static String getDefault(AbstractJavaProperty property) {
-        return "[Default: " + property.getExample() + "]";
+        return "[Default: " + property.getDefaultExample() + "]";
     }
 
     public static String newLineFormatter(String text, String newLineOperator, int maxChars) {
