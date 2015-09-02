@@ -5,7 +5,7 @@
 package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
-import de.citec.jps.exception.BadArgumentException;
+import de.citec.jps.exception.JPBadArgumentException;
 import java.util.List;
 
 /**
@@ -30,7 +30,7 @@ public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
     }
 
     @Override
-    protected Boolean parse(List<String> arguments) throws BadArgumentException {
+    protected Boolean parse(List<String> arguments) throws JPBadArgumentException {
         checkArgumentCount(0, 1);
         if (arguments.isEmpty()) { // parse as flag
             return true;

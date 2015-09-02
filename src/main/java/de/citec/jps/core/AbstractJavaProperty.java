@@ -4,9 +4,9 @@
  */
 package de.citec.jps.core;
 
-import de.citec.jps.exception.BadArgumentException;
-import de.citec.jps.exception.ParsingException;
-import de.citec.jps.exception.ValidationException;
+import de.citec.jps.exception.JPBadArgumentException;
+import de.citec.jps.exception.JPParsingException;
+import de.citec.jps.exception.JPValidationException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,14 +66,14 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		arguments.add(arg);
 	}
 
-	protected void parseArguments() throws ParsingException {
+	protected void parseArguments() throws JPParsingException {
 		try {
             valueType = ValueType.CommandLine;
 			parsedValue = parse(Collections.unmodifiableList(arguments));
 		} catch (Exception ex) {
 			logger.error("Could not parse argument[" + identifier + "]!");
 			logger.info("Right syntax would be: " + getSyntax() + "\n");
-			throw new ParsingException("Could not parse argument[" + identifier + "]!", ex);
+			throw new JPParsingException("Could not parse argument[" + identifier + "]!", ex);
 		}
 		parsed = true;
 	}
@@ -174,7 +174,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		return propertyIdentifiers[0].compareTo(o.propertyIdentifiers[0]);
 	}
 
-	protected String getOneArgumentResult() throws BadArgumentException {
+	protected String getOneArgumentResult() throws JPBadArgumentException {
 		checkArgumentCount(1);
 		return arguments.get(0);
 	}
@@ -183,25 +183,37 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		return valueType;
 	}
 
-	protected void checkArgumentCount(int size) throws BadArgumentException {
+	protected void checkArgumentCount(int size) throws JPBadArgumentException {
 		checkArgumentCount(size, size);
 	}
+    
+    protected void checkArgumentCountMin(int min) throws JPBadArgumentException {
+		if (arguments.size() < min) {
+			throw new JPBadArgumentException("Missing property arguments!");
+		}
+    }
+    
+    protected void checkArgumentCountMax(int max) throws JPBadArgumentException {
+		if (arguments.size() > max) {
+			throw new JPBadArgumentException("To many property arguments!");
+		}
+    }
 
-	protected void checkArgumentCount(int min, int max) throws BadArgumentException {
+	protected void checkArgumentCount(int min, int max) throws JPBadArgumentException {
 		int size = arguments.size();
 		if (size < min) {
-			throw new BadArgumentException("Missing property arguments!");
+			throw new JPBadArgumentException("Missing property arguments!");
 		} else if (size > max) {
-			throw new BadArgumentException("To many property arguments!");
+			throw new JPBadArgumentException("To many property arguments!");
 		}
 	}
 
 	/**
 	 * Can be overwritten for value validation. Method is called after parsing.
 	 *
-	 * @throws ValidationException
+	 * @throws JPValidationException
 	 */
-	protected void validate() throws ValidationException {
+	protected void validate() throws JPValidationException {
 	}
 
 	protected abstract V getPropertyDefaultValue();

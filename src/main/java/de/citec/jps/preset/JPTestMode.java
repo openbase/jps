@@ -5,7 +5,7 @@
  */
 package de.citec.jps.preset;
 
-import de.citec.jps.exception.ValidationException;
+import de.citec.jps.exception.JPValidationException;
 
 /**
  *
@@ -20,7 +20,7 @@ public class JPTestMode extends AbstractJPBoolean {
 	}
 	
 	@Override
-	protected void validate() throws ValidationException {
+	protected void validate() throws JPValidationException {
 		if(getValue()) {
 			logger.info("Test mode enabled!");
 		}
@@ -28,6 +28,6 @@ public class JPTestMode extends AbstractJPBoolean {
 	
 	@Override
 	public String getDescription() {
-		return "Enables the test mode used by junit tests.";
+		return "Enables the test mode which is used by junit tests.";
 	}
 }

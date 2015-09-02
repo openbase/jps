@@ -6,7 +6,7 @@
 package de.citec.jps.preset;
 
 import de.citec.jps.core.JPService;
-import de.citec.jps.exception.ValidationException;
+import de.citec.jps.exception.JPValidationException;
 
 /**
  *
@@ -14,16 +14,16 @@ import de.citec.jps.exception.ValidationException;
  */
 public class JPShowGUI extends AbstractJPBoolean {
 	
-	public final static String[] COMMAND_IDENTIFIERS = {"-g", "--gui"};
+	public final static String[] COMMAND_IDENTIFIERS = {"--gui"};
 
 	public JPShowGUI() {
 		super(COMMAND_IDENTIFIERS);
 	}
 	
 	@Override
-	protected void validate() throws ValidationException {
+	protected void validate() throws JPValidationException {
 		if(!isIdentifiered() && !getValue()) {
-			logger.info("GUI is disabled! Set "+COMMAND_IDENTIFIERS[1]+" property to display the GUI.");
+			logger.info("GUI is disabled! Set "+COMMAND_IDENTIFIERS[0]+" property to display the GUI.");
 		}
 	}
 

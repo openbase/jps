@@ -5,12 +5,12 @@
 package de.citec.jps.core;
 
 import de.citec.jps.preset.JPHelp;
-import de.citec.jps.exception.BadArgumentException;
+import de.citec.jps.exception.JPBadArgumentException;
 import de.citec.jps.exception.JPServiceException;
 import de.citec.jps.exception.JPServiceRuntimeException;
-import de.citec.jps.exception.PropertyInitializationException;
-import de.citec.jps.exception.ParsingException;
-import de.citec.jps.exception.ValidationException;
+import de.citec.jps.exception.JPInitializationException;
+import de.citec.jps.exception.JPParsingException;
+import de.citec.jps.exception.JPValidationException;
 import de.citec.jps.preset.JPTestMode;
 import de.citec.jps.preset.JPVerbose;
 import java.util.ArrayList;
@@ -228,7 +228,7 @@ public class JPService {
             initializedProperties.put(propertyClass, newInstance);
             return newInstance;
         } catch (Exception ex) {
-            throw new PropertyInitializationException("Could not init " + propertyClass.getSimpleName(), ex);
+            throw new JPInitializationException("Could not init " + propertyClass.getSimpleName(), ex);
         }
     }
 
@@ -271,7 +271,7 @@ public class JPService {
             registerProperty(JPVerbose.class, true);
             registerProperty(JPTestMode.class, true);
             initRegisteredProperties();
-        } catch (ValidationException ex) {
+        } catch (JPValidationException ex) {
             throw new JPServiceException("Could not setup JPService for UnitTestMode!", ex);
         }
     }
@@ -290,7 +290,7 @@ public class JPService {
             }
             property.updateValue();
             property.validate();
-        } catch (BadArgumentException | ValidationException ex) {
+        } catch (JPBadArgumentException | JPValidationException ex) {
             throw new JPServiceException("Could not load " + property + "!", ex);
         }
 
@@ -318,11 +318,11 @@ public class JPService {
                         }
                     }
                     if (unknownProperty) {
-                        throw new ParsingException("unknown property: " + arg);
+                        throw new JPParsingException("unknown property: " + arg);
                     }
                 } else {
                     if (lastProperty == null) {
-                        throw new ParsingException("= bad property: " + arg);
+                        throw new JPParsingException("= bad property: " + arg);
                     }
                     lastProperty.addArgument(arg);
                 }
@@ -332,12 +332,12 @@ public class JPService {
         }
     }
 
-    private static void parseProperty(final AbstractJavaProperty property) throws BadArgumentException {
+    private static void parseProperty(final AbstractJavaProperty property) throws JPBadArgumentException {
         if (property.isIdentifiered()) {
             try {
                 property.parseArguments();
             } catch (Exception ex) {
-                throw new BadArgumentException("Could not parse " + property + "!", ex);
+                throw new JPBadArgumentException("Could not parse " + property + "!", ex);
             }
         }
     }

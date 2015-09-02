@@ -5,7 +5,7 @@
 package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
-import de.citec.jps.exception.BadArgumentException;
+import de.citec.jps.exception.JPBadArgumentException;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ public abstract class AbstractJPInteger extends AbstractJavaProperty<Integer> {
     }
 	
 	@Override
-	protected Integer parse(List<String> arguments) throws BadArgumentException {
+	protected Integer parse(List<String> arguments) throws JPBadArgumentException {
 		return Integer.parseInt(getOneArgumentResult());
 	}
 }

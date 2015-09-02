@@ -7,8 +7,8 @@ package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
 import de.citec.jps.core.JPService;
-import de.citec.jps.exception.BadArgumentException;
-import de.citec.jps.exception.ValidationException;
+import de.citec.jps.exception.JPBadArgumentException;
+import de.citec.jps.exception.JPValidationException;
 import java.util.List;
 
 /**
@@ -35,12 +35,12 @@ public final class JPHelp extends AbstractJavaProperty<Void> {
 	}
 
 	@Override
-	protected Void parse(List<String> arguments) throws BadArgumentException {
+	protected Void parse(List<String> arguments) throws JPBadArgumentException {
 		return null;
 	}
 
 	@Override
-	protected void validate() throws ValidationException {
+	protected void validate() throws JPValidationException {
 		if(isIdentifiered()) {
 			JPService.printHelp();
 			System.exit(0);
