@@ -5,7 +5,7 @@
 package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
-import de.citec.jps.exception.BadArgumentException;
+import de.citec.jps.exception.JPBadArgumentException;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ public abstract class AbstractJPFloat extends AbstractJavaProperty<Float> {
     }
 	
 	@Override
-	protected Float parse(List<String> arguments) throws BadArgumentException {
+	protected Float parse(List<String> arguments) throws JPBadArgumentException {
 		return Float.parseFloat(getOneArgumentResult());
 	}
 }

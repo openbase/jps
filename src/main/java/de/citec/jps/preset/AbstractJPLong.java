@@ -5,7 +5,7 @@
 package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
-import de.citec.jps.exception.BadArgumentException;
+import de.citec.jps.exception.JPBadArgumentException;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ public abstract class AbstractJPLong extends AbstractJavaProperty<Long> {
     }
 	
 	@Override
-	protected Long parse(List<String> arguments) throws BadArgumentException {
+	protected Long parse(List<String> arguments) throws JPBadArgumentException {
 		return Long.parseLong(getOneArgumentResult());
 	}
 }

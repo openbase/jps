@@ -5,7 +5,7 @@
 package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
-import de.citec.jps.exception.BadArgumentException;
+import de.citec.jps.exception.JPBadArgumentException;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public abstract class AbstractJPDouble extends AbstractJavaProperty<Double> {
     }
 	
 	@Override
-	protected Double parse(List<String> arguments) throws BadArgumentException {
+	protected Double parse(List<String> arguments) throws JPBadArgumentException {
 		return Double.parseDouble(getOneArgumentResult());
 	}
 }

@@ -5,7 +5,7 @@
 package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
-import de.citec.jps.exception.BadArgumentException;
+import de.citec.jps.exception.JPBadArgumentException;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -28,18 +28,18 @@ public abstract class AbstractJPClass<C> extends AbstractJavaProperty<Class<C>> 
     }
 
     @Override
-    protected Class<C> parse(List<String> arguments) throws BadArgumentException {
+    protected Class<C> parse(List<String> arguments) throws JPBadArgumentException {
         String oneArgumentResult = getOneArgumentResult();
         Class clazz;
         try {
              clazz = getClass().getClassLoader().loadClass(oneArgumentResult);
         } catch (ClassNotFoundException ex) {
-            throw new BadArgumentException("Could not load given Class!", ex);
+            throw new JPBadArgumentException("Could not load given Class!", ex);
         }
         try {
              return (Class<C>) clazz;
         } catch (ClassCastException ex) {
-            throw new BadArgumentException("Given Class["+clazz.getName()+"] is not a instance of Class["+detectTypeClass().getName()+"]!", ex);
+            throw new JPBadArgumentException("Given Class["+clazz.getName()+"] is not a instance of Class["+detectTypeClass().getName()+"]!", ex);
         }
     }
 

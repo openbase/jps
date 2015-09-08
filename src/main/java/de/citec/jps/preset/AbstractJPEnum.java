@@ -5,7 +5,7 @@
 package de.citec.jps.preset;
 
 import de.citec.jps.core.AbstractJavaProperty;
-import de.citec.jps.exception.BadArgumentException;
+import de.citec.jps.exception.JPBadArgumentException;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public abstract class AbstractJPEnum<E extends Enum<E>> extends AbstractJavaProp
     }
 
     @Override
-    protected E parse(List<String> arguments) throws BadArgumentException {
+    protected E parse(List<String> arguments) throws JPBadArgumentException {
         try {
             return Enum.valueOf(getDefaultValue().getDeclaringClass(), getOneArgumentResult());
         } catch (IllegalArgumentException ex) {

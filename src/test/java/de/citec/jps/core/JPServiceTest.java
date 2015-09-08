@@ -6,11 +6,13 @@ package de.citec.jps.core;
 
 import de.citec.jps.core.helper.JPBaseDirectory;
 import de.citec.jps.core.helper.JPChildDirectory;
+import de.citec.jps.core.helper.JPMapStringString;
 import de.citec.jps.preset.JPDebugMode;
 import de.citec.jps.preset.JPShowGUI;
 import de.citec.jps.exception.JPServiceException;
 import de.citec.jps.preset.JPVerbose;
 import java.io.File;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -180,5 +182,17 @@ public class JPServiceTest {
         JPService.parse(args);
         assertEquals(new File("/tmp/test/combase"), JPService.getProperty(JPBaseDirectory.class).getValue());
         assertEquals(new File("/tmp/test/combase/comchild"), JPService.getProperty(JPChildDirectory.class).getValue());
+    }
+    
+    @Test
+    public void testJPMapStringStringParser() throws JPServiceException {
+        JPService.registerProperty(JPMapStringString.class);
+        String[] args = {"--test-map", "Key1=Value1", "Key2=Value2", "Key3=Value3"};
+        JPService.parse(args);
+        Map<String, String> keyValueMap = JPService.getProperty(JPMapStringString.class).getValue();
+
+        assertEquals(keyValueMap.get("Key1"), "Value1");
+        assertEquals(keyValueMap.get("Key2"), "Value2");
+        assertEquals(keyValueMap.get("Key3"), "Value3");
     }
 }

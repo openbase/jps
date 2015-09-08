@@ -4,7 +4,7 @@
  */
 package de.citec.jps.preset;
 
-import de.citec.jps.exception.ValidationException;
+import de.citec.jps.exception.JPValidationException;
 
 /**
  *
@@ -19,7 +19,7 @@ public class JPForce extends AbstractJPBoolean {
 	}
 
 	@Override
-	protected void validate() throws ValidationException {
+	protected void validate() throws JPValidationException {
 		if (getValue()) {
 			logger.warn("Force mode enabled!");
 		}
