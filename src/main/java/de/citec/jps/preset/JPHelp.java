@@ -8,7 +8,6 @@ package de.citec.jps.preset;
 import de.citec.jps.core.AbstractJavaProperty;
 import de.citec.jps.core.JPService;
 import de.citec.jps.exception.JPBadArgumentException;
-import de.citec.jps.exception.JPValidationException;
 import java.util.List;
 
 /**
@@ -39,13 +38,13 @@ public final class JPHelp extends AbstractJavaProperty<Void> {
 		return null;
 	}
 
-	@Override
-	protected void validate() throws JPValidationException {
-		if(isIdentifiered()) {
+    @Override
+    protected void loadAction() {
+        if(isIdentifiered()) {
 			JPService.printHelp();
 			System.exit(0);
 		}
-	}
+    }    
     
 	@Override
 	public String getDescription() {
