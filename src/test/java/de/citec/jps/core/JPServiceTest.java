@@ -195,4 +195,11 @@ public class JPServiceTest {
         assertEquals(keyValueMap.get("Key2"), "Value2");
         assertEquals(keyValueMap.get("Key3"), "Value3");
     }
+    
+    @Test
+    public void testHelpPage() throws JPServiceException {
+        JPService.registerProperty(JPMapStringString.class);
+        String[] args = {"-h"};
+        JPService.parse(args);
+    }
 }

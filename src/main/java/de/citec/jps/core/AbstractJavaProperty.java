@@ -214,11 +214,22 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 	 * @throws JPValidationException
 	 */
 	protected void validate() throws JPValidationException {
+        // overwrite for specific property validation.
 	}
+    
+    /**
+	 * Can be overwritten for specific load action. Method is called after loading a property instance.
+	 *
+	 */
+    protected void loadAction() {
+        // overwrite for specific load action.
+    }
 
 	protected abstract V getPropertyDefaultValue();
 
 	protected abstract V parse(List<String> arguments) throws Exception;
+    
+    
 
 	public abstract String getDescription();
 }

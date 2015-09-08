@@ -24,21 +24,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Java Property Service, this is the central lib controller used to initialize
- * and manage all properties.
+ * Java Property Service, this is the central lib controller used to initialize and manage all properties.
  *
  * @author Divine Threepwood
  *
  *
- * JPS Library can be used for managing the properties of an application. The
- * argument definition is realized by registering classes which extends the
- * AbstractJavaProperty class. Common argument types are supported by the preset
- * properties (e.g. Integer, Boolean, String types).
+ * JPS Library can be used for managing the properties of an application. The argument definition is realized by registering classes which extends the AbstractJavaProperty class. Common argument types
+ * are supported by the preset properties (e.g. Integer, Boolean, String types).
  *
  * The library supports the generation of a properties overview page.
  */
 public class JPService {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(JPService.class);
     private static final Set<Class<? extends AbstractJavaProperty>> registeredPropertyClasses = new HashSet<>();
     private static final HashMap<Class<? extends AbstractJavaProperty>, AbstractJavaProperty> initializedProperties = new HashMap<>();
@@ -46,19 +43,18 @@ public class JPService {
     private static final HashMap<Class<? extends AbstractJavaProperty>, Object> overwrittenDefaultValueMap = new HashMap<>();
     private static String applicationName = "";
     private static boolean argumentsAnalyzed = false;
-
+    
     static {
         initJPSDefaultProperties();
     }
-
+    
     private static void initJPSDefaultProperties() {
         registerProperty(JPHelp.class);
         registerProperty(JPVerbose.class);
     }
 
     /**
-     * Set the application name. The name is displayed in the help screen in the
-     * property overview page.
+     * Set the application name. The name is displayed in the help screen in the property overview page.
      *
      * @param name the application name
      */
@@ -76,11 +72,9 @@ public class JPService {
     }
 
     /**
-     * Register the given property and overwrite the default value of the given
-     * one.
+     * Register the given property and overwrite the default value of the given one.
      *
-     * Do not use this method after calling the analyze method, otherwise
-     * recursive property usage is not effected by the new default value!
+     * Do not use this method after calling the analyze method, otherwise recursive property usage is not effected by the new default value!
      *
      * @param <V>
      * @param <C>
@@ -90,19 +84,17 @@ public class JPService {
     public static synchronized <V, C extends AbstractJavaProperty<V>> void registerProperty(Class<C> propertyClass, V defaultValue) {
         if (argumentsAnalyzed) {
             logger.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
-
+            
         }
         registeredPropertyClasses.add(propertyClass);
         overwrittenDefaultValueMap.put(propertyClass, defaultValue);
     }
 
     /**
-     * Overwrites the default value of the given property without displaying the
-     * property in the help overview, For overwriting a regular property default
-     * value, use the property registration method instead.
+     * Overwrites the default value of the given property without displaying the property in the help overview, For overwriting a regular property default value, use the property registration method
+     * instead.
      *
-     * Do not use this method after calling the analyze method, otherwise
-     * recursive property usage is not effected by the new default value!
+     * Do not use this method after calling the analyze method, otherwise recursive property usage is not effected by the new default value!
      *
      * @param <V>
      * @param <C>
@@ -129,12 +121,9 @@ public class JPService {
     }
 
     /**
-     * Analyze the input arguments and setup all registered Properties. If one
-     * argument could not be handled or something else goes wrong this methods
-     * calls System.exit(255);
+     * Analyze the input arguments and setup all registered Properties. If one argument could not be handled or something else goes wrong this methods calls System.exit(255);
      *
-     * Make sure all desired properties are registered before calling this
-     * method. Otherwise the properties will not be listed in the help screen.
+     * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
      *
      * @param args
      */
@@ -145,14 +134,14 @@ public class JPService {
             JPService.printHelp();
             printError(ex);
             logger.info("Exit " + applicationName);
-
+            
             if (getProperty(JPVerbose.class).getValue()) {
                 ex.printStackTrace(System.err);
             }
             System.exit(255);
         }
     }
-
+    
     private static void printError(Throwable cause) {
         logger.error(cause.getMessage());
         Throwable innerCause = cause.getCause();
@@ -160,13 +149,13 @@ public class JPService {
             printError(innerCause);
         }
     }
-
+    
     private static void printValueModification(String[] args) {
-
+        
         if (args == null) {
             return;
         }
-
+        
         String argsString = "";
         for (String arg : args) {
             if (arg.startsWith("--")) {
@@ -179,19 +168,19 @@ public class JPService {
             argsString += arg;
         }
         argsString += "\n";
-
+        
         logger.info("[command line value modification]" + argsString);
     }
-
+    
     private static void initRegisteredProperties() throws JPServiceException {
         initRegisteredProperties(null);
     }
-
+    
     private static void initRegisteredProperties(final String[] args) throws JPServiceException {
 
         // reset already loaded properties.
         loadedProperties.clear();
-
+        
         try {
             Collection<Class<? extends AbstractJavaProperty>> currentlyregisteredPropertyClasses = new HashSet(registeredPropertyClasses);
             for (Class<? extends AbstractJavaProperty> propertyClass : currentlyregisteredPropertyClasses) {
@@ -199,32 +188,32 @@ public class JPService {
                     initProperty(propertyClass);
                 }
             }
-
+            
             if (args != null) {
                 parseArguments(args);
             }
 
             //print help if required.
             getProperty(JPHelp.class);
-
+            
         } catch (Exception ex) {
             throw new JPServiceException("Could not init registered properties!", ex);
         }
     }
-
+    
     private static synchronized AbstractJavaProperty initProperty(Class<? extends AbstractJavaProperty> propertyClass) throws JPServiceException {
-
+        
         try {
             // Avoid double initialization
             if (initializedProperties.containsKey(propertyClass)) {
                 throw new JPServiceException("Already initialized!");
             }
-
+            
             if (!registeredPropertyClasses.contains(propertyClass)) {
                 registeredPropertyClasses.add(propertyClass);
             }
             AbstractJavaProperty newInstance = propertyClass.newInstance();
-
+            
             initializedProperties.put(propertyClass, newInstance);
             return newInstance;
         } catch (Exception ex) {
@@ -235,8 +224,7 @@ public class JPService {
     /**
      * Analyze the input arguments and setup all registered Properties.
      *
-     * Make sure all desired properties are registered before calling this
-     * method. Otherwise the properties will not be listed in the help screen.
+     * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
      *
      * @param args
      * @throws JPServiceException
@@ -252,13 +240,10 @@ public class JPService {
     }
 
     /**
-     * Setup JPService for JUnitTests By using the JPService during JUnit Tests
-     * it's recommended to call this method after property registration instead
-     * using the parsing methods because command line property handling makes no
-     * sense in the context of unit tests..
+     * Setup JPService for JUnitTests By using the JPService during JUnit Tests it's recommended to call this method after property registration instead using the parsing methods because command line
+     * property handling makes no sense in the context of unit tests..
      *
-     * The following properties are activated by default while running JPService
-     * in TestMode:
+     * The following properties are activated by default while running JPService in TestMode:
      *
      * - JPVerbose is set to true to print more debug messages.
      *
@@ -275,15 +260,15 @@ public class JPService {
             throw new JPServiceException("Could not setup JPService for UnitTestMode!", ex);
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     private static void loadProperty(final AbstractJavaProperty property) throws JPServiceException {
-
+        
         try {
             if (loadedProperties.containsKey(property.getClass())) {
                 throw new JPServiceException("Already loaded!");
             }
-
+            
             parseProperty(property);
             if (overwrittenDefaultValueMap.containsKey(property.getClass())) {
                 property.overwriteDefaultValue(overwrittenDefaultValueMap.get(property.getClass()));
@@ -293,13 +278,18 @@ public class JPService {
         } catch (JPBadArgumentException | JPValidationException ex) {
             throw new JPServiceException("Could not load " + property + "!", ex);
         }
-
+        
         loadedProperties.put(property.getClass(), property);
+        try {
+            property.loadAction();
+        } catch (Throwable th) {
+            logger.error("Could not execute load action for Property[{}]", property.toString(), th);
+        }
     }
-
+    
     private static void parseArguments(String[] args) throws JPServiceException {
         AbstractJavaProperty lastProperty = null;
-
+        
         for (String arg : args) {
             try {
                 arg = arg.trim();
@@ -309,7 +299,7 @@ public class JPService {
                 if (arg.startsWith("-") || arg.startsWith("--")) { // handle property
                     boolean unknownProperty = true;
                     for (AbstractJavaProperty property : initializedProperties.values()) {
-
+                        
                         if (property.match(arg)) {
                             lastProperty = property;
                             lastProperty.reset(); // In case of property overwriting during script recursion. Example: -p 5 -p 9
@@ -331,7 +321,7 @@ public class JPService {
             }
         }
     }
-
+    
     private static void parseProperty(final AbstractJavaProperty property) throws JPBadArgumentException {
         if (property.isIdentifiered()) {
             try {
@@ -345,15 +335,12 @@ public class JPService {
     /**
      * Returns the current value of the given property line class.
      *
-     * If the property is never registered but the class is known in the
-     * classpath, the method returns the default value.
+     * If the property is never registered but the class is known in the classpath, the method returns the default value.
      *
      * @param <C>
      * @param propertyClass property class which defines the property.
      * @return the current value of the given property type.
-     * @throws JPServiceRuntimeException Method throws this Exception in any
-     * error case. For more details of the error access the
-     * innerCLParserException delivered by the CLParserRuntimeException.
+     * @throws JPServiceRuntimeException Method throws this Exception in any error case. For more details of the error access the innerCLParserException delivered by the CLParserRuntimeException.
      */
     public static synchronized <C extends AbstractJavaProperty> C getProperty(Class<C> propertyClass) throws JPServiceRuntimeException {
         try {
@@ -379,7 +366,7 @@ public class JPService {
      * Method prints the help screen.
      */
     public static void printHelp() {
-
+        
         String help = "usage: " + applicationName;
         String header = "";
         List<AbstractJavaProperty> propertyList = new ArrayList(initializedProperties.values());
@@ -389,7 +376,7 @@ public class JPService {
         }
         help += newLineFormatter(header, "\n\t", 100);;
         help += "\nwhere:\n";
-
+        
         AbstractJavaProperty loadedProperty;
         for (Class<? extends AbstractJavaProperty> propertyClass : registeredPropertyClasses) {
             loadedProperty = getProperty(propertyClass);
@@ -400,23 +387,23 @@ public class JPService {
         }
         logger.info(help);
     }
-
+    
     private static String getDefault(AbstractJavaProperty property) {
         return "[Default: " + property.getDefaultExample() + "]";
     }
-
+    
     public static String newLineFormatter(String text, String newLineOperator, int maxChars) {
         String[] textArray = text.split(" ");
         text = "";
         int charCounter = 0;
-
+        
         for (int i = 0; i < textArray.length; i++) {
             if ((charCounter + textArray[i].length()) >= maxChars) {
                 text += newLineOperator + textArray[i];
                 charCounter = textArray[i].length();
             } else {
                 text += textArray[i];
-
+                
                 if (textArray[i].contains("\n")) {
                     charCounter = textArray[i].indexOf("\n");
                 } else {
