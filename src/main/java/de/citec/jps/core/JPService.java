@@ -16,6 +16,7 @@ import de.citec.jps.preset.JPVerbose;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * The library supports the generation of a properties overview page.
  */
 public class JPService {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(JPService.class);
     private static final Set<Class<? extends AbstractJavaProperty>> registeredPropertyClasses = new HashSet<>();
     private static final HashMap<Class<? extends AbstractJavaProperty>, AbstractJavaProperty> initializedProperties = new HashMap<>();
@@ -43,11 +44,11 @@ public class JPService {
     private static final HashMap<Class<? extends AbstractJavaProperty>, Object> overwrittenDefaultValueMap = new HashMap<>();
     private static String applicationName = "";
     private static boolean argumentsAnalyzed = false;
-    
+
     static {
         initJPSDefaultProperties();
     }
-    
+
     private static void initJPSDefaultProperties() {
         registerProperty(JPHelp.class);
         registerProperty(JPVerbose.class);
@@ -84,7 +85,7 @@ public class JPService {
     public static synchronized <V, C extends AbstractJavaProperty<V>> void registerProperty(Class<C> propertyClass, V defaultValue) {
         if (argumentsAnalyzed) {
             logger.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
-            
+
         }
         registeredPropertyClasses.add(propertyClass);
         overwrittenDefaultValueMap.put(propertyClass, defaultValue);
@@ -131,17 +132,22 @@ public class JPService {
         try {
             JPService.parse(args);
         } catch (JPServiceException ex) {
-            JPService.printHelp();
+            try {
+                JPService.printHelp();
+            } catch (JPServiceException ex1) {
+                logger.error("Could not print help text!");
+                printError(ex);
+            }
             printError(ex);
             logger.info("Exit " + applicationName);
-            
+
             if (getProperty(JPVerbose.class).getValue()) {
                 ex.printStackTrace(System.err);
             }
             System.exit(255);
         }
     }
-    
+
     private static void printError(Throwable cause) {
         logger.error(cause.getMessage());
         Throwable innerCause = cause.getCause();
@@ -149,13 +155,13 @@ public class JPService {
             printError(innerCause);
         }
     }
-    
+
     private static void printValueModification(String[] args) {
-        
+
         if (args == null) {
             return;
         }
-        
+
         String argsString = "";
         for (String arg : args) {
             if (arg.startsWith("--")) {
@@ -168,52 +174,59 @@ public class JPService {
             argsString += arg;
         }
         argsString += "\n";
-        
+
         logger.info("[command line value modification]" + argsString);
     }
-    
+
     private static void initRegisteredProperties() throws JPServiceException {
         initRegisteredProperties(null);
     }
-    
+
     private static void initRegisteredProperties(final String[] args) throws JPServiceException {
 
         // reset already loaded properties.
         loadedProperties.clear();
-        
+
         try {
             Collection<Class<? extends AbstractJavaProperty>> currentlyregisteredPropertyClasses = new HashSet(registeredPropertyClasses);
-            for (Class<? extends AbstractJavaProperty> propertyClass : currentlyregisteredPropertyClasses) {
-                if (!initializedProperties.containsKey(propertyClass)) {
-                    initProperty(propertyClass);
+            boolean modification = true;
+
+            // init recursive all properties which are not already initialized.
+            while (modification) {
+                modification = false;
+                for (Class<? extends AbstractJavaProperty> propertyClass : currentlyregisteredPropertyClasses) {
+                    if (!initializedProperties.containsKey(propertyClass)) {
+                        initProperty(propertyClass);
+                        modification = true;
+                    }
                 }
             }
-            
+
             if (args != null) {
                 parseArguments(args);
             }
 
             //print help if required.
             getProperty(JPHelp.class);
-            
+
         } catch (Exception ex) {
             throw new JPServiceException("Could not init registered properties!", ex);
         }
     }
-    
+
     private static synchronized AbstractJavaProperty initProperty(Class<? extends AbstractJavaProperty> propertyClass) throws JPServiceException {
-        
+
         try {
             // Avoid double initialization
             if (initializedProperties.containsKey(propertyClass)) {
                 throw new JPServiceException("Already initialized!");
             }
-            
+
             if (!registeredPropertyClasses.contains(propertyClass)) {
                 registeredPropertyClasses.add(propertyClass);
             }
             AbstractJavaProperty newInstance = propertyClass.newInstance();
-            
+
             initializedProperties.put(propertyClass, newInstance);
             return newInstance;
         } catch (Exception ex) {
@@ -260,15 +273,15 @@ public class JPService {
             throw new JPServiceException("Could not setup JPService for UnitTestMode!", ex);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private static void loadProperty(final AbstractJavaProperty property) throws JPServiceException {
-        
+
         try {
             if (loadedProperties.containsKey(property.getClass())) {
                 throw new JPServiceException("Already loaded!");
             }
-            
+
             parseProperty(property);
             if (overwrittenDefaultValueMap.containsKey(property.getClass())) {
                 property.overwriteDefaultValue(overwrittenDefaultValueMap.get(property.getClass()));
@@ -278,7 +291,7 @@ public class JPService {
         } catch (JPBadArgumentException | JPValidationException ex) {
             throw new JPServiceException("Could not load " + property + "!", ex);
         }
-        
+
         loadedProperties.put(property.getClass(), property);
         try {
             property.loadAction();
@@ -286,10 +299,10 @@ public class JPService {
             logger.error("Could not execute load action for Property[{}]", property.toString(), th);
         }
     }
-    
+
     private static void parseArguments(String[] args) throws JPServiceException {
         AbstractJavaProperty lastProperty = null;
-        
+
         for (String arg : args) {
             try {
                 arg = arg.trim();
@@ -299,7 +312,7 @@ public class JPService {
                 if (arg.startsWith("-") || arg.startsWith("--")) { // handle property
                     boolean unknownProperty = true;
                     for (AbstractJavaProperty property : initializedProperties.values()) {
-                        
+
                         if (property.match(arg)) {
                             lastProperty = property;
                             lastProperty.reset(); // In case of property overwriting during script recursion. Example: -p 5 -p 9
@@ -321,7 +334,7 @@ public class JPService {
             }
         }
     }
-    
+
     private static void parseProperty(final AbstractJavaProperty property) throws JPBadArgumentException {
         if (property.isIdentifiered()) {
             try {
@@ -362,11 +375,30 @@ public class JPService {
         }
     }
 
+    private static List<AbstractJavaProperty> loadAllProperties() throws JPServiceException {
+        List<AbstractJavaProperty> properties = new ArrayList<>();
+        try {
+            Collection<Class<? extends AbstractJavaProperty>> currentlyregisteredPropertyClasses = new HashSet(registeredPropertyClasses);
+            boolean modification = true;
+
+            // load recursive all properties which are not already loaded.
+            while (modification) {
+                modification = false;
+                for (Class<? extends AbstractJavaProperty> propertyClass : currentlyregisteredPropertyClasses) {
+                    properties.add(getProperty(propertyClass));
+                }
+            }
+        } catch (Exception ex) {
+            throw new JPServiceException("Could not load all properties!", ex);
+        }
+        return properties;
+    }
+
     /**
      * Method prints the help screen.
      */
-    public static void printHelp() {
-        
+    public static void printHelp() throws JPServiceException {
+
         String help = "usage: " + applicationName;
         String header = "";
         List<AbstractJavaProperty> propertyList = new ArrayList(initializedProperties.values());
@@ -376,34 +408,43 @@ public class JPService {
         }
         help += newLineFormatter(header, "\n\t", 100);;
         help += "\nwhere:\n";
-        
-        AbstractJavaProperty loadedProperty;
-        for (Class<? extends AbstractJavaProperty> propertyClass : registeredPropertyClasses) {
-            loadedProperty = getProperty(propertyClass);
-            help += "\t" + loadedProperty.getSyntax() + " " + getDefault(loadedProperty);
+
+        List<AbstractJavaProperty> properties = loadAllProperties();
+
+        Collections.sort(properties, (AbstractJavaProperty o1, AbstractJavaProperty o2) -> {
+            try {
+                return o1.getDefaultExample().compareTo(o2.getDefaultExample());
+            } catch (Exception ex) {
+                logger.warn("Could not compare properties!");
+                return -1;
+            }
+        });
+
+        for (AbstractJavaProperty property : properties) {
+            help += "\t" + property.getSyntax() + " " + getDefault(property);
             help += "\n ";
-            help += "\t\t" + newLineFormatter(loadedProperty.getDescription(), "\n\t\t", 100);
+            help += "\t\t" + newLineFormatter(property.getDescription(), "\n\t\t", 100);
             help += "\n";
         }
         logger.info(help);
     }
-    
+
     private static String getDefault(AbstractJavaProperty property) {
         return "[Default: " + property.getDefaultExample() + "]";
     }
-    
+
     public static String newLineFormatter(String text, String newLineOperator, int maxChars) {
         String[] textArray = text.split(" ");
         text = "";
         int charCounter = 0;
-        
+
         for (int i = 0; i < textArray.length; i++) {
             if ((charCounter + textArray[i].length()) >= maxChars) {
                 text += newLineOperator + textArray[i];
                 charCounter = textArray[i].length();
             } else {
                 text += textArray[i];
-                
+
                 if (textArray[i].contains("\n")) {
                     charCounter = textArray[i].indexOf("\n");
                 } else {
