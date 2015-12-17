@@ -5,7 +5,8 @@
  */
 package org.dc.jps.core;
 
-import org.dc.jps.core.JPService;
+import java.io.File;
+import java.util.Map;
 import org.dc.jps.core.helper.JPBaseDirectory;
 import org.dc.jps.core.helper.JPChildDirectory;
 import org.dc.jps.core.helper.JPDefaultValueRecursion;
@@ -14,8 +15,6 @@ import org.dc.jps.preset.JPDebugMode;
 import org.dc.jps.preset.JPShowGUI;
 import org.dc.jps.preset.JPTestMode;
 import org.dc.jps.preset.JPVerbose;
-import java.io.File;
-import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -239,5 +238,14 @@ public class JPServiceTest {
         String[] args = {"--child", "child/revolution"};
         JPService.parse(args);
         assertEquals("/tmp/test/base/child/revolution", JPService.getProperty(JPDefaultValueRecursion.class).getValue().getAbsolutePath());
+    }
+
+    @Test
+    public void testAbsolutChildRef() throws Exception {
+        JPService.registerProperty(JPBaseDirectory.class);
+        JPService.registerProperty(JPChildDirectory.class);
+        String[] args = {"--child", "/tmp/test/absolut/child"};
+        JPService.parse(args);
+        assertEquals("/tmp/test/absolut/child", JPService.getProperty(JPChildDirectory.class).getValue().getAbsolutePath());
     }
 }

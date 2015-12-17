@@ -4,6 +4,8 @@
  */
 package org.dc.jps.preset;
 
+import java.io.File;
+import java.util.List;
 import org.dc.jps.core.AbstractJavaProperty;
 import org.dc.jps.core.JPService;
 import org.dc.jps.exception.JPServiceException;
@@ -12,8 +14,6 @@ import org.dc.jps.tools.FileHandler;
 import org.dc.jps.tools.FileHandler.AutoMode;
 import org.dc.jps.tools.FileHandler.ExistenceHandling;
 import org.dc.jps.tools.FileHandler.FileType;
-import java.io.File;
-import java.util.List;
 
 /**
  *
@@ -69,7 +69,7 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
     protected void setValue(File value, ValueType valueType) {
         try {
             File parent = getParentDirectory();
-            if (parent != null) {
+            if (parent != null && !value.isAbsolute()) {
                 super.setValue(new File(parent, value.getPath()), valueType);
                 return;
             }
