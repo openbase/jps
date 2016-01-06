@@ -23,6 +23,10 @@ public class JPPrefix extends AbstractJPDirectory {
 
     @Override
     protected File getPropertyDefaultValue() throws JPNotAvailableException {
+        if (JPService.testMode()) {
+            return new File(System.getProperty("java.io.tmpdir", "/tmp") + "/" + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
+        }
+
         String globalPrefix = System.getenv("prefix");
         if (globalPrefix == null) {
             File localUserPrefix;
@@ -32,6 +36,8 @@ public class JPPrefix extends AbstractJPDirectory {
         }
         return new File(globalPrefix);
     }
+
+
 
     @Override
     public String getDescription() {

@@ -9,7 +9,28 @@
     <description>Java Properties Service</description>
     <name>JPS</name>
     <url>http://maven.apache.org</url>
-    
+
+    <organization>
+        <name>DivineCooperation</name>
+        <url>https://github.com/divinecooperation</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>DivineThreepwood</id>
+            <name>Marian Pohling</name>
+
+            <email>divinethreepwood@gmail.com</email>
+            <url>https://github.com/DivineThreepwood</url>
+            <organization>DivineCooperation</organization>
+            <organizationUrl>https://github.com/divinecooperation</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
     <build>
         <plugins>
             <plugin>
@@ -61,23 +82,6 @@
             <url>http://www.gnu.org/licenses/gpl.html</url>
         </license>
     </licenses>
-    <organization>
-        <name>Citec, Bielefeld University</name>
-        <url>http://www.cit-ec.de/</url>
-    </organization>
-    <developers>
-        <developer>
-            <id>mpohling</id>
-            <name>Marian Pohling</name>
-            <email>mpohling@techfak.uni-bielefeld.de</email>
-            <url>https://www.cit-ec.de/de/users/mpohling</url>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
-            <timezone>+1</timezone>
-        </developer>
-    </developers>
 	
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

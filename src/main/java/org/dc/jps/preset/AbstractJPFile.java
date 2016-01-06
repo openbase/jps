@@ -110,6 +110,10 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
         return null;
     }
 
+    public static String convertIntoValidFileName(final String filename) {
+        return filename.replaceAll("[^0-9a-zA-Z-äöüÄÖÜéàèÉÈßÄ\\.\\-\\_\\[\\]\\#\\$]+", "_");
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "[Type:" + type + "|ExistenceHandling:" + existenceHandling + "|AutoMode:" + autoCreateMode + "]";
