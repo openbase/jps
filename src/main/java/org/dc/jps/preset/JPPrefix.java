@@ -8,6 +8,8 @@ import org.dc.jps.core.JPService;
 import org.dc.jps.exception.JPNotAvailableException;
 import org.dc.jps.tools.FileHandler;
 import java.io.File;
+import java.io.IOException;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -24,7 +26,13 @@ public class JPPrefix extends AbstractJPDirectory {
     @Override
     protected File getPropertyDefaultValue() throws JPNotAvailableException {
         if (JPService.testMode()) {
-            return new File(System.getProperty("java.io.tmpdir", "/tmp") + "/" + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
+            File tmpFolder = new File(System.getProperty("java.io.tmpdir", "/tmp") + "/" + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
+            try {
+                FileUtils.forceMkdir(tmpFolder);
+                return tmpFolder;
+            } catch (IOException ex) {
+                JPService.printError("Could not create tmp folder :(", ex);
+            }
         }
 
         String globalPrefix = System.getenv("prefix");
@@ -36,8 +44,6 @@ public class JPPrefix extends AbstractJPDirectory {
         }
         return new File(globalPrefix);
     }
-
-
 
     @Override
     public String getDescription() {
