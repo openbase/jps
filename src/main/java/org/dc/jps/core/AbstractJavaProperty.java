@@ -4,14 +4,14 @@
  */
 package org.dc.jps.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.dc.jps.exception.JPBadArgumentException;
 import org.dc.jps.exception.JPNotAvailableException;
 import org.dc.jps.exception.JPParsingException;
 import org.dc.jps.exception.JPServiceException;
 import org.dc.jps.exception.JPValidationException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -184,7 +184,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		return syntax;
 	}
 
-	protected boolean isParsed() {
+	public boolean isParsed() {
 		return parsed;
 	}
 
