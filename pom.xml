@@ -6,9 +6,11 @@
     <artifactId>jps</artifactId>
     <version>3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <description>Java Properties Service</description>
     <name>JPS</name>
-    <url>http://maven.apache.org</url>
+    <inceptionYear>2014</inceptionYear>
+    <description>Java Property Service</description>
+
+    <url>https://github.com/divinecooperation/jps.git/wiki</url>
 
     <organization>
         <name>DivineCooperation</name>
@@ -29,7 +31,26 @@
             </roles>
             <timezone>+1</timezone>
         </developer>
+        <developer>
+            <id>pLeminoq</id>
+            <name>Tamino Huxohl</name>
+            <email>taminoh@ymail.com</email>
+            <url>https://github.com/pLeminoq</url>
+            <organization>DivineCooperation</organization>
+            <organizationUrl>https://github.com/divinecooperation</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
     </developers>
+
+    <licenses>
+        <license>
+            <name>LGPLv3</name>
+            <url>http://www.gnu.org/licenses/lgpl.html</url>
+        </license>
+    </licenses>
 
     <build>
         <plugins>
@@ -69,23 +90,47 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.8</version>
+                <configuration>
+                    <verbose>false</verbose>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <licenseName>lgpl_v3</licenseName>
+                            <roots>
+                                <root>src/main/java</root>
+                                <root>src/test</root>
+                            </roots>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-licenses</id>
+                        <goals>
+                            <goal>download-licenses</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     
     <scm>
-        <developerConnection>scm:git:https://projects.cit-ec.uni-bielefeld.de/git/lsp-csra.java-properties-service.git</developerConnection>
-        <url>https://projects.cit-ec.uni-bielefeld.de/git/lsp-csra.java-properties-service.git</url>
+        <developerConnection>scm:git:https://github.com/divinecooperation/jps.git</developerConnection>
+        <url>https://github.com/divinecooperation/jps.git/wiki</url>
     </scm>
-    <licenses>
-        <license>
-            <name>GPLv3</name>
-            <url>http://www.gnu.org/licenses/gpl.html</url>
-        </license>
-    </licenses>
 	
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--<skipTests>true</skipTests>-->
+        <skipTests>false</skipTests>
     </properties>
 
     <dependencies>
