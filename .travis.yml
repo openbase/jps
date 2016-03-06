@@ -1,13 +1,8 @@
-language:
-    java
-
-jdk:        
-    - oraclejdk8
-            
+language: java
+jdk:
+  - oraclejdk8
 env:
-    global:
-        - SONATYPE_USERNAME=yourusername
-        - secure: "your encrypted SONATYPE_PASSWORD=pass"
-    
-after_success:
-    mvn deploy --settings .travis-maven-settings.xml -DskipTests=true -B
+  global:
+  - secure: HR5PUvdT3op35X2eciCjwg+rHv97aFVQ31B3F3Zx8maIjRVFUvIFx2wvhciLsPxUuFnGNHzr/R/CsJFItuiyXGmn2ZBfOrWX9WcluMfyfUcultNQLw3mRZmWZ5ACZgSQkqRv4SOxSKNMJpe/sBU7Xfga0+HS5SZEgMmHqn9/ksnqrNP9QKZHAykbzwH29/3Qk2SktMZfOMJ92WnFR3QujEHeIwNv2xpYOITxNmHSa2m3DDlfk+CDiVXPB/avg+g54D4Rvw3kOeAKSaWh5OGxB5nn7vNUVByNzWbZM7IBBTRXqn4y4/Izuc+3SkLxkwPhSU9liyNZ2NwQ+x5/6szgvkbDVklhXqwVK1GX6Mz4NC18MSCD4IBPfI+4L6KWdiyM6GOAZXOhjkkdBuD5dtR4ATbOLmL1QAtD8oBpBJ24RGmC6/EjyKOr1xE6t7/6E1O5fkyCZrQEQymh57CvgD3w+cdNMP12ktFFEwssOFFiCPPfMx6hcGllnOYONBMRFT66+ASPs2cPfEaB/6dROADCnznWpaBGlDc8Ck7DspuZ82Smyiv+zeM2GBrqjtxcH3plfjI7o5arWHnMrXj20lKsNCDacjZqdjVzoxAnh/1maaLvIhz21Ry4UPXRwnnkuP2g/ulx9h+IjfagzrEMh/bcWDwxbPEffWO3KlQcqCDs+WU=
+  - secure: kH2PsjnRDEJp+/0LMN1ebnMnWgeIgoXBLhmgal6V3XgnzThZDNITvqG4sp+Z7J0yVMyVbOc3ID2DkI0NIRAXnLHd4uh1jCG9ak9o6vIcsAjU1aXzxdd7uPXyAzDoR4a3XiCd1gxZX+MNiqaSguxIIW3GfjIqjZ/BgR4Fojir1pTbbwhSvbl6cSlesgEf21BcMiTfpO9UCXbaVtt2MO5gc8dAw7BZmOh95rc2+2Zdm6gWihsFQtZ7rub/H8auVs/bPW0rSShGwX0CqyuayZy0We4d/wnysy/gbhRgNToRnB1kyCTecevBcBzMTCKm6RY/JpWCk4sG4AOvIWkjH2W6EHxu05fndCtA6lOmIiYls+slVLE5H4N4/ZNS0DVbp6VVWDaWXmnUY3g0EeiVrAoX0yuSV4o9Cin6FQpv2qf5YG6EWP7JZQhkHPJW6Awumok0CHBOsuu+l1jJoa8uu9JDcIUO5BXzlTFOHdk+gpe6inNNrmEMAM1pD9TlrKM8/KIx+m2nrlYWjkVuHIsguMD1yaC+QbnisTWV+8eDFelS5zQmXju0mNqHMB1z9r1zzxvsHInYkqLGlAf1vYSicoERAjrofy1tIBfvRsNLY/jj3P3EFcicONEQLPr313h11f6hFKdbdYgtcBgQIIAnmNIuACVEZfg7SLWQMFZDdhJZ1Hc=
+after_success: mvn deploy --settings .travis-maven-settings.xml -DskipTests=true -B
