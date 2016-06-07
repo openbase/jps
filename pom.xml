@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.dc</groupId>
+    <groupId>org.openbase</groupId>
     <artifactId>jps</artifactId>
     <version>3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -10,11 +10,11 @@
     <inceptionYear>2014</inceptionYear>
     <description>Java Property Service</description>
 
-    <url>https://github.com/divinecooperation/jps.git/wiki</url>
+    <url>https://github.com/openbase/jps.git/wiki</url>
 
     <organization>
-        <name>DivineCooperation</name>
-        <url>https://github.com/divinecooperation</url>
+        <name>openbase.org</name>
+        <url>https://github.com/openbase</url>
     </organization>
 
     <developers>
@@ -24,8 +24,8 @@
 
             <email>divinethreepwood@gmail.com</email>
             <url>https://github.com/DivineThreepwood</url>
-            <organization>DivineCooperation</organization>
-            <organizationUrl>https://github.com/divinecooperation</organizationUrl>
+            <organization>openbase.org</organization>
+            <organizationUrl>https://github.com/openbase</organizationUrl>
             <roles>
                 <role>architect</role>
                 <role>developer</role>
@@ -37,8 +37,8 @@
             <name>Tamino Huxohl</name>
             <email>taminoh@ymail.com</email>
             <url>https://github.com/pLeminoq</url>
-            <organization>DivineCooperation</organization>
-            <organizationUrl>https://github.com/divinecooperation</organizationUrl>
+            <organization>openbase.org</organization>
+            <organizationUrl>https://github.com/openbase</organizationUrl>
             <roles>
                 <role>developer</role>
             </roles>
@@ -171,9 +171,9 @@
     </profiles>
 
     <scm>
-        <connection>scm:git:git@github.com/divinecooperation/jps.git</connection>
-        <developerConnection>scm:git:git@github.com/divinecooperation/jps.git</developerConnection>
-        <url>git@github.com/divinecooperation/jps.git</url>
+        <connection>scm:git:git@github.com/openbase/jps.git</connection>
+        <developerConnection>scm:git:git@github.com/openbase/jps.git</developerConnection>
+        <url>git@github.com/openbase/jps.git</url>
     </scm>
 	
     <properties>
