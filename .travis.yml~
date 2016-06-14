@@ -11,14 +11,14 @@ deploy:
     provider: script
     script: .travis/deploy.sh
     on:
-      repo: openbase/jps
+      repo: ExampleOrg/my-library
       branch: master
       jdk: oraclejdk8
   -
     provider: script
     script: .travis/deploy.sh
     on:
-      repo: openbase/jps
+      repo: ExampleOrg/my-library
       tags: true
       jdk: oraclejdk8
 
