@@ -269,6 +269,9 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 	protected abstract V getPropertyDefaultValue() throws JPNotAvailableException;
 
 	protected abstract V parse(List<String> arguments) throws Exception;
-
+    
+    /**
+     * Method returns the description of the property.
+     */
 	public abstract String getDescription();
 }
