@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  *
- * @author divine
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
 
