@@ -25,13 +25,12 @@ package org.openbase.jps.preset;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
-import org.openbase.jps.core.JPService;
-import org.openbase.jps.exception.JPNotAvailableException;
-import org.openbase.jps.tools.FileHandler;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
+import org.openbase.jps.core.JPService;
+import org.openbase.jps.exception.JPNotAvailableException;
+import org.openbase.jps.tools.FileHandler;
 
 /**
  *
