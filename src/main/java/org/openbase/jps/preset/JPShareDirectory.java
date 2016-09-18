@@ -25,6 +25,7 @@ package org.openbase.jps.preset;
 import java.io.File;
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPNotAvailableException;
+import org.openbase.jps.exception.JPValidationException;
 import org.openbase.jps.tools.FileHandler;
 
 /**
@@ -47,6 +48,15 @@ public class JPShareDirectory extends AbstractJPDirectory {
     @Override
     protected File getPropertyDefaultValue() {
         return new File("share");
+    }
+    
+    @Override
+    public void validate() throws JPValidationException {
+        if (JPService.testMode()) {
+            setAutoCreateMode(FileHandler.AutoMode.On);
+            setExistenceHandling(FileHandler.ExistenceHandling.Must);
+        }
+        super.validate();
     }
 
     @Override

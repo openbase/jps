@@ -22,32 +22,40 @@ package org.openbase.jps.preset;
  * #L%
  */
 import java.io.File;
+import java.io.IOException;
+import org.apache.commons.io.FileUtils;
 import org.openbase.jps.core.JPService;
-import org.openbase.jps.exception.JPNotAvailableException;
-import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.exception.JPValidationException;
+import static org.openbase.jps.preset.AbstractJPFile.convertIntoValidFileName;
 import org.openbase.jps.tools.FileHandler;
 
 /**
  *
  * @author <a href="mailto:mpohling@cit-ec.uni-bielefeld.de">Divine Threepwood</a>
  */
-public class JPVarDirectory extends AbstractJPDirectory {
+public class JPTmpDirectory extends AbstractJPDirectory {
 
-    public final static String[] COMMAND_IDENTIFIERS = {"--var"};
+    public final static String[] COMMAND_IDENTIFIERS = {"--tmp"};
 
-    public JPVarDirectory() {
+    public JPTmpDirectory() {
         super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
     }
 
     @Override
-    public File getParentDirectory() throws JPNotAvailableException {
-        return JPService.getProperty(JPPrefix.class).getValue();
-    }
-
-    @Override
     protected File getPropertyDefaultValue() {
-        return new File("var");
+        File tmpFolder;
+        if (JPService.testMode()) {
+            tmpFolder = new File(System.getProperty("java.io.tmpdir", "/tmp") + File.separatorChar + "test" + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName()) + File.separatorChar + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
+        } else {
+            tmpFolder = new File(System.getProperty("java.io.tmpdir", "/tmp") + File.separatorChar +  convertIntoValidFileName(JPService.getApplicationName()) + File.separatorChar + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
+        }
+        try {
+            FileUtils.forceMkdir(tmpFolder);
+            return tmpFolder;
+        } catch (IOException ex) {
+            JPService.printError("Could not create tmp folder :(", ex);
+            return new File("/tmp");
+        }
     }
 
     @Override
@@ -61,6 +69,6 @@ public class JPVarDirectory extends AbstractJPDirectory {
 
     @Override
     public String getDescription() {
-        return "Specifies the global system var directory which is used for storing variable application data like databases or models.";
+        return "Specifies the application temporary directory which is used for lockfiles and application caches.";
     }
 }

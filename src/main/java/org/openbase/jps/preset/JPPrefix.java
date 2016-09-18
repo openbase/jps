@@ -47,13 +47,7 @@ public class JPPrefix extends AbstractJPDirectory {
     @Override
     protected File getPropertyDefaultValue() throws JPNotAvailableException {
         if (JPService.testMode()) {
-            File tmpFolder = new File(System.getProperty("java.io.tmpdir", "/tmp") + "/" + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
-            try {
-                FileUtils.forceMkdir(tmpFolder);
-                return tmpFolder;
-            } catch (IOException ex) {
-                JPService.printError("Could not create tmp folder :(", ex);
-            }
+            return JPService.getProperty(JPTmpDirectory.class).getValue();
         }
 
         String globalPrefix = System.getenv("prefix");
