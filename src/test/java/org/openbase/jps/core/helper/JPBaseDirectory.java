@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.openbase.jps.core.helper;
 
 /*
@@ -27,10 +26,12 @@ package org.openbase.jps.core.helper;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
 import org.openbase.jps.preset.AbstractJPDirectory;
 import org.openbase.jps.tools.FileHandler;
 import java.io.File;
+import org.openbase.jps.core.JPService;
+import org.openbase.jps.exception.JPNotAvailableException;
+import org.openbase.jps.preset.JPTmpDirectory;
 
 /**
  *
@@ -38,22 +39,22 @@ import java.io.File;
  */
 public class JPBaseDirectory extends AbstractJPDirectory {
 
-	public final static String[] COMMAND_IDENTIFIERS = {"--base"};
+    public final static String[] COMMAND_IDENTIFIERS = {"--base"};
 
-	public static FileHandler.ExistenceHandling existenceHandling = FileHandler.ExistenceHandling.Must;
-	public static FileHandler.AutoMode autoMode = FileHandler.AutoMode.On;
-	
-	public JPBaseDirectory() {
-		super(COMMAND_IDENTIFIERS, existenceHandling, autoMode);
-	}
+    public static FileHandler.ExistenceHandling existenceHandling = FileHandler.ExistenceHandling.Must;
+    public static FileHandler.AutoMode autoMode = FileHandler.AutoMode.On;
+
+    public JPBaseDirectory() {
+        super(COMMAND_IDENTIFIERS, existenceHandling, autoMode);
+    }
 
     @Override
-	protected File getPropertyDefaultValue() {
-		return new File("/tmp/test/base");
-	}
+    protected File getPropertyDefaultValue() throws JPNotAvailableException {
+        return new File(JPService.getProperty(JPTmpDirectory.class).getValue(), "base");
+    }
 
-	@Override
-	public String getDescription() {
-		return "Specifies the database directory.";
-	}
+    @Override
+    public String getDescription() {
+        return "Specifies the database directory.";
+    }
 }

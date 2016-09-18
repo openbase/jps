@@ -35,25 +35,68 @@ import org.openbase.jps.tools.FileHandler;
  */
 public class JPTmpDirectory extends AbstractJPDirectory {
 
+    public final static String SYSTEM_TMP_DIRECTORY = System.getProperty("java.io.tmpdir", "/tmp");
+    public final static String TEST_DIRECTORY = "test";
     public final static String[] COMMAND_IDENTIFIERS = {"--tmp"};
+    
+    private File tmpDefaultDirectory;
 
     public JPTmpDirectory() {
         super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                try {
+
+                    // cleanup tmp folder
+                    if (getValue().exists()) {
+                        FileUtils.deleteQuietly(getValue());
+                    }
+                    // cleanup parent folder if structure is known
+                    if (getValue().getAbsolutePath().equals(tmpDefaultDirectory.getAbsolutePath())) {
+                        if (JPService.testMode()) {
+                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
+                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY));
+                        } else {
+                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
+                        }
+                    }
+
+                } catch (IllegalArgumentException ex) {
+                    JPService.printError("Could not delete tmp directory!", ex);
+                }
+            }
+        });
+    }
+
+    private void deleteDirectoryIfEmpty(final File file) {
+        if (!file.isDirectory()) {
+            return;
+        }
+        for (File child : file.listFiles()) {
+            deleteDirectoryIfEmpty(child);
+        }
+
+        if (file.listFiles().length == 0) {
+            FileUtils.deleteQuietly(file);
+        }
     }
 
     @Override
     protected File getPropertyDefaultValue() {
         File tmpFolder;
         if (JPService.testMode()) {
-            tmpFolder = new File(System.getProperty("java.io.tmpdir", "/tmp") + File.separatorChar + "test" + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName()) + File.separatorChar + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
+            tmpFolder = new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName()) + File.separatorChar + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
         } else {
-            tmpFolder = new File(System.getProperty("java.io.tmpdir", "/tmp") + File.separatorChar +  convertIntoValidFileName(JPService.getApplicationName()) + File.separatorChar + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
+            tmpFolder = new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName()) + File.separatorChar + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
         }
         try {
             FileUtils.forceMkdir(tmpFolder);
+            tmpDefaultDirectory = tmpFolder;
             return tmpFolder;
         } catch (IOException ex) {
             JPService.printError("Could not create tmp folder :(", ex);
+            tmpDefaultDirectory = tmpFolder;
             return new File("/tmp");
         }
     }
