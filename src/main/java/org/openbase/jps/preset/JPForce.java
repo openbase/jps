@@ -30,7 +30,7 @@ import org.openbase.jps.exception.JPValidationException;
 
 /**
  *
- * @author mpohling
+ @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPForce extends AbstractJPBoolean {
 

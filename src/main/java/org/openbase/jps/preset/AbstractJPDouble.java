@@ -32,8 +32,7 @@ import java.util.List;
 
 /**
  *
- * @author
- * mpohling
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public abstract class AbstractJPDouble extends AbstractJavaProperty<Double> {
 

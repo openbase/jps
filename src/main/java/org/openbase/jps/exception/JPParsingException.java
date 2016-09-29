@@ -28,7 +28,7 @@ package org.openbase.jps.exception;
 
 /**
  *
- * @author mpohling
+ @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPParsingException extends JPServiceException {
 

@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  *
- * @author mpohling
+ @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public abstract class AbstractJPFloat extends AbstractJavaProperty<Float> {
     

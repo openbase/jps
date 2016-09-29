@@ -31,7 +31,7 @@ import org.openbase.jps.preset.AbstractJPMapStringString;
 
 /**
  *
- * @author <a href="mailto:mpohling@cit-ec.uni-bielefeld.de">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPMapStringString extends AbstractJPMapStringString {
 

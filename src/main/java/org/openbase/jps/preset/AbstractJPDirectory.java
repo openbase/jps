@@ -32,7 +32,7 @@ import org.openbase.jps.tools.FileHandler.ExistenceHandling;
 
 /**
  *
- * @author mpohling
+ @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public abstract class AbstractJPDirectory extends AbstractJPFile {
 

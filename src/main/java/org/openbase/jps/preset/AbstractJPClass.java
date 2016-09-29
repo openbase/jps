@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  *
- * @author mpohling
+ @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  * @param <C> property related enum type.
  */
 public abstract class AbstractJPClass<C> extends AbstractJavaProperty<Class<C>> {
