@@ -32,7 +32,7 @@ import org.openbase.jps.tools.FileHandler;
 
 /**
  *
- @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPPrefix extends AbstractJPDirectory {
 

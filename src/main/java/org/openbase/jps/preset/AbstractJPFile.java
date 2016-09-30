@@ -39,7 +39,7 @@ import org.openbase.jps.tools.FileHandler.FileType;
 
 /**
  *
- @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 

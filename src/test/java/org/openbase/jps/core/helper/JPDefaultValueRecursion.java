@@ -30,7 +30,7 @@ import java.io.File;
 
 /**
  *
- @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPDefaultValueRecursion extends AbstractJPDirectory {
 

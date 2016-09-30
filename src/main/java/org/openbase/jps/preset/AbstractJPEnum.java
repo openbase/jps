@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  *
- @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  * @param <E> property related enum type.
  */
 public abstract class AbstractJPEnum<E extends Enum<E>> extends AbstractJavaProperty<E> {

@@ -30,7 +30,7 @@ import org.openbase.jps.preset.JPTmpDirectory;
 
 /**
  *
- @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPBaseDirectory extends AbstractJPDirectory {
 

@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Java Property Service, this is the central lib controller used to initialize and manage all properties.
  *
- @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  *
  *
  * JPS Library can be used for managing the properties of an application. The argument definition is realized by registering classes which extends the AbstractJavaProperty class. Common argument types

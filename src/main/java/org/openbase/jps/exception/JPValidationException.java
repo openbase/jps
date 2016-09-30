@@ -28,7 +28,7 @@ package org.openbase.jps.exception;
 
 /**
  *
- @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPValidationException extends JPServiceException {
 
