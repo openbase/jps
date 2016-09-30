@@ -29,7 +29,7 @@ import java.util.Map;
 
 /**
  *
- * * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public abstract class AbstractJPMapStringString extends AbstractJPMap<String, String> {
 
