@@ -58,7 +58,6 @@ public abstract class AbstractJPMethod<C> extends AbstractJavaProperty<Method> {
         try {
             Class<C> relatedClass = JPService.getProperty(jpClass).getValue();
             for (Method method : relatedClass.getMethods()) {
-                System.out.println("Method: "+method.getName());
                 if (method.getName().equalsIgnoreCase(oneArgumentResult)) {
                     return method;
                 }
