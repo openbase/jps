@@ -55,9 +55,9 @@
     <packaging>jar</packaging>
     
     <scm>
-        <connection>scm:git:git@github.com/openbase/jps.git</connection>
-        <developerConnection>scm:git:git@github.com/openbase/jps.git</developerConnection>
-        <url>git@github.com/openbase/jps.git</url>
+        <connection>scm:git:https://github.com/openbase/jps.git</connection>
+        <developerConnection>scm:git:https://github.com/openbase/jps.git</developerConnection>
+        <url>https://github.com/openbase/jps.git</url>
     </scm>
 
     <build>
