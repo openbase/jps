@@ -4,7 +4,7 @@
 
     <groupId>org.openbase</groupId>
     <artifactId>jps</artifactId>
-    <version>3.1-SNAPSHOT</version>
+    <version>3.2-SNAPSHOT</version>
     
     <name>JPS</name>
     <inceptionYear>2014</inceptionYear>
