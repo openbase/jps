@@ -21,17 +21,8 @@ package org.openbase.jps.core;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
 import java.io.File;
 import java.util.Map;
-import org.openbase.jps.core.helper.JPBaseDirectory;
-import org.openbase.jps.core.helper.JPChildDirectory;
-import org.openbase.jps.core.helper.JPDefaultValueRecursion;
-import org.openbase.jps.core.helper.JPMapStringString;
-import org.openbase.jps.preset.JPDebugMode;
-import org.openbase.jps.preset.JPShowGUI;
-import org.openbase.jps.preset.JPTestMode;
-import org.openbase.jps.preset.JPVerbose;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -39,7 +30,16 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openbase.jps.core.helper.JPBaseDirectory;
+import org.openbase.jps.core.helper.JPChildDirectory;
+import org.openbase.jps.core.helper.JPDefaultValueRecursion;
+import org.openbase.jps.core.helper.JPMapStringString;
+import org.openbase.jps.exception.JPServiceException;
+import org.openbase.jps.preset.JPDebugMode;
+import org.openbase.jps.preset.JPShowGUI;
+import org.openbase.jps.preset.JPTestMode;
 import org.openbase.jps.preset.JPTmpDirectory;
+import org.openbase.jps.preset.JPVerbose;
 
 /**
  *
@@ -51,7 +51,8 @@ public class JPServiceTest {
     }
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws JPServiceException {
+        JPService.setupJUnitTestMode();
     }
 
     @AfterClass
@@ -194,7 +195,7 @@ public class JPServiceTest {
     public void testPropertyDepHandling_3() throws Exception {
         JPService.registerProperty(JPBaseDirectory.class, new File(JPService.getProperty(JPTmpDirectory.class).getValue(), "appbase/"));
         JPService.registerProperty(JPChildDirectory.class, new File("appchild/sub"));
-        String[] args = {"--base", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() +"/combase"};
+        String[] args = {"--base", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/combase"};
         JPService.parse(args);
         assertEquals(new File(JPService.getProperty(JPTmpDirectory.class).getValue(), "combase"), JPService.getProperty(JPBaseDirectory.class).getValue());
         assertEquals(new File(JPService.getProperty(JPTmpDirectory.class).getValue(), "combase/appchild/sub"), JPService.getProperty(JPChildDirectory.class).getValue());
@@ -214,7 +215,7 @@ public class JPServiceTest {
     public void testPropertyDepHandling_5() throws Exception {
         JPService.registerProperty(JPBaseDirectory.class, new File(JPService.getProperty(JPTmpDirectory.class).getValue(), "appbase/"));
         JPService.registerProperty(JPChildDirectory.class, new File("appchild/sub"));
-        String[] args = {"--base", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() +"/combase", "--child", "comchild"};
+        String[] args = {"--base", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/combase", "--child", "comchild"};
         JPService.parse(args);
         assertEquals(new File(JPService.getProperty(JPTmpDirectory.class).getValue(), "combase"), JPService.getProperty(JPBaseDirectory.class).getValue());
         assertEquals(new File(JPService.getProperty(JPTmpDirectory.class).getValue(), "combase/comchild"), JPService.getProperty(JPChildDirectory.class).getValue());
@@ -243,10 +244,10 @@ public class JPServiceTest {
     @Test
     public void testRecursivePropertyResolving() throws Exception {
         JPService.registerProperty(JPChildDirectory.class);
-        String[] args = {"--base", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() +"/newbase"};
+        String[] args = {"--base", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/newbase"};
         JPService.parse(args);
 
-        assertEquals(JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() +"/newbase/child", JPService.getProperty(JPChildDirectory.class).getValue().getAbsolutePath());
+        assertEquals(JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/newbase/child", JPService.getProperty(JPChildDirectory.class).getValue().getAbsolutePath());
     }
 
     @Test
@@ -255,15 +256,15 @@ public class JPServiceTest {
         JPService.registerProperty(JPChildDirectory.class);
         String[] args = {"--child", "child/revolution"};
         JPService.parse(args);
-        assertEquals(JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() +"/base/child/revolution", JPService.getProperty(JPDefaultValueRecursion.class).getValue().getAbsolutePath());
+        assertEquals(JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/base/child/revolution", JPService.getProperty(JPDefaultValueRecursion.class).getValue().getAbsolutePath());
     }
 
     @Test
     public void testAbsolutChildRef() throws Exception {
         JPService.registerProperty(JPBaseDirectory.class);
         JPService.registerProperty(JPChildDirectory.class);
-        String[] args = {"--child", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() +"/absolut/child"};
+        String[] args = {"--child", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/absolut/child"};
         JPService.parse(args);
-        assertEquals(JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() +"/absolut/child", JPService.getProperty(JPChildDirectory.class).getValue().getAbsolutePath());
+        assertEquals(JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/absolut/child", JPService.getProperty(JPChildDirectory.class).getValue().getAbsolutePath());
     }
 }
