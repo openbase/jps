@@ -25,7 +25,6 @@ package org.openbase.jps.core;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
 import org.openbase.jps.exception.JPBadArgumentException;
 import org.openbase.jps.exception.JPInitializationException;
 import org.openbase.jps.exception.JPNotAvailableException;
@@ -182,7 +181,6 @@ public class JPService {
         printError(new JPServiceException(message, cause));
     }
 
-
     /**
      *
      * @param cause
@@ -234,9 +232,11 @@ public class JPService {
             }
             argsString += arg;
         }
-        argsString += "\n";
 
-        logger.info("[command line value modification]" + argsString);
+        if (!argsString.isEmpty()) {
+            argsString += "\n";
+            logger.info("[command line value modification]" + argsString);
+        }
     }
 
     /**
