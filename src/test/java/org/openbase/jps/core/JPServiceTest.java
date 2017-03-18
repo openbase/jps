@@ -40,6 +40,7 @@ import org.openbase.jps.preset.JPShowGUI;
 import org.openbase.jps.preset.JPTestMode;
 import org.openbase.jps.preset.JPTmpDirectory;
 import org.openbase.jps.preset.JPVerbose;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -266,5 +267,12 @@ public class JPServiceTest {
         String[] args = {"--child", JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/absolut/child"};
         JPService.parse(args);
         assertEquals(JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/absolut/child", JPService.getProperty(JPChildDirectory.class).getValue().getAbsolutePath());
+    }
+    
+    @Test
+    public void testPrinting() throws Exception {
+        LoggerFactory.getLogger("TestMessage").info("This is a info message");
+        LoggerFactory.getLogger("TestMessage").warn("This is a important warning!");
+        LoggerFactory.getLogger("TestMessage").error("This is an error message!");
     }
 }
