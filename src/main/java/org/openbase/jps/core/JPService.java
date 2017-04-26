@@ -25,6 +25,10 @@ package org.openbase.jps.core;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+import java8.util.function.BinaryOperator;
+import java8.util.function.Consumer;
+import java8.util.function.Function;
+import java8.util.stream.StreamSupport;
 import org.openbase.jps.exception.JPBadArgumentException;
 import org.openbase.jps.exception.JPInitializationException;
 import org.openbase.jps.exception.JPNotAvailableException;
@@ -34,13 +38,16 @@ import org.openbase.jps.exception.JPValidationException;
 import org.openbase.jps.preset.JPHelp;
 import org.openbase.jps.preset.JPTestMode;
 import org.openbase.jps.preset.JPVerbose;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -482,11 +489,14 @@ public class JPService {
         // load recursive all properties which are not already loaded.
         while (modification) {
             modification = false;
-            currentlyregisteredPropertyClasses.stream().forEach((propertyClass) -> {
-                try {
-                    properties.add(getProperty(propertyClass));
-                } catch (Exception ex) {
-                    printError(new JPServiceException("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex));
+            StreamSupport.stream(currentlyregisteredPropertyClasses).forEach(new Consumer<Class<? extends AbstractJavaProperty>>() {
+                @Override
+                public void accept(Class<? extends AbstractJavaProperty> propertyClass) {
+                    try {
+                        properties.add(getProperty(propertyClass));
+                    } catch (Exception ex) {
+                        printError(new JPServiceException("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex));
+                    }
                 }
             });
         }
@@ -504,18 +514,31 @@ public class JPService {
         String header = "";
         List<AbstractJavaProperty> propertyList = new ArrayList(initializedProperties.values());
         Collections.sort(propertyList);
-        header = propertyList.stream().map((property) -> " [" + property.getSyntax() + "]").reduce(header, String::concat);
+        header = StreamSupport.stream(propertyList).map(new Function<AbstractJavaProperty, String>() {
+            @Override
+            public String apply(AbstractJavaProperty property) {
+                return " [" + property.getSyntax() + "]";
+            }
+        }).reduce(header, new BinaryOperator<String>() {
+            @Override
+            public String apply(String s, String str) {
+                return s.concat(str);
+            }
+        });
         help += newLineFormatter(header, "\n\t", 100);
         help += "\nwhere:\n";
 
         List<AbstractJavaProperty> properties = loadAllProperties();
 
-        Collections.sort(properties, (AbstractJavaProperty o1, AbstractJavaProperty o2) -> {
-            try {
-                return o1.getDefaultExample().compareTo(o2.getDefaultExample());
-            } catch (Exception ex) {
-                logger.warn("Could not compare properties!");
-                return -1;
+        Collections.sort(properties, new Comparator<AbstractJavaProperty>() {
+            @Override
+            public int compare(AbstractJavaProperty o1, AbstractJavaProperty o2) {
+                try {
+                    return o1.getDefaultExample().compareTo(o2.getDefaultExample());
+                } catch (Exception ex) {
+                    logger.warn("Could not compare properties!");
+                    return -1;
+                }
             }
         });
 
