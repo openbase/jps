@@ -49,7 +49,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 
 	public enum ValueType {
 
-		PropertyDefault, ApplicationDefault, CommandLine
+		PropertyDefault, ApplicationDefault, CommandLine, Runtime
 	};
 	protected String identifier;
 	protected final String[] propertyIdentifiers;
@@ -124,6 +124,11 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		this.valueType = valueType;
 	}
 
+	public void update(V value) {
+		this.value = value;
+		this.valueType = ValueType.Runtime;
+	}
+
 	protected void updateValue() throws JPServiceException {
         V newValue;
 		switch (valueType) {
@@ -136,6 +141,8 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 			case CommandLine:
                 newValue = parsedValue;
 				break;
+			case Runtime:
+				return;
             default:
                 throw new AssertionError(valueType + " is an unknown state!");
 
