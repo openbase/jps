@@ -119,12 +119,12 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		return value;
 	}
 
-	protected void setValue(V value, ValueType valueType) {
+	protected void setValue(final V value, final ValueType valueType) {
 		this.value = value;
 		this.valueType = valueType;
 	}
 
-	public void update(V value) {
+	public void update(final V value) {
 		this.value = value;
 		this.valueType = ValueType.Runtime;
 	}
