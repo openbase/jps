@@ -94,12 +94,7 @@ public class JPService {
         applicationMainClass = mainclass;
 
         // format and setup application name
-        String appName = "";
-        String[] split = mainclass.getSimpleName().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])");
-        for (int i = 0; i < split.length; i++) {
-            appName += (i + 1 < split.length && !split[i].endsWith(" ")) ? split[i] + " " : split[i];
-        }
-        setApplicationName(appName.replace(" ", "-").toLowerCase());
+        setApplicationName(mainclass.getSimpleName().replaceAll("(.)(\\p{Upper})", "$1-$2").toLowerCase());
     }
 
     /**
