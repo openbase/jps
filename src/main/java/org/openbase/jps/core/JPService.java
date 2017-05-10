@@ -92,7 +92,14 @@ public class JPService {
      */
     public static void setApplicationName(final Class mainclass) {
         applicationMainClass = mainclass;
-        setApplicationName(mainclass.getSimpleName().toLowerCase());
+
+        // format and setup application name
+        String appName = "";
+        String[] split = mainclass.getSimpleName().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])");
+        for (int i = 0; i < split.length; i++) {
+            appName += (i + 1 < split.length && !split[i].endsWith(" ")) ? split[i] + " " : split[i];
+        }
+        setApplicationName(appName.replace(" ", "-").toLowerCase());
     }
 
     /**
