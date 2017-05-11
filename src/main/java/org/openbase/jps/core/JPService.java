@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.openbase.jps.core;
 
 /*
@@ -64,12 +60,13 @@ import org.slf4j.LoggerFactory;
  */
 public class JPService {
 
-    private static final Logger logger = LoggerFactory.getLogger(JPService.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(JPService.class);
     private static final Set<Class<? extends AbstractJavaProperty>> registeredPropertyClasses = new HashSet<>();
     private static final HashMap<Class<? extends AbstractJavaProperty>, AbstractJavaProperty> initializedProperties = new HashMap<>();
     private static final HashMap<Class<? extends AbstractJavaProperty>, AbstractJavaProperty> loadedProperties = new HashMap<>();
     private static final HashMap<Class<? extends AbstractJavaProperty>, Object> overwrittenDefaultValueMap = new HashMap<>();
     private static String applicationName = "";
+    private static Class applicationMainClass;
     private static boolean argumentsAnalyzed = false;
 
     static {
@@ -97,7 +94,10 @@ public class JPService {
      * @param mainclass the application mainclass which is used to generate the application name.
      */
     public static void setApplicationName(final Class mainclass) {
-        setApplicationName(mainclass.getSimpleName().toLowerCase());
+        applicationMainClass = mainclass;
+
+        // format and setup application name
+        setApplicationName(mainclass.getSimpleName().replaceAll("(.)(\\p{Upper})", "$1-$2").toLowerCase());
     }
 
     /**
@@ -121,7 +121,7 @@ public class JPService {
      */
     public static synchronized <V, C extends AbstractJavaProperty<V>> void registerProperty(Class<C> propertyClass, V defaultValue) {
         if (argumentsAnalyzed) {
-            logger.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
+            LOGGER.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
 
         }
         registeredPropertyClasses.add(propertyClass);
@@ -141,7 +141,7 @@ public class JPService {
      */
     public static synchronized <V, C extends AbstractJavaProperty<V>> void overwriteDefaultValue(Class<C> propertyClass, V defaultValue) {
         if (argumentsAnalyzed) {
-            logger.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
+            LOGGER.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
         }
         overwrittenDefaultValueMap.put(propertyClass, defaultValue);
     }
@@ -153,7 +153,7 @@ public class JPService {
      */
     public static void registerProperty(Class<? extends AbstractJavaProperty> propertyClass) {
         if (argumentsAnalyzed) {
-            logger.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
+            LOGGER.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
         }
         registeredPropertyClasses.add(propertyClass);
     }
@@ -172,11 +172,11 @@ public class JPService {
             try {
                 JPService.printHelp();
             } catch (JPServiceException ex1) {
-                logger.error("Could not print help text!");
+                getApplicationLogger().error("Could not print help text!");
                 printError(ex1);
             }
             printError(ex);
-            logger.info("Exit " + applicationName);
+            getApplicationLogger().info("Exit " + applicationName);
 
             if (!testMode()) {
                 System.exit(255);
@@ -193,16 +193,16 @@ public class JPService {
      * @param cause
      */
     public static void printError(Throwable cause) {
-        logger.error("=========================================================================");
+        getApplicationLogger().error("=========================================================================");
         printError(cause, "=");
         try {
             if (getProperty(JPVerbose.class).getValue()) {
                 cause.printStackTrace(System.err);
             }
         } catch (JPNotAvailableException ex) {
-            logger.error("Could not load exception stack: " + ex.getMessage());
+            getApplicationLogger().error("Could not load exception stack: " + ex.getMessage());
         }
-        logger.error("=========================================================================");
+        getApplicationLogger().error("=========================================================================");
     }
 
     /**
@@ -211,7 +211,7 @@ public class JPService {
      * @param prefix
      */
     protected static void printError(Throwable cause, String prefix) {
-        logger.error(prefix + " " + cause.getMessage());
+        getApplicationLogger().error(prefix + " " + cause.getMessage());
         Throwable innerCause = cause.getCause();
         if (innerCause != null) {
             printError(innerCause, prefix + "==");
@@ -242,7 +242,7 @@ public class JPService {
 
         if (!argsString.isEmpty()) {
             argsString += "\n";
-            logger.info("[command line value modification]" + argsString);
+            getApplicationLogger().info("[command line value modification]" + argsString);
         }
     }
 
@@ -536,7 +536,7 @@ public class JPService {
                 try {
                     return o1.getDefaultExample().compareTo(o2.getDefaultExample());
                 } catch (Exception ex) {
-                    logger.warn("Could not compare properties!");
+                    getApplicationLogger().warn("Could not compare properties!");
                     return -1;
                 }
             }
@@ -548,7 +548,29 @@ public class JPService {
             help += "\t\t" + newLineFormatter(property.getDescription(), "\n\t\t", 100);
             help += "\n";
         }
-        logger.info(help);
+        getApplicationLogger().info(help);
+    }
+
+    /**
+     * Returns the logger instance of the main class.
+     *
+     * Note: If the main class is not set via {@code setApplicationName()} the {@code defaultLogger} is used.
+     *
+     * @return a default logger instance.
+     */
+    public static Logger getApplicationLogger(final Logger defaultLogger) {
+        return (applicationMainClass != null ? LoggerFactory.getLogger(applicationMainClass) : defaultLogger);
+    }
+
+    /**
+     * Returns the logger instance of the main class.
+     *
+     * Note: If the main class is not set via {@code setApplicationName()} the jpservice default logger instance is used.
+     *
+     * @return a logger instance.
+     */
+    public static Logger getApplicationLogger() {
+        return getApplicationLogger(LOGGER);
     }
 
     /**
@@ -606,7 +628,7 @@ public class JPService {
 //				FileOutputStream fos = new FileOutputStream(JPService.getProperty(JPPropertyFile.class).getValue());
 //				properties.store(fos, "MyProperties");
 //			} catch (IOException ex) {
-//				LOGGER.error("Could not save properties!", ex);
+//				getApplicationLogger().error("Could not save properties!", ex);
 //			}
 //		}
 //	}
