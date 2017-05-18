@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ev
 # start lib deployment  ...
-mnn deploy -Pdeploy,sonatype --settings .travis/settings.xml -DskipTests=true -B -q -U
+#mvn deploy -Pdeploy,sonatype --settings .travis/settings.xml -DskipTests=true -B -q -U
 
 
 # start doc deployment ...
