@@ -6,6 +6,9 @@ set -ev
 
 ### start doc deployment ...
 
+# checkout master branch
+git checkout master
+
 # clear existsing doc files 
 rm -rf docs
 mkdir docs
