@@ -27,5 +27,6 @@ git add docs
 git status
 git commit -m "Lastest javadoc on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
 git status
-#git push
+# deploy
+git push
 echo ### deployment successfully finished
