@@ -202,7 +202,7 @@
             <version>${jansi.version}</version>
         </dependency>
         <dependency>
-            <!-- containsd slf4j-api -->
+            <!-- contains slf4j-api -->
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
