@@ -21,6 +21,13 @@ package org.openbase.jps.core;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.openbase.jps.exception.JPBadArgumentException;
 import org.openbase.jps.exception.JPInitializationException;
 import org.openbase.jps.exception.JPNotAvailableException;
@@ -30,13 +37,6 @@ import org.openbase.jps.exception.JPValidationException;
 import org.openbase.jps.preset.JPHelp;
 import org.openbase.jps.preset.JPTestMode;
 import org.openbase.jps.preset.JPVerbose;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,7 +90,7 @@ public class JPService {
         applicationMainClass = mainclass;
 
         // format and setup application name
-        setApplicationName(mainclass.getSimpleName().replaceAll("(.)(\\p{Upper})", "$1-$2").toLowerCase());
+        setApplicationName(mainclass.getSimpleName().replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase());
     }
 
     /**
