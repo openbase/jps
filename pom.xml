@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.openbase</groupId>
-    <artifactId>jps-feature-marshmallow-support</artifactId>
-    <version>3.2-SNAPSHOT</version>
+    <artifactId>jps</artifactId>
+    <version>3.2-feature-marshmallow-support-SNAPSHOT</version>
     
     <name>JPS</name>
     <inceptionYear>2014</inceptionYear>
