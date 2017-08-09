@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.openbase.jps.core.helper;
 
 /*
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2016 openbase.org
+ * Copyright (C) 2014 - 2017 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -31,7 +26,7 @@ import org.openbase.jps.preset.AbstractJPMapStringString;
 
 /**
  *
- * @author <a href="mailto:mpohling@cit-ec.uni-bielefeld.de">Divine Threepwood</a>
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPMapStringString extends AbstractJPMapStringString {
 

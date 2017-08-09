@@ -8,7 +8,7 @@ package org.openbase.jps.core;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2016 openbase.org
+ * Copyright (C) 2014 - 2017 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author mpohling
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  * @param <V>
  */
 public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJavaProperty> { // <Value,ActionClass>
@@ -49,7 +49,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 
 	public enum ValueType {
 
-		PropertyDefault, ApplicationDefault, CommandLine
+		PropertyDefault, ApplicationDefault, CommandLine, Runtime
 	};
 	protected String identifier;
 	protected final String[] propertyIdentifiers;
@@ -119,9 +119,14 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 		return value;
 	}
 
-	protected void setValue(V value, ValueType valueType) {
+	protected void setValue(final V value, final ValueType valueType) {
 		this.value = value;
 		this.valueType = valueType;
+	}
+
+	public void update(final V value) {
+		this.value = value;
+		this.valueType = ValueType.Runtime;
 	}
 
 	protected void updateValue() throws JPServiceException {
@@ -136,6 +141,8 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 			case CommandLine:
                 newValue = parsedValue;
 				break;
+			case Runtime:
+				return;
             default:
                 throw new AssertionError(valueType + " is an unknown state!");
 

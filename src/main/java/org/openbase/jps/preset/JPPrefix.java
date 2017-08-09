@@ -8,7 +8,7 @@ package org.openbase.jps.preset;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2016 openbase.org
+ * Copyright (C) 2014 - 2017 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -25,17 +25,14 @@ package org.openbase.jps.preset;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
+import java.io.File;
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.tools.FileHandler;
-import java.io.File;
-import java.io.IOException;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
- * @author mpohling
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPPrefix extends AbstractJPDirectory {
 
@@ -48,13 +45,7 @@ public class JPPrefix extends AbstractJPDirectory {
     @Override
     protected File getPropertyDefaultValue() throws JPNotAvailableException {
         if (JPService.testMode()) {
-            File tmpFolder = new File(System.getProperty("java.io.tmpdir", "/tmp") + "/" + convertIntoValidFileName(System.getProperty("user.name", "mrpink")));
-            try {
-                FileUtils.forceMkdir(tmpFolder);
-                return tmpFolder;
-            } catch (IOException ex) {
-                JPService.printError("Could not create tmp folder :(", ex);
-            }
+            return JPService.getProperty(JPTmpDirectory.class).getValue();
         }
 
         String globalPrefix = System.getenv("prefix");

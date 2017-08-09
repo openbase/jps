@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.openbase.jps.core.helper;
 
 /*
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2016 openbase.org
+ * Copyright (C) 2014 - 2017 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -27,33 +21,35 @@ package org.openbase.jps.core.helper;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-
 import org.openbase.jps.preset.AbstractJPDirectory;
 import org.openbase.jps.tools.FileHandler;
 import java.io.File;
+import org.openbase.jps.core.JPService;
+import org.openbase.jps.exception.JPNotAvailableException;
+import org.openbase.jps.preset.JPTmpDirectory;
 
 /**
  *
- * @author mpohling
+ * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPBaseDirectory extends AbstractJPDirectory {
 
-	public final static String[] COMMAND_IDENTIFIERS = {"--base"};
+    public final static String[] COMMAND_IDENTIFIERS = {"--base"};
 
-	public static FileHandler.ExistenceHandling existenceHandling = FileHandler.ExistenceHandling.Must;
-	public static FileHandler.AutoMode autoMode = FileHandler.AutoMode.On;
-	
-	public JPBaseDirectory() {
-		super(COMMAND_IDENTIFIERS, existenceHandling, autoMode);
-	}
+    public static FileHandler.ExistenceHandling existenceHandling = FileHandler.ExistenceHandling.Must;
+    public static FileHandler.AutoMode autoMode = FileHandler.AutoMode.On;
+
+    public JPBaseDirectory() {
+        super(COMMAND_IDENTIFIERS, existenceHandling, autoMode);
+    }
 
     @Override
-	protected File getPropertyDefaultValue() {
-		return new File("/tmp/test/base");
-	}
+    protected File getPropertyDefaultValue() throws JPNotAvailableException {
+        return new File(JPService.getProperty(JPTmpDirectory.class).getValue(), "base");
+    }
 
-	@Override
-	public String getDescription() {
-		return "Specifies the database directory.";
-	}
+    @Override
+    public String getDescription() {
+        return "Specifies the database directory.";
+    }
 }
