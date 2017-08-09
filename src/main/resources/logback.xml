@@ -1,7 +1,7 @@
 <configuration>
     <!-- openbase coloring conversion -->
-    <conversionRule conversionWord="messageHighlighting" converterClass="org.openbase.log.OpenBaseLogbackLoggerColorTheme" />
-    <conversionRule conversionWord="loggerHighlighting" converterClass="org.openbase.log.OpenBaseLogbackMessageColorTheme" />
+    <conversionRule conversionWord="messageHighlighting" converterClass="org.openbase.log.OpenBaseLogbackMessageColorTheme" />
+    <conversionRule conversionWord="loggerHighlighting" converterClass="org.openbase.log.OpenBaseLogbackLoggerColorTheme" />
     
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- On Windows machines setting withJansi to true enables ANSI
