@@ -50,6 +50,6 @@ public class JPVerbose extends AbstractJPBoolean {
 	
 	@Override
 	public String getDescription() {
-		return "Prints more information during exection to stdout.";
+		return "Prints more information during execution to stdout.";
 	}
 }
