@@ -36,7 +36,7 @@ public class OpenBaseLogbackMessageColorTheme extends ForegroundCompositeConvert
     protected String getForegroundColorCode(ILoggingEvent event) {
         switch (event.getLevel().toInt()) {
             case Level.INFO_INT:
-                return ANSIConstants.BLUE_FG;
+                return ANSIConstants.DEFAULT_FG;
             case Level.WARN_INT:
                 return ANSIConstants.YELLOW_FG;
             case Level.ERROR_INT:
