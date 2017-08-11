@@ -156,6 +156,8 @@ public class JPService {
      *
      * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
      *
+     * Note: In case the JPUnitTestMode was enabled this method does not call exit.
+     * 
      * @param args
      */
     public static void parseAndExitOnError(String[] args) {
