@@ -10,6 +10,8 @@
     <inceptionYear>2014</inceptionYear>
     <description>Java Property Service</description>
 
+    <url>https://github.com/openbase/jps/wiki</url>
+
     <organization>
         <name>openbase.org</name>
         <url>https://github.com/openbase</url>
