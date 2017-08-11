@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -34,6 +35,7 @@ import org.openbase.jps.core.helper.JPBaseDirectory;
 import org.openbase.jps.core.helper.JPChildDirectory;
 import org.openbase.jps.core.helper.JPDefaultValueRecursion;
 import org.openbase.jps.core.helper.JPMapStringString;
+import org.openbase.jps.core.helper.JPTestProperty;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.preset.JPDebugMode;
 import org.openbase.jps.preset.JPShowGUI;
@@ -268,11 +270,31 @@ public class JPServiceTest {
         JPService.parse(args);
         assertEquals(JPService.getProperty(JPTmpDirectory.class).getValue().getAbsolutePath() + "/absolut/child", JPService.getProperty(JPChildDirectory.class).getValue().getAbsolutePath());
     }
-    
+
     @Test
     public void testPrinting() throws Exception {
         LoggerFactory.getLogger("TestMessage").info("This is a info message");
         LoggerFactory.getLogger("TestMessage").warn("This is a important warning!");
         LoggerFactory.getLogger("TestMessage").error("This is an error message!");
+    }
+
+//    @Test
+    public void testParseAndExitOnError() throws Exception {
+        String[] testArgs = {"-t"};
+        JPService.registerProperty(JPTestProperty.class);
+        JPService.parseAndExitOnError(testArgs);
+        Assert.fail("Should have exited!");
+    }
+
+//    @Test
+    public void testNullPointerForUninitializedProperties() throws Exception {
+        String[] testArgs = {"-t"};
+        JPService.registerProperty(JPTestProperty.class);
+        JPService.parse(testArgs);
+        try {
+            System.out.println(JPService.getProperty(JPTestProperty.class).getValue());
+        } catch (NullPointerException ex) {
+            Assert.fail("NullPointer should not be thrown!");
+        }
     }
 }
