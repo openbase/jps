@@ -157,8 +157,21 @@ public class JPService {
      * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
      *
      * Note: In case the JPUnitTestMode was enabled this method does not call exit.
-     * 
-     * @param args
+     *
+     * @param args Arguments as a string list e.g. given by a java fx application {@code getParameters().getRaw()} in the start method.
+     */
+    public static void parseAndExitOnError(final List<String> args) {
+        parseAndExitOnError(args.toArray(new String[args.size()]));
+    }
+
+    /**
+     * Analyze the input arguments and setup all registered Properties. If one argument could not be handled or something else goes wrong this methods calls System.exit(255);
+     *
+     * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
+     *
+     * Note: In case the JPUnitTestMode was enabled this method does not call exit.
+     *
+     * @param args Arguments given by the main method.
      */
     public static void parseAndExitOnError(String[] args) {
         try {
@@ -176,6 +189,36 @@ public class JPService {
             if (!testMode()) {
                 System.exit(255);
             }
+        }
+    }
+
+    /**
+     * Analyze the input arguments and setup all registered Properties.
+     *
+     * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
+     *
+     * @param args Arguments as a string list e.g. given by a java fx application {@code getParameters().getRaw()} in the start method.
+     * @throws JPServiceException
+     */
+    public static void parse(final List<String> args) throws JPServiceException {
+        parse(args.toArray(new String[args.size()]));
+    }
+
+    /**
+     * Analyze the input arguments and setup all registered Properties.
+     *
+     * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
+     *
+     * @param args Arguments given by the main method.
+     * @throws JPServiceException
+     */
+    public static void parse(final String[] args) throws JPServiceException {
+        argumentsAnalyzed = true;
+        try {
+            printValueModification(args);
+            initRegisteredProperties(args);
+        } catch (Exception ex) {
+            throw new JPServiceException("Could not analyse arguments: " + ex.getMessage(), ex);
         }
     }
 
@@ -313,24 +356,6 @@ public class JPService {
             return newInstance;
         } catch (JPServiceException | InstantiationException | IllegalAccessException ex) {
             throw new JPInitializationException("Could not init " + propertyClass.getSimpleName(), ex);
-        }
-    }
-
-    /**
-     * Analyze the input arguments and setup all registered Properties.
-     *
-     * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
-     *
-     * @param args
-     * @throws JPServiceException
-     */
-    public static void parse(String[] args) throws JPServiceException {
-        argumentsAnalyzed = true;
-        try {
-            printValueModification(args);
-            initRegisteredProperties(args);
-        } catch (Exception ex) {
-            throw new JPServiceException("Could not analyse arguments: " + ex.getMessage(), ex);
         }
     }
 
