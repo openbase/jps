@@ -656,4 +656,13 @@ public class JPService {
         }
         return false;
     }
+    
+    public static boolean verboseMode() {
+        try {
+            return JPService.getProperty(JPVerbose.class).getValue();
+        } catch (JPServiceException ex) {
+            printError("Could not detect VerboseMode!", ex);
+        }
+        return false;
+    }
 }
