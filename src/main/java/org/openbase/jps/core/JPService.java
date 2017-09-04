@@ -34,6 +34,7 @@ import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.exception.JPParsingException;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.exception.JPValidationException;
+import org.openbase.jps.preset.JPDebugMode;
 import org.openbase.jps.preset.JPHelp;
 import org.openbase.jps.preset.JPTestMode;
 import org.openbase.jps.preset.JPVerbose;
@@ -662,6 +663,15 @@ public class JPService {
             return JPService.getProperty(JPVerbose.class).getValue();
         } catch (JPServiceException ex) {
             printError("Could not detect VerboseMode!", ex);
+        }
+        return false;
+    }
+    
+    public static boolean debugMode() {
+        try {
+            return JPService.getProperty(JPDebugMode.class).getValue();
+        } catch (JPServiceException ex) {
+            printError("Could not detect DebugMode!", ex);
         }
         return false;
     }
