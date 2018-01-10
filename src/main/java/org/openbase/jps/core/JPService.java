@@ -4,7 +4,7 @@ package org.openbase.jps.core;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2017 openbase.org
+ * Copyright (C) 2014 - 2018 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -35,6 +35,7 @@ import org.openbase.jps.exception.JPParsingException;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.exception.JPValidationException;
 import org.openbase.jps.preset.JPDebugMode;
+import org.openbase.jps.preset.JPForce;
 import org.openbase.jps.preset.JPHelp;
 import org.openbase.jps.preset.JPTestMode;
 import org.openbase.jps.preset.JPVerbose;
@@ -663,6 +664,15 @@ public class JPService {
             return JPService.getProperty(JPVerbose.class).getValue();
         } catch (JPServiceException ex) {
             printError("Could not detect VerboseMode!", ex);
+        }
+        return false;
+    }
+    
+    public static boolean forceMode() {
+        try {
+            return JPService.getProperty(JPForce.class).getValue();
+        } catch (JPServiceException ex) {
+            printError("Could not detect ForceMode!", ex);
         }
         return false;
     }
