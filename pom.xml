@@ -198,11 +198,11 @@
     </properties>
 
     <dependencies>
-        <!--dependency>
+        <dependency>
             <groupId>org.fusesource.jansi</groupId>
             <artifactId>jansi</artifactId>
             <version>${jansi.version}</version>
-        </dependency-->
+        </dependency>
         <dependency>
             <!-- contains slf4j-api -->
             <groupId>ch.qos.logback</groupId>
