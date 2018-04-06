@@ -351,6 +351,14 @@ public class JPService {
             AbstractJavaProperty newInstance = propertyClass.newInstance();
 
             initializedProperties.put(propertyClass, newInstance);
+
+            // init load dependencies.
+            for (Class<? extends AbstractJavaProperty> dependentPropertyClass : (List<Class<? extends AbstractJavaProperty>>) newInstance.getDependencyList()) {
+                if (!initializedProperties.containsKey(dependentPropertyClass)) {
+                    initProperty(dependentPropertyClass);
+                }
+            }
+
             return newInstance;
         } catch (JPServiceException | InstantiationException | IllegalAccessException ex) {
             throw new JPInitializationException("Could not init " + propertyClass.getSimpleName(), ex);

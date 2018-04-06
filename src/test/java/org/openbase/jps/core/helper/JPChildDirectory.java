@@ -38,6 +38,7 @@ public class JPChildDirectory extends AbstractJPDirectory {
 
 	public JPChildDirectory() {
 		super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.On);
+		registerDependingProperty(JPBaseDirectory.class);
 	}
 
     @Override

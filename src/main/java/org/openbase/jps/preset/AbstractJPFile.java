@@ -35,9 +35,7 @@ import org.openbase.jps.tools.FileHandler.ExistenceHandling;
 import org.openbase.jps.tools.FileHandler.FileType;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
 /**
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
@@ -55,13 +53,6 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
         this.existenceHandling = existenceHandling;
         this.autoCreateMode = autoCreateMode;
         this.type = FileType.File;
-
-        // preload partent folder properties.
-        try {
-            getParentDirectory();
-        } catch (Exception ex) {
-            logger.debug("Could not preload parent directory!");
-        }
     }
 
     AbstractJPFile(final String[] commandIdentifier, final ExistenceHandling existenceHandling, final AutoMode autoCreateMode, final FileType type) {
@@ -88,7 +79,7 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
         final File value = getValue();
 
         if (value == null) {
-            throw new JPValidationException(getClass().getSimpleName() + " is not defined but can be set manually with "+ getDefaultExample(), getErrorReport());
+            throw new JPValidationException(getClass().getSimpleName() + " is not defined but can be set manually with " + getDefaultExample(), getErrorReport());
         }
 
         try {
