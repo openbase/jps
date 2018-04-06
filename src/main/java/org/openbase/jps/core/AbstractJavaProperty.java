@@ -45,28 +45,24 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
     protected final String[] argumentIdentifiers;
     protected final List<String> arguments;
     private final TreeMap<ValueType, Exception> errorReportMap;
+    private final List<Class<? extends AbstractJavaProperty>> dependencyList;
     protected String identifier;
     private V value;
     private V parsedValue;
     private V applicationDefaultValue;
     private ValueType valueType, defaultValueType;
     private boolean parsed;
+
     public AbstractJavaProperty(String[] propertyIdentifier) {
         this.propertyIdentifiers = propertyIdentifier;
         this.argumentIdentifiers = generateArgumentIdentifiers();
         this.arguments = new ArrayList<>(argumentIdentifiers.length);
+        this.dependencyList = new ArrayList<>();
         this.identifier = NOT_IDENTIFIERED;
         this.applicationDefaultValue = null;
         this.defaultValueType = ValueType.PropertyDefault;
         this.valueType = ValueType.PropertyDefault;
         this.errorReportMap = new TreeMap<>(Comparator.comparingInt(Enum::ordinal));
-
-        // preload default value.
-        try {
-            setValue(getPropertyDefaultValue(), ValueType.PropertyDefault);
-        } catch (Exception ex) {
-            addErrorReport(ex, ValueType.PropertyDefault);
-        }
         this.reset();
     }
 
@@ -276,6 +272,20 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
     protected abstract V getPropertyDefaultValue() throws JPNotAvailableException;
 
     protected abstract V parse(List<String> arguments) throws Exception;
+
+    /**
+     * Method returns a list with properties where this property depends on.
+     *
+     * @return a list of java properties.
+     */
+    public List<Class<? extends AbstractJavaProperty>> getDependencyList() {
+        return dependencyList;
+    }
+
+    protected void registerDependingProperty(final Class<? extends AbstractJavaProperty> dependency) {
+        assert dependency != null;
+        dependencyList.add(dependency);
+    }
 
     /**
      * Method returns the description of the property.
