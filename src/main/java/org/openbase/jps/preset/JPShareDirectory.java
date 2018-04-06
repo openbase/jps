@@ -38,6 +38,7 @@ public class JPShareDirectory extends AbstractJPDirectory {
 
     public JPShareDirectory() {
         super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
+        registerDependingProperty(JPPrefix.class);
     }
 
     @Override

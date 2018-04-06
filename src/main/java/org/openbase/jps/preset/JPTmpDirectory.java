@@ -28,6 +28,8 @@ import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPValidationException;
 import static org.openbase.jps.preset.AbstractJPFile.convertIntoValidFileName;
 import org.openbase.jps.tools.FileHandler;
+import org.openbase.jps.tools.FileHandler.AutoMode;
+import org.openbase.jps.tools.FileHandler.ExistenceHandling;
 
 /**
  *
@@ -42,7 +44,7 @@ public class JPTmpDirectory extends AbstractJPDirectory {
     private File tmpDefaultDirectory;
 
     public JPTmpDirectory() {
-        super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
+        super(COMMAND_IDENTIFIERS, ExistenceHandling.Must, AutoMode.Off);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {

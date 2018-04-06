@@ -41,6 +41,7 @@ public class JPPrefix extends AbstractJPDirectory {
 
     public JPPrefix() {
         super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
+        registerDependingProperty(JPUsrDirectory.class);
     }
 
     @Override
