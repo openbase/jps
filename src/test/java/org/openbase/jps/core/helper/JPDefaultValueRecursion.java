@@ -45,8 +45,8 @@ public class JPDefaultValueRecursion extends AbstractJPDirectory {
         try {
             return JPService.getProperty(JPChildDirectory.class).getValue();
         } catch (JPNotAvailableException ex) {
-            JPService.printError("Could not load default value!", ex);
-            return new File("could/not/load/default");
+            addErrorReport(ex, ValueType.PropertyDefault);
+            return null;
         }
     }
 

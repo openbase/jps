@@ -25,13 +25,14 @@ package org.openbase.jps.preset;
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-import java.io.File;
+
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.tools.FileHandler;
 
+import java.io.File;
+
 /**
- *
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPPrefix extends AbstractJPDirectory {
@@ -48,18 +49,24 @@ public class JPPrefix extends AbstractJPDirectory {
             return JPService.getProperty(JPTmpDirectory.class).getValue();
         }
 
+        // load prefix via system variable
         String globalPrefix = System.getenv("prefix");
-        if (globalPrefix == null) {
-            File localUserPrefix;
-            localUserPrefix = JPService.getProperty(JPLocalUserPrefix.class).getValue();
-            logger.warn("Could not load global prefix! Use local user Prefix[" + localUserPrefix.getAbsolutePath() + "] instead.");
-            return localUserPrefix;
+        if (globalPrefix != null) {
+            return new File(globalPrefix);
         }
-        return new File(globalPrefix);
+
+        // load prefix via system variable
+        globalPrefix = System.getenv("PREFIX");
+        if (globalPrefix != null) {
+            return new File(globalPrefix);
+        }
+
+        // use global usr folder as prefix
+        return JPService.getProperty(JPUsrDirectory.class).getValue();
     }
 
     @Override
     public String getDescription() {
-        return "Set the application prefix, which is used for accessing configurations and storing temporally data.";
+        return "Set the application prefix, which is used for accessing binaries, shared data and templates.";
     }
 }

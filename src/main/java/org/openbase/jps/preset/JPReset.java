@@ -57,7 +57,7 @@ public class JPReset extends AbstractJPBoolean {
                 JPService.printError("Could not access java property!", ex);
             }
 
-            logger.warn("=== Type y and press enter to contine ===");
+            logger.warn("=== Type y and press enter to continue ===");
             try {
                 if (!(System.in.read() == 'y')) {
                     throw new JPValidationException("Execution aborted by user!");

@@ -26,10 +26,7 @@ package org.openbase.jps.preset;
  * #L%
  */
 
-import java.io.File;
-import java.util.List;
 import org.openbase.jps.core.AbstractJavaProperty;
-import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.exception.JPValidationException;
 import org.openbase.jps.tools.FileHandler;
@@ -37,8 +34,12 @@ import org.openbase.jps.tools.FileHandler.AutoMode;
 import org.openbase.jps.tools.FileHandler.ExistenceHandling;
 import org.openbase.jps.tools.FileHandler.FileType;
 
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+
 /**
- *
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
@@ -59,13 +60,17 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
         try {
             getParentDirectory();
         } catch (Exception ex) {
-            logger.warn("Could not preload parent directory!");
+            logger.debug("Could not preload parent directory!");
         }
     }
 
     AbstractJPFile(final String[] commandIdentifier, final ExistenceHandling existenceHandling, final AutoMode autoCreateMode, final FileType type) {
         this(commandIdentifier, existenceHandling, autoCreateMode);
         this.type = type;
+    }
+
+    public static String convertIntoValidFileName(final String filename) {
+        return filename.replaceAll("[^0-9a-zA-Z-äöüÄÖÜéàèÉÈßÄ\\.\\-\\_\\[\\]\\#\\$]+", "_");
     }
 
     @Override
@@ -80,38 +85,54 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
 
     @Override
     public void validate() throws JPValidationException {
+        final File value = getValue();
+
+        if (value == null) {
+            throw new JPValidationException(getClass().getSimpleName() + " is not defined but can be set manually with "+ getDefaultExample(), getErrorReport());
+        }
+
         try {
-            FileHandler.handle(getValue(), type, existenceHandling, autoCreateMode);
+            FileHandler.handle(value, type, existenceHandling, autoCreateMode);
         } catch (Exception ex) {
-            throw new JPValidationException("Could not validate " + getValue() + "!", ex);
+            throw new JPValidationException("Could not handle " + type.name() + "[" + value + "]!", ex);
         }
     }
 
     @Override
     protected void setValue(File value, ValueType valueType) {
-        try {
-            File parent = getParentDirectory();
-            if (parent != null && !value.isAbsolute()) {
-                super.setValue(new File(parent, value.getPath()), valueType);
-                return;
-            }
-        } catch (JPServiceException ex) {
-            JPService.printError(new JPServiceException("Could not load parent directory of Property[" + getClass().getSimpleName() + "]!", ex));
+        // if file is already referred absolute than use it and ignore parent directory.
+        if (value.isAbsolute()) {
+            super.setValue(value, valueType);
+            return;
         }
 
-        super.setValue(value, valueType);
+        try {
+            File parent = getParentDirectory();
+
+            // if parent file is not defined just use the value directly
+            if (parent == null) {
+                super.setValue(value, valueType);
+                return;
+            }
+
+            // build value with parent folder
+            super.setValue(new File(parent, value.getPath()), valueType);
+        } catch (JPServiceException ex) {
+            // ignore value because parent seems to be invalid and value itself is not absolute!
+            addErrorReport(new JPServiceException("Parent directory is not valid!", ex), valueType);
+        }
     }
 
     public AutoMode getAutoCreateMode() {
         return autoCreateMode;
     }
 
-    public ExistenceHandling getExistenceHandling() {
-        return existenceHandling;
-    }
-
     protected void setAutoCreateMode(final AutoMode autoCreateMode) {
         this.autoCreateMode = autoCreateMode;
+    }
+
+    public ExistenceHandling getExistenceHandling() {
+        return existenceHandling;
     }
 
     protected void setExistenceHandling(final ExistenceHandling existenceHandling) {
@@ -126,14 +147,11 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
      * Returns the parent dir or null if the no parent exist. Method can be overwritten to defining the parent dir.
      *
      * @return
+     *
      * @throws org.openbase.jps.exception.JPServiceException
      */
     public File getParentDirectory() throws JPServiceException {
         return null;
-    }
-
-    public static String convertIntoValidFileName(final String filename) {
-        return filename.replaceAll("[^0-9a-zA-Z-äöüÄÖÜéàèÉÈßÄ\\.\\-\\_\\[\\]\\#\\$]+", "_");
     }
 
     @Override

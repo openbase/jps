@@ -46,8 +46,8 @@ public class JPInitialize extends AbstractJPBoolean {
         try {
             return JPService.testMode() || JPService.getProperty(JPReset.class).getValue();
         } catch (JPNotAvailableException ex) {
-            JPService.printError("Could not load default value!", ex);
-            return false;
+            addErrorReport(ex, ValueType.PropertyDefault);
+            return null;
         }
     }
 

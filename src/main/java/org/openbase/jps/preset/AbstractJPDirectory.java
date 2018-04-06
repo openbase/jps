@@ -38,7 +38,6 @@ public abstract class AbstractJPDirectory extends AbstractJPFile {
 
     private static final String[] ARGUMENT_IDENTIFIERS = {"DIRECTORY"};
 
-
     public AbstractJPDirectory(String[] commandIdentifier, final ExistenceHandling existenceHandling, final AutoMode autoCreateMode) {
         super(commandIdentifier, existenceHandling, autoCreateMode, FileHandler.FileType.Directory);
     }

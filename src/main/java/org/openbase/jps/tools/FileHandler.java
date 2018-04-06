@@ -74,12 +74,12 @@ public class FileHandler {
             switch (type) {
                 case File:
                     if (!file.isFile()) {
-                        throw new IOException("URI[" + file.getAbsolutePath() + "] is not a " + type.name() + "!");
+                        throw new IOException("URI[" + file.getAbsolutePath() + "] is not a " + type.name().toLowerCase() + "!");
                     }
                     break;
                 case Directory:
                     if (!file.isDirectory()) {
-                        throw new IOException("URI[" + file.getAbsolutePath() + "] is not a " + type.name() + "!");
+                        throw new IOException("URI[" + file.getAbsolutePath() + "] is not a " + type.name().toLowerCase() + "!");
                     }
                     break;
                 default:
@@ -87,13 +87,13 @@ public class FileHandler {
             }
         }
 
-        LOGGER.debug("analyse " + type + "[" + file.getAbsolutePath() + "] exists[" + file.exists() + "] " + existenceHandling + " " + autoMode);
+        LOGGER.debug("analyse " + type.name() + "[" + file.getAbsolutePath() + "] exists[" + file.exists() + "] " + existenceHandling + " " + autoMode);
 
         switch (existenceHandling) {
             case Must:
                 if (!file.exists()) {
                     if (autoMode == AutoMode.Off) {
-                        throw new IOException(type.name() + " URI[" + file.getAbsolutePath() + "] does not exits!");
+                        throw new IOException(type.name() + "[" + file.getAbsolutePath() + "] does not exist!");
                     }
                     create(file, type, creator);
                 }
@@ -101,12 +101,12 @@ public class FileHandler {
             case MustNot:
                 if (file.exists()) {
                     if (autoMode == AutoMode.Off) {
-                        throw new IOException(type.name() + " URI[" + file.getAbsolutePath() + "] exist already!");
+                        throw new IOException(type.name() + "[" + file.getAbsolutePath() + "] exist already!");
                     }
                     if (!file.canWrite()) {
                         throw new IOException("Could not get delete permissions for " + file.getAbsolutePath());
                     }
-                    LOGGER.info("Delete existing " + type.name() + " " + file.getAbsolutePath());
+                    LOGGER.info("Delete existing " + type.name().toLowerCase() + " " + file.getAbsolutePath());
                     if (!file.delete()) {
                         throw new IOException("Could not delete " + file.getAbsolutePath());
                     }
@@ -127,7 +127,7 @@ public class FileHandler {
                     if (!file.canWrite()) {
                         throw new IOException("Could not get delete permissions for " + file.getAbsolutePath());
                     }
-                    LOGGER.info("Delete existing " + type.name() + " " + file.getAbsolutePath());
+                    LOGGER.info("Delete existing " + type.name().toLowerCase() + " " + file.getAbsolutePath());
                     if (type == FileType.File) {
                         if (!file.delete()) {
                             throw new IOException("Could not delete " + file.getAbsolutePath());
@@ -147,7 +147,7 @@ public class FileHandler {
     public static void create(File file, FileType type, FileCreator creator) throws Exception {
         switch (type) {
             case Directory:
-                LOGGER.info("Create missing " + type.name() + " " + file.getAbsolutePath());
+                LOGGER.info("Create missing " + type.name().toLowerCase() + " " + file.getAbsolutePath());
 
                 try {
                     FileUtils.forceMkdir(file);
@@ -165,7 +165,7 @@ public class FileHandler {
                 }
                 break;
             default:
-                throw new AssertionError("Handling of " + type.name() + " not defined!");
+                throw new AssertionError("Handling of " + type.name().toLowerCase() + " not defined!");
         }
     }
     public static final FileCreator DEFAULT_FILE_CREATOR = new FileCreator() {
