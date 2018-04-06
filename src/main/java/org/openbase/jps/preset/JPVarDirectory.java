@@ -38,6 +38,7 @@ public class JPVarDirectory extends AbstractJPDirectory {
 
     public JPVarDirectory() {
         super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
+        registerDependingProperty(JPPrefix.class);
     }
 
     @Override
