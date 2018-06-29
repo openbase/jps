@@ -44,7 +44,7 @@ public class JPShowGUI extends AbstractJPBoolean {
 	
 	@Override
 	protected void validate() throws JPValidationException {
-		if(!isIdentifiered() && !getValue()) {
+		if(!isIdentified() && !getValue()) {
 			logger.info("GUI is disabled! Set "+COMMAND_IDENTIFIERS[0]+" property to display the GUI.");
 		}
 	}
