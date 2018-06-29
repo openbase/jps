@@ -181,6 +181,28 @@ public class JPService {
     }
 
     /**
+     * Generate help page.
+     * @throws JPServiceException is thrown if something went wrong.
+     */
+    private static void handleHelpCall() throws JPServiceException {
+        try {
+            if (JPService.getProperty(JPHelp.class).isIdentified()) {
+                try {
+                    JPService.printHelp();
+                } catch (Exception ex) {
+                    LOGGER.error("Could not fully generate help page!", ex);
+                }
+
+                if (!JPService.testMode()) {
+                    System.exit(0);
+                }
+            }
+        } catch (JPServiceException ex) {
+            throw new JPServiceException("Could not generate help page!", ex);
+        }
+    }
+
+    /**
      * Analyze the input arguments and setup all registered Properties.
      * <p>
      * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
@@ -221,6 +243,7 @@ public class JPService {
         } catch (Exception ex) {
             throw new JPServiceException("Could not analyse arguments: " + ex.getMessage(), ex);
         }
+        handleHelpCall();
     }
 
     public static void printError(String message, Throwable cause) {

@@ -77,7 +77,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
     }
 
     protected boolean neetToBeParsed() {
-        return isIdentifiered() && !isParsed();
+        return isIdentified() && !isParsed();
     }
 
     protected final void reset() {
@@ -153,7 +153,17 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         return display;
     }
 
+    /**
+     *
+     * @return
+     * @deprecated please use isIdentified() instead
+     */
+    @Deprecated
     protected boolean isIdentifiered() {
+        return isIdentified();
+    }
+
+    protected boolean isIdentified() {
         return !identifier.isEmpty();
     }
 

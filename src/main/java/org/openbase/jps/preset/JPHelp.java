@@ -30,6 +30,7 @@ import org.openbase.jps.core.AbstractJavaProperty;
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPBadArgumentException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -57,21 +58,6 @@ public final class JPHelp extends AbstractJavaProperty<Void> {
     @Override
     protected Void parse(List<String> arguments) throws JPBadArgumentException {
         return null;
-    }
-
-    @Override
-    protected void loadAction() {
-        if (isIdentifiered()) {
-            try {
-                JPService.printHelp();
-            } catch (Exception ex) {
-                logger.error("Could not fully generate help page!", ex);
-            } finally {
-                if (!JPService.testMode()) {
-                    System.exit(0);
-                }
-            }
-        }
     }
 
     @Override
