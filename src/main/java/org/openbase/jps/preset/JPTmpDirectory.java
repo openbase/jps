@@ -49,6 +49,11 @@ public class JPTmpDirectory extends AbstractJPDirectory {
             @Override
             public void run() {
                 try {
+                    
+                    // just exit if not yet available
+                    if(getValue() == null) {
+                        return;
+                    }
 
                     // cleanup tmp folder
                     if (getValue().exists()) {
