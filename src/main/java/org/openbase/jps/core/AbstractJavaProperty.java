@@ -62,7 +62,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         this.applicationDefaultValue = null;
         this.defaultValueType = ValueType.PropertyDefault;
         this.valueType = ValueType.PropertyDefault;
-        this.errorReportMap = new TreeMap<>(Comparator.comparingInt(Enum::ordinal));
+        this.errorReportMap = new TreeMap<>(Comparator.comparingInt(valueType1 -> valueType1.ordinal()));
         this.reset();
     }
 

@@ -565,7 +565,7 @@ public class JPService {
         String header = "";
         List<AbstractJavaProperty> propertyList = new ArrayList(initializedProperties.values());
         Collections.sort(propertyList);
-        header = propertyList.stream().map((property) -> " [" + property.getSyntax() + "]").reduce(header, String::concat);
+        header = propertyList.stream().map((property) -> " [" + property.getSyntax() + "]").reduce(header, (s, str) -> s.concat(str));
         help += newLineFormatter(header, "\n\t", 100);
         help += "\nwhere:\n";
 
