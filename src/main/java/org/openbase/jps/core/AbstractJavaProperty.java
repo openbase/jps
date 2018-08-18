@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.ToIntFunction;
 
 /**
  * @param <V>
@@ -62,7 +63,12 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         this.applicationDefaultValue = null;
         this.defaultValueType = ValueType.PropertyDefault;
         this.valueType = ValueType.PropertyDefault;
-        this.errorReportMap = new TreeMap<>(Comparator.comparingInt(valueType1 -> valueType1.ordinal()));
+        this.errorReportMap = new TreeMap<>(Comparator.comparingInt(new ToIntFunction<ValueType>() {
+            @Override
+            public int applyAsInt(ValueType valueType1) {
+                return valueType1.ordinal();
+            }
+        }));
         this.reset();
     }
 
