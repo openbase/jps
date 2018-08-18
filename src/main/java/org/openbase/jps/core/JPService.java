@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Java Property Service, this is the central lib controller used to initialize and manage all properties.
@@ -539,14 +540,17 @@ public class JPService {
         // load recursive all properties which are not already loaded.
         while (modification) {
             modification = false;
-            currentlyregisteredPropertyClasses.stream().forEach((propertyClass) -> {
-                try {
-                    properties.add(getProperty(propertyClass));
-                } catch (Exception ex) {
-                    if (errorReport) {
-                        new JPServiceException("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex);
-                    } else {
-                        LOGGER.debug("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex);
+            currentlyregisteredPropertyClasses.stream().forEach(new Consumer<Class<? extends AbstractJavaProperty>>() {
+                @Override
+                public void accept(Class<? extends AbstractJavaProperty> propertyClass) {
+                    try {
+                        properties.add(getProperty(propertyClass));
+                    } catch (Exception ex) {
+                        if (errorReport) {
+                            new JPServiceException("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex);
+                        } else {
+                            LOGGER.debug("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex);
+                        }
                     }
                 }
             });
