@@ -30,8 +30,12 @@ import org.openbase.jps.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.function.ToIntFunction;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeMap;
+
+import static java.util.Comparator.comparingInt;
 
 /**
  * @param <V>
@@ -63,12 +67,8 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         this.applicationDefaultValue = null;
         this.defaultValueType = ValueType.PropertyDefault;
         this.valueType = ValueType.PropertyDefault;
-        this.errorReportMap = new TreeMap<>(Comparator.comparingInt(new ToIntFunction<ValueType>() {
-            @Override
-            public int applyAsInt(ValueType valueType1) {
-                return valueType1.ordinal();
-            }
-        }));
+        // please do not replace by function operator to be android 6 compatible.
+        this.errorReportMap = new TreeMap<>((o1, o2) -> Integer.compare(o1.ordinal(), o2.ordinal());
         this.reset();
     }
 
