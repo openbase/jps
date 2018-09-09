@@ -278,6 +278,17 @@ public class JPServiceTest {
         LoggerFactory.getLogger("TestMessage").error("This is an error message!");
     }
 
+    @Test
+    public void testJavaPropertyHandling() throws Exception {
+        final String testEmptyProperty = "org.openbase.jps.testEmptyProperty";
+        final String testProperty = "org.openbase.jps.testProperty";
+        final String testPropertyValue = "handled";
+        String[] args = {"-D" + testProperty + "=" + testPropertyValue, "-D" + testEmptyProperty};
+        JPService.parse(args);
+        assertEquals(testPropertyValue, System.getProperty(testProperty));
+        assertEquals("", System.getProperty(testEmptyProperty));
+    }
+
 //    @Test
     public void testParseAndExitOnError() throws Exception {
         String[] testArgs = {"-t"};

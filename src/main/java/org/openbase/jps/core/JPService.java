@@ -10,12 +10,12 @@ package org.openbase.jps.core;
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
@@ -183,6 +183,7 @@ public class JPService {
 
     /**
      * Generate help page.
+     *
      * @throws JPServiceException is thrown if something went wrong.
      */
     private static void handleHelpCall() throws JPServiceException {
@@ -453,9 +454,29 @@ public class JPService {
         for (String arg : args) {
             try {
                 arg = arg.trim();
-                if (arg.equals("--")) { // handle final pattern
+
+                // handle final pattern
+                if (arg.equals("--")) {
                     break;
                 }
+
+                // handle default properties
+                if (arg.startsWith("-D")) {
+                    try {
+                        // remove "-D" prefix
+                        final String propertyString = arg.substring(2);
+                        if (propertyString.contains("=")) {
+                            final String[] keyValueArray = propertyString.split("=");
+                            System.setProperty(keyValueArray[0], keyValueArray[1]);
+                        } else {
+                            System.setProperty(propertyString, "");
+                        }
+                        continue;
+                    } catch (IllegalArgumentException | IndexOutOfBoundsException | SecurityException | NullPointerException ex) {
+                        throw new JPParsingException("invalid system property syntax: " + arg);
+                    }
+                }
+
                 if (arg.startsWith("-") || arg.startsWith("--")) { // handle property
                     boolean unknownProperty = true;
                     for (AbstractJavaProperty property : initializedProperties.values()) {
