@@ -10,42 +10,32 @@ package org.openbase.jps.core;
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
  * #L%
  */
-import java.io.File;
-import java.util.Map;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openbase.jps.core.helper.JPBaseDirectory;
-import org.openbase.jps.core.helper.JPChildDirectory;
-import org.openbase.jps.core.helper.JPDefaultValueRecursion;
-import org.openbase.jps.core.helper.JPMapStringString;
-import org.openbase.jps.core.helper.JPTestProperty;
+
+import org.junit.*;
+import org.openbase.jps.core.helper.*;
+import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.exception.JPServiceException;
-import org.openbase.jps.preset.JPDebugMode;
-import org.openbase.jps.preset.JPShowGUI;
-import org.openbase.jps.preset.JPTestMode;
-import org.openbase.jps.preset.JPTmpDirectory;
-import org.openbase.jps.preset.JPVerbose;
+import org.openbase.jps.preset.*;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
- *
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPServiceTest {
@@ -289,23 +279,47 @@ public class JPServiceTest {
         assertEquals("", System.getProperty(testEmptyProperty));
     }
 
-//    @Test
-    public void testParseAndExitOnError() throws Exception {
-        String[] testArgs = {"-t"};
-        JPService.registerProperty(JPTestProperty.class);
-        JPService.parseAndExitOnError(testArgs);
-        Assert.fail("Should have exited!");
+    @Test
+    public void testJPLocale() throws Exception {
+        JPService.registerProperty(JPLocale.class);
+        String[] args = {"--locale", "DE"};
+        JPService.parse(args);
+        assertEquals(JPService.getProperty(JPLocale.class).getValue().getLanguage(), "de");
     }
 
-//    @Test
+    @Test
+    public void testBadJPLocale() throws Exception {
+        JPService.registerProperty(JPLocale.class);
+        String[] args = {"--locale", "uhthe"};
+        try {
+            JPService.parse(args);
+            Assert.fail("JPNotAvailableException should not be thrown!");
+        } catch (JPServiceException ex) {
+            // finish
+        }
+    }
+
+    @Test
+    public void testParseAndExitOnError() {
+        String[] testArgs = {"-t"};
+        JPService.registerProperty(JPTestProperty.class);
+        try {
+            JPService.parseAndExitOnError(testArgs);
+            Assert.fail("Should have exited!");
+        } catch (RuntimeException ex) {
+            // finish
+        }
+    }
+
+    @Test
     public void testNullPointerForUninitializedProperties() throws Exception {
         String[] testArgs = {"-t"};
         JPService.registerProperty(JPTestProperty.class);
-        JPService.parse(testArgs);
         try {
-            System.out.println(JPService.getProperty(JPTestProperty.class).getValue());
-        } catch (NullPointerException ex) {
-            Assert.fail("NullPointer should not be thrown!");
+            JPService.parse(testArgs);
+            Assert.fail("Should have exited!");
+        } catch (JPServiceException ex) {
+            // finish
         }
     }
 }

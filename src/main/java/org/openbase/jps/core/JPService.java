@@ -161,8 +161,9 @@ public class JPService {
      * Note: In case the JPUnitTestMode was enabled this method does not call exit.
      *
      * @param args Arguments given by the main method.
+     * @throws InterruptedException is thrown only in test mode otherwise System.exit(255) is called.
      */
-    public static void parseAndExitOnError(String[] args) {
+    public static void parseAndExitOnError(String[] args) throws RuntimeException {
         try {
             JPService.parse(args);
         } catch (JPServiceException ex) {
@@ -177,6 +178,8 @@ public class JPService {
 
             if (!testMode()) {
                 System.exit(255);
+            } else {
+                throw new RuntimeException("Could not parse arguments!", ex);
             }
         }
     }
@@ -561,17 +564,18 @@ public class JPService {
         // load recursive all properties which are not already loaded.
         while (modification) {
             modification = false;
-            currentlyregisteredPropertyClasses.forEach(propertyClass -> {
+
+            for (Class<? extends AbstractJavaProperty> propertyClass : currentlyregisteredPropertyClasses) {
                 try {
                     properties.add(getProperty(propertyClass));
                 } catch (Exception ex) {
                     if (errorReport) {
-                        new JPServiceException("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex);
+                        throw new JPServiceException("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex);
                     } else {
                         LOGGER.debug("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex);
                     }
                 }
-            });
+            }
         }
         return properties;
     }
