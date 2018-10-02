@@ -42,6 +42,9 @@ public class JPBadArgumentException extends JPServiceException {
 
     @Override
     public String getLocalizedMessage() {
+        if(getCause() == null) {
+            return getMessage();
+        }
         return getMessage() + " caused by: " + getCause().getMessage();
     }
 }
