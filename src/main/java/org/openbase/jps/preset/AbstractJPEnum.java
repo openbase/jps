@@ -44,8 +44,7 @@ public abstract class AbstractJPEnum<E extends Enum<E>> extends AbstractJavaProp
 
     @Override
     protected String[] generateArgumentIdentifiers() {
-        String[] id = {detectTypeClass().getSimpleName().toUpperCase()};
-        return id;
+        return new String[]{detectTypeClass().getSimpleName().toUpperCase()};
     }
 
     @Override

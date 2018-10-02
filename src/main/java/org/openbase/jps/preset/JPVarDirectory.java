@@ -24,7 +24,6 @@ package org.openbase.jps.preset;
 import java.io.File;
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPNotAvailableException;
-import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.exception.JPValidationException;
 import org.openbase.jps.tools.FileHandler;
 

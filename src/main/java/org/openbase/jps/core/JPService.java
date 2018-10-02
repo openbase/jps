@@ -161,7 +161,7 @@ public class JPService {
      * Note: In case the JPUnitTestMode was enabled this method does not call exit.
      *
      * @param args Arguments given by the main method.
-     * @throws InterruptedException is thrown only in test mode otherwise System.exit(255) is called.
+     * @throws RuntimeException is thrown only in test mode otherwise System.exit(255) is called.
      */
     public static void parseAndExitOnError(String[] args) throws RuntimeException {
         try {
@@ -214,7 +214,7 @@ public class JPService {
      *
      * @param args Arguments as a string list e.g. given by a java fx application {@code getParameters().getRaw()} in the start method.
      *
-     * @throws JPServiceException
+     * @throws JPServiceException is thrown if the given arguments can not be parsed.
      */
     public static void parse(final List<String> args) throws JPServiceException {
         parse(args.toArray(new String[args.size()]));
@@ -311,7 +311,7 @@ public class JPService {
     }
 
     /**
-     * @throws JPServiceException
+     * @throws JPServiceException is thrown if at least one property could not be initialized.
      */
     private static void initRegisteredProperties() throws JPServiceException {
         initRegisteredProperties(null);

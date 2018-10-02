@@ -27,10 +27,8 @@ package org.openbase.jps.preset;
  */
 
 import org.openbase.jps.core.AbstractJavaProperty;
-import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPBadArgumentException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  *
