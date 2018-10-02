@@ -10,12 +10,12 @@ package org.openbase.jps.core;
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Lesser Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Lesser Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/lgpl-3.0.html>.
@@ -24,7 +24,6 @@ package org.openbase.jps.core;
 
 import org.junit.*;
 import org.openbase.jps.core.helper.*;
-import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.preset.*;
 import org.slf4j.LoggerFactory;
@@ -66,7 +65,7 @@ public class JPServiceTest {
     /**
      * Test of registerCommand method, of class JPService.
      *
-     * @throws org.openbase.jps.exception.JPServiceException
+     * @throws Exception
      */
     @Test
     public void testDebugFlagNotSet() throws Exception {
@@ -78,7 +77,7 @@ public class JPServiceTest {
     /**
      * Test of registerCommand method, of class JPService.
      *
-     * @throws org.openbase.jps.exception.JPServiceException
+     * @throws Exception
      */
     @Test
     public void testDebugFlagSet() throws Exception {
@@ -105,7 +104,7 @@ public class JPServiceTest {
     /**
      * Test of registerCommand method, of class JPService.
      *
-     * @throws org.openbase.jps.exception.JPServiceException
+     * @throws Exception
      */
     @Test
     public void testApplicationDefaultValue() throws Exception {
@@ -120,7 +119,7 @@ public class JPServiceTest {
     /**
      * Test of registerCommand method, of class JPService.
      *
-     * @throws org.openbase.jps.exception.JPServiceException
+     * @throws Exception
      */
     @Test
     public void testApplicationDefaultValueOverwrite() throws Exception {
@@ -136,7 +135,7 @@ public class JPServiceTest {
     /**
      * Test of registerCommand method, of class JPService.
      *
-     * @throws org.openbase.jps.exception.JPServiceException
+     * @throws Exception
      */
     @Test
     public void testPropertyDefaultValueOverwriteViaApp() throws Exception {
@@ -151,7 +150,7 @@ public class JPServiceTest {
     /**
      * Test of registerCommand method, of class JPService.
      *
-     * @throws org.openbase.jps.exception.JPServiceException
+     * @throws Exception
      */
     @Test
     public void testPropertyDefaultValueOverwriteViaCom() throws Exception {

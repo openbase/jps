@@ -38,8 +38,7 @@ public class JPInitialize extends AbstractJPBoolean {
     }
 
     /**
-     * returns true if JPS is in test mode or JPReset is enabled.
-     * @return
+     * @return true if JPS is in test mode or JPReset is enabled.
      */
     @Override
     protected Boolean getPropertyDefaultValue() {

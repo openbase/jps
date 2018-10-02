@@ -61,7 +61,7 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
     }
 
     public static String convertIntoValidFileName(final String filename) {
-        return filename.replaceAll("[^0-9a-zA-Z-äöüÄÖÜéàèÉÈßÄ\\.\\-\\_\\[\\]\\#\\$]+", "_");
+        return filename.replaceAll("[^0-9a-zA-Z-äöüÄÖÜéàèÉÈß\\.\\-\\_\\[\\]\\#\\$]+", "_");
     }
 
     @Override
@@ -135,11 +135,9 @@ public abstract class AbstractJPFile extends AbstractJavaProperty<File> {
     }
 
     /**
-     * Returns the parent dir or null if the no parent exist. Method can be overwritten to defining the parent dir.
+     * @return the parent dir or null if the no parent exist. Method can be overwritten to defining the parent dir.
      *
-     * @return
-     *
-     * @throws org.openbase.jps.exception.JPServiceException
+     * @throws org.openbase.jps.exception.JPServiceException in case the parent directory is not available.
      */
     public File getParentDirectory() throws JPServiceException {
         return null;

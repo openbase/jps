@@ -32,8 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static java.util.Comparator.comparingInt;
-
 /**
  * @param <V>
  *
@@ -157,8 +155,6 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
     }
 
     /**
-     *
-     * @return
      * @deprecated please use isIdentified() instead
      */
     @Deprecated
