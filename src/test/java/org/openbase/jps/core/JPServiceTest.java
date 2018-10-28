@@ -326,7 +326,6 @@ public class JPServiceTest {
     @Test
     public void testBooleanPropertyDefaultValue() throws Exception {
         String[] testArgs = {"--"};
-//        JPService.registerProperty(JPBooleanTestProperty.class);
         try {
             Assert.assertEquals("Type need to be property default.", ValueType.PropertyDefault, JPService.getProperty(JPBooleanTestProperty.class).getValueType());
             Assert.assertEquals("Default value should have been true!", true, JPService.getProperty(JPBooleanTestProperty.class).getValue());

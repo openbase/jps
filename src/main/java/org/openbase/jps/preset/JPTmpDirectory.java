@@ -24,6 +24,7 @@ package org.openbase.jps.preset;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPValidationException;
 import static org.openbase.jps.preset.AbstractJPFile.convertIntoValidFileName;
