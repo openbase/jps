@@ -107,15 +107,14 @@ local.properties
 .idea/libraries
 
 # Sensitive or high-churn files:
-# .idea/dataSources.ids
-# .idea/dataSources.xml
-# .idea/sqlDataSources.xml
-# .idea/dynamic.xml
-# .idea/uiDesigner.xml
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
 
 # Gradle:
-# .idea/gradle.xml
-# .idea/libraries
+.idea/gradle.xml
 
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
@@ -178,3 +177,7 @@ gen-external-apklibs
 ### Vim temporary files ###
 *.swp
 
+### Node JS and VuePress
+node_modules/.cache
+node_modules/vuepress/node_modules
+www/.vuepress

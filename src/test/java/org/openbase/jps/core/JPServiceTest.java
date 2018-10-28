@@ -23,6 +23,7 @@ package org.openbase.jps.core;
  */
 
 import org.junit.*;
+import org.openbase.jps.core.AbstractJavaProperty.ValueType;
 import org.openbase.jps.core.helper.*;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.preset.*;
@@ -317,6 +318,18 @@ public class JPServiceTest {
         try {
             JPService.parse(testArgs);
             Assert.fail("Should have exited!");
+        } catch (JPServiceException ex) {
+            // finish
+        }
+    }
+
+    @Test
+    public void testBooleanPropertyDefaultValue() throws Exception {
+        String[] testArgs = {"--"};
+//        JPService.registerProperty(JPBooleanTestProperty.class);
+        try {
+            Assert.assertEquals("Type need to be property default.", ValueType.PropertyDefault, JPService.getProperty(JPBooleanTestProperty.class).getValueType());
+            Assert.assertEquals("Default value should have been true!", true, JPService.getProperty(JPBooleanTestProperty.class).getValue());
         } catch (JPServiceException ex) {
             // finish
         }

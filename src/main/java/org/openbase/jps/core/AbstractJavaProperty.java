@@ -67,7 +67,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         this.reset();
     }
 
-    protected boolean match(String commandIdentifier) {
+    protected final boolean match(String commandIdentifier) {
         for (String command : propertyIdentifiers) {
             if (command.equals(commandIdentifier)) {
                 identifier = commandIdentifier;
@@ -77,7 +77,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         return false;
     }
 
-    protected boolean neetToBeParsed() {
+    protected final boolean neetToBeParsed() {
         return isIdentified() && !isParsed();
     }
 
@@ -86,11 +86,11 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         parsed = false;
     }
 
-    protected void addArgument(String arg) {
+    protected final void addArgument(String arg) {
         arguments.add(arg);
     }
 
-    protected void parseArguments() throws JPParsingException {
+    protected final void parseArguments() throws JPParsingException {
         try {
             valueType = ValueType.CommandLine;
             parsedValue = parse(Collections.unmodifiableList(arguments));
@@ -102,7 +102,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         parsed = true;
     }
 
-    public V getValue() {
+    public final V getValue() {
         return value;
     }
 
@@ -111,12 +111,12 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         this.valueType = valueType;
     }
 
-    public void update(final V value) {
+    public final void update(final V value) {
         this.value = value;
         this.valueType = ValueType.Runtime;
     }
 
-    protected void updateValue() throws JPServiceException {
+    protected final void updateValue() throws JPServiceException {
         V newValue;
         switch (valueType) {
             case PropertyDefault:
@@ -136,7 +136,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         setValue(newValue, valueType);
     }
 
-    protected void overwriteDefaultValue(V defaultValue) {
+    protected final void overwriteDefaultValue(V defaultValue) {
         this.applicationDefaultValue = defaultValue;
         this.defaultValueType = ValueType.ApplicationDefault;
         if (valueType.equals(ValueType.PropertyDefault)) {
@@ -162,11 +162,11 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         return isIdentified();
     }
 
-    protected boolean isIdentified() {
+    protected final boolean isIdentified() {
         return !identifier.isEmpty();
     }
 
-    public V getDefaultValue() throws JPNotAvailableException {
+    public final V getDefaultValue() throws JPNotAvailableException {
         switch (defaultValueType) {
             case ApplicationDefault:
                 return applicationDefaultValue;
@@ -177,11 +177,11 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
 
     protected abstract String[] generateArgumentIdentifiers();
 
-    protected String[] getPropertyIdentifiers() {
+    protected final String[] getPropertyIdentifiers() {
         return propertyIdentifiers;
     }
 
-    protected String[] getArgumentIdentifiers() {
+    protected final String[] getArgumentIdentifiers() {
         return argumentIdentifiers;
     }
 
@@ -207,41 +207,41 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         return syntax;
     }
 
-    public boolean isParsed() {
+    public final boolean isParsed() {
         return parsed;
     }
 
     @Override
-    public int compareTo(AbstractJavaProperty o) {
+    public final int compareTo(AbstractJavaProperty o) {
         return propertyIdentifiers[0].compareTo(o.propertyIdentifiers[0]);
     }
 
-    protected String getOneArgumentResult() throws JPBadArgumentException {
+    protected final String getOneArgumentResult() throws JPBadArgumentException {
         checkArgumentCount(1);
         return arguments.get(0);
     }
 
-    public ValueType getValueType() {
+    public final ValueType getValueType() {
         return valueType;
     }
 
-    protected void checkArgumentCount(int size) throws JPBadArgumentException {
+    protected final void checkArgumentCount(int size) throws JPBadArgumentException {
         checkArgumentCount(size, size);
     }
 
-    protected void checkArgumentCountMin(int min) throws JPBadArgumentException {
+    protected final void checkArgumentCountMin(int min) throws JPBadArgumentException {
         if (arguments.size() < min) {
             throw new JPBadArgumentException("Missing property arguments!");
         }
     }
 
-    protected void checkArgumentCountMax(int max) throws JPBadArgumentException {
+    protected final void checkArgumentCountMax(int max) throws JPBadArgumentException {
         if (arguments.size() > max) {
             throw new JPBadArgumentException("To many property arguments!");
         }
     }
 
-    protected void checkArgumentCount(int min, int max) throws JPBadArgumentException {
+    protected final void checkArgumentCount(int min, int max) throws JPBadArgumentException {
         int size = arguments.size();
         if (size < min) {
             throw new JPBadArgumentException("Missing property arguments!");
@@ -250,15 +250,15 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         }
     }
 
-    protected void addErrorReport(final Exception exception, final ValueType valueType) {
+    protected final void addErrorReport(final Exception exception, final ValueType valueType) {
         errorReportMap.put(valueType, exception);
     }
 
-    protected Exception getErrorReport() {
+    protected final Exception getErrorReport() {
         return errorReportMap.lastEntry().getValue();
     }
 
-    protected Map<ValueType, Exception> getErrorReportMap() {
+    protected final Map<ValueType, Exception> getErrorReportMap() {
         return errorReportMap;
     }
 
@@ -287,11 +287,11 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
      *
      * @return a list of java properties.
      */
-    public List<Class<? extends AbstractJavaProperty>> getDependencyList() {
+    public final List<Class<? extends AbstractJavaProperty>> getDependencyList() {
         return dependencyList;
     }
 
-    protected void registerDependingProperty(final Class<? extends AbstractJavaProperty> dependency) {
+    protected final void registerDependingProperty(final Class<? extends AbstractJavaProperty> dependency) {
         assert dependency != null;
         dependencyList.add(dependency);
     }
