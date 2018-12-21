@@ -522,16 +522,61 @@ public class JPService {
     }
 
     /**
-     * Returns the current value of the given property line class.
+     * Returns the current value of the property related to the given {@code propertyClass}.
      * <p>
      * If the property is never registered but the class is known in the classpath, the method returns the default value.
+     * If not in classpath the {@code defaultValue} is returned.
      *
-     * @param <C>
+     * Note: Method should only be used if it really doesn't matter if the property is available or not because no warning
+     * will be printed in this case.
+     *
+     * Note: The given backup value in only used in error case and will not be used as default value. Property default
+     *       values can be defined during property registration.
+     *
+     * @param <C> the property type.
+     * @param <V> the value type.
+     * @param backupValue the value used if the property could not be resolved.
+     * @param propertyClass property class which defines the property.
+     *
+     * @return the current value of the given property type.
+     */
+    public static synchronized <V, C extends AbstractJavaProperty<V>> V getValue(Class<C> propertyClass, final V backupValue) {
+        try {
+            return getProperty(propertyClass).getValue();
+        } catch (JPNotAvailableException e) {
+            return backupValue;
+        }
+    }
+
+    /**
+     * Returns the current value of the property related to the given {@code propertyClass}.
+     * <p>
+     * If the property is never registered but the class is known in the classpath, the method returns the default value.
+     * If not in classpath the {@code defaultValue} is returned.
+     *
+     * @param <C> the property type.
+     * @param <V> the value type.
      * @param propertyClass property class which defines the property.
      *
      * @return the current value of the given property type.
      *
-     * @throws org.openbase.jps.exception.JPNotAvailableException thrown if the given property could not be .
+     * @throws org.openbase.jps.exception.JPNotAvailableException thrown if the given property or value could not be found.
+     */
+    public static synchronized <V, C extends AbstractJavaProperty<V>> V getValue(Class<C> propertyClass) throws JPNotAvailableException {
+        return getProperty(propertyClass).getValue();
+    }
+
+    /**
+     * Returns the property related to the given {@code propertyClass}.
+     * <p>
+     * If the property is never registered but the class is known in the classpath, the method returns the default value.
+     *
+     * @param <C> the property type.
+     * @param propertyClass property class which defines the property.
+     *
+     * @return the property.
+     *
+     * @throws org.openbase.jps.exception.JPNotAvailableException thrown if the given property could not be found.
      */
     public static synchronized <C extends AbstractJavaProperty> C getProperty(Class<C> propertyClass) throws JPNotAvailableException {
         try {
@@ -553,9 +598,6 @@ public class JPService {
         }
     }
 
-    /**
-     * @return @throws JPServiceException
-     */
     private static List<AbstractJavaProperty> loadAllProperties(final boolean errorReport) throws JPServiceException {
         List<AbstractJavaProperty> properties = new ArrayList<>();
         Collection<Class<? extends AbstractJavaProperty>> currentlyregisteredPropertyClasses = new HashSet(registeredPropertyClasses);
