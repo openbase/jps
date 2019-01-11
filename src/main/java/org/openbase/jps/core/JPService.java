@@ -4,7 +4,7 @@ package org.openbase.jps.core;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2018 openbase.org
+ * Copyright (C) 2014 - 2019 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -27,6 +27,8 @@ import org.openbase.jps.preset.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Console;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -161,6 +163,7 @@ public class JPService {
      * Note: In case the JPUnitTestMode was enabled this method does not call exit.
      *
      * @param args Arguments given by the main method.
+     *
      * @throws RuntimeException is thrown only in test mode otherwise System.exit(255) is called.
      */
     public static void parseAndExitOnError(String[] args) throws RuntimeException {
@@ -526,16 +529,16 @@ public class JPService {
      * <p>
      * If the property is never registered but the class is known in the classpath, the method returns the default value.
      * If not in classpath the {@code defaultValue} is returned.
-     *
+     * <p>
      * Note: Method should only be used if it really doesn't matter if the property is available or not because no warning
      * will be printed in this case.
-     *
+     * <p>
      * Note: The given backup value in only used in error case and will not be used as default value. Property default
-     *       values can be defined during property registration.
+     * values can be defined during property registration.
      *
-     * @param <C> the property type.
-     * @param <V> the value type.
-     * @param backupValue the value used if the property could not be resolved.
+     * @param <C>           the property type.
+     * @param <V>           the value type.
+     * @param backupValue   the value used if the property could not be resolved.
      * @param propertyClass property class which defines the property.
      *
      * @return the current value of the given property type.
@@ -554,8 +557,8 @@ public class JPService {
      * If the property is never registered but the class is known in the classpath, the method returns the default value.
      * If not in classpath the {@code defaultValue} is returned.
      *
-     * @param <C> the property type.
-     * @param <V> the value type.
+     * @param <C>           the property type.
+     * @param <V>           the value type.
      * @param propertyClass property class which defines the property.
      *
      * @return the current value of the given property type.
@@ -571,7 +574,7 @@ public class JPService {
      * <p>
      * If the property is never registered but the class is known in the classpath, the method returns the default value.
      *
-     * @param <C> the property type.
+     * @param <C>           the property type.
      * @param propertyClass property class which defines the property.
      *
      * @return the property.
@@ -718,6 +721,37 @@ public class JPService {
             }
         }
         return text;
+    }
+
+    /**
+     * Method prints the info message and blocks the system input until the user confirms the message.
+     * Otherwise the cancel message will be printed and System.exit is called with the given exit code.
+     *
+     * @param infoMessage   the message to inform the user about the situation to confirm.
+     * @param cancelMessage the message which is printed in case the user rejects the action.
+     * @param exitCode      the exit code to use in case the user rejects the action.
+     */
+    public static final void awaitUserConfirmationOrExit(final String infoMessage, final String cancelMessage, final int exitCode) {
+        final Console console = System.console();
+        if (console == null) {
+            System.err.println(infoMessage);
+            try {
+                final int read = System.in.read();
+                if (read != 'y' && read != 'j' && read != 'z') {
+                    System.err.println(cancelMessage);
+                    System.exit(exitCode);
+                }
+            } catch (IOException ex) {
+                System.err.println(cancelMessage);
+                System.exit(exitCode);
+            }
+        } else {
+            String userConfirmation = console.readLine(infoMessage).toLowerCase();
+            if (!userConfirmation.contains("y") && !userConfirmation.contains("j") && !userConfirmation.contains("z")) {
+                System.err.println(cancelMessage);
+                System.exit(exitCode);
+            }
+        }
     }
 
 //	public void saveProperties() {
