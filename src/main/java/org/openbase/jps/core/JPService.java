@@ -27,6 +27,8 @@ import org.openbase.jps.preset.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Console;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -729,7 +731,7 @@ public class JPService {
      * @param cancelMessage the message which is printed in case the user rejects the action.
      * @param exitCode      the exit code to use in case the user rejects the action.
      */
-    public static final void awaitConfirmationOrExit(final String infoMessage, final String cancelMessage, final int exitCode) {
+    public static final void awaitUserConfirmationOrExit(final String infoMessage, final String cancelMessage, final int exitCode) {
         final Console console = System.console();
         if (console == null) {
             System.err.println(infoMessage);
