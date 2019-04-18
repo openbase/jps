@@ -34,11 +34,11 @@ import java.io.File;
  *
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
-public class JPUsrDirectory extends AbstractJPDirectory {
+public class JPSystemDirectory extends AbstractJPDirectory {
 
     public final static String[] COMMAND_IDENTIFIERS = {"--usr"};
 
-    public JPUsrDirectory() {
+    public JPSystemDirectory() {
         super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
     }
 
