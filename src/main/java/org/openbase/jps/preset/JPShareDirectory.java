@@ -27,6 +27,7 @@ import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.exception.JPValidationException;
 import org.openbase.jps.tools.FileHandler;
+import org.openbase.jps.tools.FileHandler.ExistenceHandling;
 
 /**
  *
@@ -37,7 +38,7 @@ public class JPShareDirectory extends AbstractJPDirectory {
     public final static String[] COMMAND_IDENTIFIERS = {"--share"};
 
     public JPShareDirectory() {
-        super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
+        super(COMMAND_IDENTIFIERS, ExistenceHandling.CanExist, FileHandler.AutoMode.Off);
         registerDependingProperty(JPPrefix.class);
     }
 

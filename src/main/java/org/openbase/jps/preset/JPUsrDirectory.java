@@ -22,6 +22,7 @@ package org.openbase.jps.preset;
  * #L%
  */
 
+import org.apache.commons.lang3.SystemUtils;
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.exception.JPValidationException;
@@ -43,12 +44,25 @@ public class JPUsrDirectory extends AbstractJPDirectory {
 
     @Override
     public File getParentDirectory() throws JPNotAvailableException {
-        // root folder
+
+        // on windows we return the windows dir.
+        if(SystemUtils.IS_OS_WINDOWS) {
+            return new File(System.getenv("WINDIR"));
+        }
+
+        // on unix based systems we return the root folder.
         return new File("/");
     }
 
     @Override
     protected File getPropertyDefaultValue() {
+
+        // on windows we return the system32 folder.
+        if(SystemUtils.IS_OS_WINDOWS) {
+            return new File("system32");
+        }
+
+        // on unix based systems we return the usr folder.
         return new File("usr");
     }
 
@@ -63,6 +77,6 @@ public class JPUsrDirectory extends AbstractJPDirectory {
 
     @Override
     public String getDescription() {
-        return "Specifies the global system usr directory which is used for storing variable application data like databases or models.";
+        return "Specifies the global system directory which is used to lookup static resources like databases, models, templates or images.";
     }
 }
