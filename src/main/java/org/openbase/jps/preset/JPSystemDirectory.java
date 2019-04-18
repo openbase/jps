@@ -22,36 +22,50 @@ package org.openbase.jps.preset;
  * #L%
  */
 
-import java.io.File;
+import org.apache.commons.lang3.SystemUtils;
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.exception.JPValidationException;
 import org.openbase.jps.tools.FileHandler;
-import org.openbase.jps.tools.FileHandler.ExistenceHandling;
+
+import java.io.File;
 
 /**
  *
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
-public class JPShareDirectory extends AbstractJPDirectory {
+public class JPSystemDirectory extends AbstractJPDirectory {
 
-    public final static String[] COMMAND_IDENTIFIERS = {"--share"};
+    public final static String[] COMMAND_IDENTIFIERS = {"--usr"};
 
-    public JPShareDirectory() {
-        super(COMMAND_IDENTIFIERS, ExistenceHandling.CanExist, FileHandler.AutoMode.Off);
-        registerDependingProperty(JPPrefix.class);
+    public JPSystemDirectory() {
+        super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
     }
 
     @Override
     public File getParentDirectory() throws JPNotAvailableException {
-        return JPService.getProperty(JPPrefix.class).getValue();
+
+        // on windows we return the windows dir.
+        if(SystemUtils.IS_OS_WINDOWS) {
+            return new File(System.getenv("WINDIR"));
+        }
+
+        // on unix based systems we return the root folder.
+        return new File("/");
     }
 
     @Override
     protected File getPropertyDefaultValue() {
-        return new File("share");
+
+        // on windows we return the system32 folder.
+        if(SystemUtils.IS_OS_WINDOWS) {
+            return new File("system32");
+        }
+
+        // on unix based systems we return the usr folder.
+        return new File("usr");
     }
-    
+
     @Override
     public void validate() throws JPValidationException {
         if (JPService.testMode()) {
@@ -63,6 +77,6 @@ public class JPShareDirectory extends AbstractJPDirectory {
 
     @Override
     public String getDescription() {
-        return "Specifies the global system share directory.";
+        return "Specifies the global system directory which is used to lookup static resources like databases, models, templates or images.";
     }
 }

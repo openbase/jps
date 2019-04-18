@@ -41,7 +41,7 @@ public class JPPrefix extends AbstractJPDirectory {
 
     public JPPrefix() {
         super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
-        registerDependingProperty(JPUsrDirectory.class);
+        registerDependingProperty(JPSystemDirectory.class);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class JPPrefix extends AbstractJPDirectory {
         }
 
         // use global usr folder as prefix
-        return JPService.getProperty(JPUsrDirectory.class).getValue();
+        return JPService.getProperty(JPSystemDirectory.class).getValue();
     }
 
     @Override

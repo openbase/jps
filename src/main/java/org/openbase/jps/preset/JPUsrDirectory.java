@@ -22,47 +22,9 @@ package org.openbase.jps.preset;
  * #L%
  */
 
-import org.openbase.jps.core.JPService;
-import org.openbase.jps.exception.JPNotAvailableException;
-import org.openbase.jps.exception.JPValidationException;
-import org.openbase.jps.tools.FileHandler;
-
-import java.io.File;
-
 /**
- *
- * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
+ * @deprecated This class is deprecated, please use JPSystemDirectory instead.
  */
-public class JPUsrDirectory extends AbstractJPDirectory {
-
-    public final static String[] COMMAND_IDENTIFIERS = {"--usr"};
-
-    public JPUsrDirectory() {
-        super(COMMAND_IDENTIFIERS, FileHandler.ExistenceHandling.Must, FileHandler.AutoMode.Off);
-    }
-
-    @Override
-    public File getParentDirectory() throws JPNotAvailableException {
-        // root folder
-        return new File("/");
-    }
-
-    @Override
-    protected File getPropertyDefaultValue() {
-        return new File("usr");
-    }
-
-    @Override
-    public void validate() throws JPValidationException {
-        if (JPService.testMode()) {
-            setAutoCreateMode(FileHandler.AutoMode.On);
-            setExistenceHandling(FileHandler.ExistenceHandling.Must);
-        }
-        super.validate();
-    }
-
-    @Override
-    public String getDescription() {
-        return "Specifies the global system usr directory which is used for storing variable application data like databases or models.";
-    }
+@Deprecated
+public class JPUsrDirectory extends JPSystemDirectory {
 }
