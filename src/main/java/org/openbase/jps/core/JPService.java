@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Console;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 
@@ -371,15 +373,16 @@ public class JPService {
     private static synchronized AbstractJavaProperty initProperty(Class<? extends AbstractJavaProperty> propertyClass) throws JPServiceException {
 
         try {
+            if (!registeredPropertyClasses.contains(propertyClass)) {
+                registeredPropertyClasses.add(propertyClass);
+            }
+
             // Avoid double initialization
             if (initializedProperties.containsKey(propertyClass)) {
                 throw new JPServiceException("Already initialized!");
             }
 
-            if (!registeredPropertyClasses.contains(propertyClass)) {
-                registeredPropertyClasses.add(propertyClass);
-            }
-            AbstractJavaProperty newInstance = propertyClass.newInstance();
+            AbstractJavaProperty newInstance = propertyClass.getConstructor().newInstance();
 
             initializedProperties.put(propertyClass, newInstance);
 
@@ -391,7 +394,7 @@ public class JPService {
             }
 
             return newInstance;
-        } catch (JPServiceException | InstantiationException | IllegalAccessException ex) {
+        } catch (JPServiceException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
             throw new JPInitializationException("Could not init " + propertyClass.getSimpleName(), ex);
         }
     }
@@ -424,21 +427,31 @@ public class JPService {
      * @throws JPServiceException
      */
     @SuppressWarnings("unchecked")
-    private static void loadProperty(final AbstractJavaProperty property) throws JPServiceException {
+    private static void loadProperty(final AbstractJavaProperty property, final boolean errorReport) throws JPServiceException {
 
         try {
             if (loadedProperties.containsKey(property.getClass()) && !loadedProperties.get(property.getClass()).neetToBeParsed()) {
                 return;
             }
 
-            parseProperty(property);
+            try {
+                parseProperty(property);
+            } catch (JPBadArgumentException ex) {
+                if (errorReport) {
+                    throw ex;
+                }
+            }
+
             if (overwrittenDefaultValueMap.containsKey(property.getClass())) {
                 property.overwriteDefaultValue(overwrittenDefaultValueMap.get(property.getClass()));
             }
+
             property.updateValue();
             property.validate();
         } catch (JPBadArgumentException | JPValidationException ex) {
-            throw new JPServiceException("Could not load " + property + "!", ex);
+            if (errorReport) {
+                throw new JPServiceException("Could not load " + property + "!", ex);
+            }
         }
 
         loadedProperties.put(property.getClass(), property);
@@ -582,6 +595,23 @@ public class JPService {
      * @throws org.openbase.jps.exception.JPNotAvailableException thrown if the given property could not be found.
      */
     public static synchronized <C extends AbstractJavaProperty> C getProperty(Class<C> propertyClass) throws JPNotAvailableException {
+        return getProperty(propertyClass, true);
+    }
+
+    /**
+     * Returns the property related to the given {@code propertyClass}.
+     * <p>
+     * If the property is never registered but the class is known in the classpath, the method returns the default value.
+     *
+     * @param <C>           the property type.
+     * @param propertyClass property class which defines the property.
+     * @param errorReport   skips exceptions if the property could not be loaded.
+     *
+     * @return the property.
+     *
+     * @throws org.openbase.jps.exception.JPNotAvailableException thrown if the given property could not be found.
+     */
+    private static synchronized <C extends AbstractJavaProperty> C getProperty(Class<C> propertyClass, final boolean errorReport) throws JPNotAvailableException {
         try {
             if (propertyClass == null) {
                 throw new JPNotAvailableException(propertyClass, new JPServiceException("Given propertyClass is a Nullpointer!"));
@@ -593,7 +623,7 @@ public class JPService {
                 if (!initializedProperties.containsKey(propertyClass)) {
                     initProperty(propertyClass);
                 }
-                loadProperty(initializedProperties.get(propertyClass));
+                loadProperty(initializedProperties.get(propertyClass), errorReport);
             }
             return (C) loadedProperties.get(propertyClass);
         } catch (JPServiceException ex) {
@@ -603,14 +633,14 @@ public class JPService {
 
     private static List<AbstractJavaProperty> loadAllProperties(final boolean errorReport) throws JPServiceException {
         List<AbstractJavaProperty> properties = new ArrayList<>();
-        Collection<Class<? extends AbstractJavaProperty>> currentlyregisteredPropertyClasses = new HashSet(registeredPropertyClasses);
+        Collection<Class<? extends AbstractJavaProperty>> currentlyRegisteredPropertyClasses = new HashSet(registeredPropertyClasses);
         boolean modification = true;
 
         // load recursive all properties which are not already loaded.
         while (modification) {
             modification = false;
 
-            for (Class<? extends AbstractJavaProperty> propertyClass : currentlyregisteredPropertyClasses) {
+            for (Class<? extends AbstractJavaProperty> propertyClass : currentlyRegisteredPropertyClasses) {
                 try {
                     properties.add(getProperty(propertyClass));
                 } catch (Exception ex) {
