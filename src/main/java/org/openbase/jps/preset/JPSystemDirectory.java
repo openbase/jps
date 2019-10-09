@@ -31,7 +31,6 @@ import org.openbase.jps.tools.FileHandler;
 import java.io.File;
 
 /**
- *
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public class JPSystemDirectory extends AbstractJPDirectory {
@@ -46,7 +45,7 @@ public class JPSystemDirectory extends AbstractJPDirectory {
     public File getParentDirectory() throws JPNotAvailableException {
 
         // on windows we return the windows dir.
-        if(SystemUtils.IS_OS_WINDOWS) {
+        if (SystemUtils.IS_OS_WINDOWS) {
             return new File(System.getenv("WINDIR"));
         }
 
@@ -58,7 +57,7 @@ public class JPSystemDirectory extends AbstractJPDirectory {
     protected File getPropertyDefaultValue() {
 
         // on windows we return the system32 folder.
-        if(SystemUtils.IS_OS_WINDOWS) {
+        if (SystemUtils.IS_OS_WINDOWS) {
             return new File("system32");
         }
 
