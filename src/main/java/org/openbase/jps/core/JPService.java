@@ -642,7 +642,7 @@ public class JPService {
 
             for (Class<? extends AbstractJavaProperty> propertyClass : currentlyRegisteredPropertyClasses) {
                 try {
-                    properties.add(getProperty(propertyClass));
+                    properties.add(getProperty(propertyClass, errorReport));
                 } catch (Exception ex) {
                     if (errorReport) {
                         throw new JPServiceException("Could not load Property[" + propertyClass.getSimpleName() + "]!", ex);
