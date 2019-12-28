@@ -27,6 +27,7 @@ package org.openbase.jps.preset;
  * #L%
  */
 
+import ch.qos.logback.classic.Level;
 import org.openbase.jps.exception.JPValidationException;
 
 /**
@@ -47,7 +48,14 @@ public class JPDebugMode extends AbstractJPBoolean {
 			logger.info("Debug mode enabled!");
 		}
 	}
-	
+
+	@Override
+	protected void loadAction() {
+		super.loadAction();
+		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+		root.setLevel(Level.DEBUG);
+	}
+
 	@Override
 	public String getDescription() {
 		return "Enables the debug mode.";
