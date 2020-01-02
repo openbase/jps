@@ -9,7 +9,7 @@ package org.openbase.jps.preset;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2019 openbase.org
+ * Copyright (C) 2014 - 2020 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -52,8 +52,6 @@ public class JPDebugMode extends AbstractJPBoolean {
 	@Override
 	protected void loadAction() {
 		super.loadAction();
-		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.DEBUG);
 	}
 
 	@Override

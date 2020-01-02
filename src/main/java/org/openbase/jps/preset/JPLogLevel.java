@@ -4,7 +4,7 @@ package org.openbase.jps.preset;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2019 openbase.org
+ * Copyright (C) 2014 - 2020 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JPLogLevel extends AbstractJPEnum<LogLevel> {
 
-    public final static String[] COMMAND_IDENTIFIERS = {"--visual-debug"};
+    public final static String[] COMMAND_IDENTIFIERS = {"--log-level"};
 
     enum LogLevel {
         TRACE, DEBUG, INFO, WARN, ERROR, OFF
