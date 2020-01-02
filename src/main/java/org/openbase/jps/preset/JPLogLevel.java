@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JPLogLevel extends AbstractJPEnum<LogLevel> {
 
-    public final static String[] COMMAND_IDENTIFIERS = {"--visual-debug"};
+    public final static String[] COMMAND_IDENTIFIERS = {"--log-level"};
 
     enum LogLevel {
         TRACE, DEBUG, INFO, WARN, ERROR, OFF

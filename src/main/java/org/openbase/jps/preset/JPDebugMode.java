@@ -52,8 +52,6 @@ public class JPDebugMode extends AbstractJPBoolean {
 	@Override
 	protected void loadAction() {
 		super.loadAction();
-		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.DEBUG);
 	}
 
 	@Override

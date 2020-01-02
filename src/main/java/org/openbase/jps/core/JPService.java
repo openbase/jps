@@ -62,6 +62,7 @@ public class JPService {
     private static void initJPSDefaultProperties() {
         registerProperty(JPHelp.class);
         registerProperty(JPVerbose.class);
+        registerProperty(JPLogLevel.class);
     }
 
     /**
@@ -541,26 +542,26 @@ public class JPService {
      * Returns the current value of the property related to the given {@code propertyClass}.
      * <p>
      * If the property is never registered but the class is known in the classpath, the method returns the default value.
-     * If not in classpath the {@code defaultValue} is returned.
+     * If not in classpath the {@code alternative} is returned.
      * <p>
      * Note: Method should only be used if it really doesn't matter if the property is available or not because no warning
      * will be printed in this case.
      * <p>
-     * Note: The given backup value in only used in error case and will not be used as default value. Property default
+     * Note: The given {@code alternative} is only used in error case and will not be used as default value. Property default
      * values can be defined during property registration.
      *
      * @param <C>           the property type.
      * @param <V>           the value type.
-     * @param backupValue   the value used if the property could not be resolved.
+     * @param alternative   the value used if the property could not be resolved.
      * @param propertyClass property class which defines the property.
      *
      * @return the current value of the given property type.
      */
-    public static synchronized <V, C extends AbstractJavaProperty<V>> V getValue(Class<C> propertyClass, final V backupValue) {
+    public static synchronized <V, C extends AbstractJavaProperty<V>> V getValue(Class<C> propertyClass, final V alternative) {
         try {
             return getProperty(propertyClass).getValue();
         } catch (JPNotAvailableException e) {
-            return backupValue;
+            return alternative;
         }
     }
 
