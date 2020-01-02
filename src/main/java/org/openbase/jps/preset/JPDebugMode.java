@@ -50,11 +50,6 @@ public class JPDebugMode extends AbstractJPBoolean {
 	}
 
 	@Override
-	protected void loadAction() {
-		super.loadAction();
-	}
-
-	@Override
 	public String getDescription() {
 		return "Enables the debug mode.";
 	}

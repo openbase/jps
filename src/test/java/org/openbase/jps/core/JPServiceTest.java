@@ -27,6 +27,7 @@ import org.openbase.jps.core.AbstractJavaProperty.ValueType;
 import org.openbase.jps.core.helper.*;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.preset.*;
+import org.openbase.jps.preset.JPLogLevel.LogLevel;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
@@ -45,6 +46,7 @@ public class JPServiceTest {
 
     @BeforeClass
     public static void setUpClass() throws JPServiceException {
+        JPService.registerProperty(JPLogLevel.class, LogLevel.DEBUG);
         JPService.setupJUnitTestMode();
     }
 
@@ -263,6 +265,7 @@ public class JPServiceTest {
 
     @Test
     public void testPrinting() throws Exception {
+        LoggerFactory.getLogger("TestMessage").debug("This is a debug message");
         LoggerFactory.getLogger("TestMessage").info("This is a info message");
         LoggerFactory.getLogger("TestMessage").warn("This is a important warning!");
         LoggerFactory.getLogger("TestMessage").error("This is an error message!");
