@@ -46,13 +46,13 @@ import java.util.*;
  */
 public class JPService {
 
-    private static final Set<Class<? extends AbstractJavaProperty>> registeredPropertyClasses = new HashSet<>();
-    private static final HashMap<Class<? extends AbstractJavaProperty>, AbstractJavaProperty> initializedProperties = new HashMap<>();
-    private static final HashMap<Class<? extends AbstractJavaProperty>, AbstractJavaProperty> loadedProperties = new HashMap<>();
-    private static final HashMap<Class<? extends AbstractJavaProperty>, Object> overwrittenDefaultValueMap = new HashMap<>();
+    private static final Set<Class<? extends AbstractJavaProperty<?>>> registeredPropertyClasses = new HashSet<>();
+    private static final HashMap<Class<? extends AbstractJavaProperty<?>>, AbstractJavaProperty<?>> initializedProperties = new HashMap<>();
+    private static final HashMap<Class<? extends AbstractJavaProperty<?>>, AbstractJavaProperty<?>> loadedProperties = new HashMap<>();
+    private static final HashMap<Class<? extends AbstractJavaProperty<?>>, Object> overwrittenDefaultValueMap = new HashMap<>();
     private static Logger LOGGER = LoggerFactory.getLogger(JPService.class);
     private static String applicationName = "";
-    private static Class applicationMainClass;
+    private static Class<?> applicationMainClass;
     private static boolean argumentsAnalyzed = false;
 
     static {
@@ -89,7 +89,7 @@ public class JPService {
      *
      * @param mainclass the application mainclass which is used to generate the application name.
      */
-    public static void setApplicationName(final Class mainclass) {
+    public static void setApplicationName(final Class<?> mainclass) {
         applicationMainClass = mainclass;
 
         // format and setup application name
@@ -138,7 +138,7 @@ public class JPService {
      *
      * @param propertyClass
      */
-    public static void registerProperty(Class<? extends AbstractJavaProperty> propertyClass) {
+    public static void registerProperty(Class<? extends AbstractJavaProperty<?>> propertyClass) {
         if (argumentsAnalyzed) {
             LOGGER.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
         }
@@ -339,7 +339,7 @@ public class JPService {
             // init recursive all properties which are not already initialized.
             while (modification) {
                 modification = false;
-                for (Class<? extends AbstractJavaProperty> propertyClass : new HashSet<>(registeredPropertyClasses)) {
+                for (Class<? extends AbstractJavaProperty<?>> propertyClass : new HashSet<>(registeredPropertyClasses)) {
                     if (!initializedProperties.containsKey(propertyClass)) {
                         initProperty(propertyClass);
                         modification = true;
@@ -371,7 +371,7 @@ public class JPService {
      *
      * @throws JPServiceException
      */
-    private static synchronized AbstractJavaProperty initProperty(Class<? extends AbstractJavaProperty> propertyClass) throws JPServiceException {
+    private static synchronized AbstractJavaProperty<?> initProperty(Class<? extends AbstractJavaProperty<?>> propertyClass) throws JPServiceException {
 
         try {
             if (!registeredPropertyClasses.contains(propertyClass)) {
@@ -383,12 +383,12 @@ public class JPService {
                 throw new JPServiceException("Already initialized!");
             }
 
-            AbstractJavaProperty newInstance = propertyClass.getConstructor().newInstance();
+            AbstractJavaProperty<?> newInstance = propertyClass.getConstructor().newInstance();
 
             initializedProperties.put(propertyClass, newInstance);
 
             // init load dependencies.
-            for (Class<? extends AbstractJavaProperty> dependentPropertyClass : (List<Class<? extends AbstractJavaProperty>>) newInstance.getDependencyList()) {
+            for (Class<? extends AbstractJavaProperty<?>> dependentPropertyClass : newInstance.getDependencyList()) {
                 if (!initializedProperties.containsKey(dependentPropertyClass)) {
                     initProperty(dependentPropertyClass);
                 }
@@ -427,8 +427,7 @@ public class JPService {
      *
      * @throws JPServiceException
      */
-    @SuppressWarnings("unchecked")
-    private static void loadProperty(final AbstractJavaProperty property, final boolean errorReport) throws JPServiceException {
+    private static <O> void loadProperty(final AbstractJavaProperty<O> property, final boolean errorReport) throws JPServiceException {
 
         try {
             if (loadedProperties.containsKey(property.getClass()) && !loadedProperties.get(property.getClass()).neetToBeParsed()) {
@@ -444,7 +443,7 @@ public class JPService {
             }
 
             if (overwrittenDefaultValueMap.containsKey(property.getClass())) {
-                property.overwriteDefaultValue(overwrittenDefaultValueMap.get(property.getClass()));
+                property.overwriteDefaultValue((O) overwrittenDefaultValueMap.get(property.getClass()));
             }
 
             property.updateValue();
@@ -455,7 +454,7 @@ public class JPService {
             }
         }
 
-        loadedProperties.put(property.getClass(), property);
+        loadedProperties.put((Class<? extends AbstractJavaProperty<?>>) property.getClass(), property);
         try {
             property.loadAction();
         } catch (Throwable ex) {
@@ -469,7 +468,7 @@ public class JPService {
      * @throws JPServiceException
      */
     private static void parseArguments(String[] args) throws JPServiceException {
-        AbstractJavaProperty lastProperty = null;
+        AbstractJavaProperty<?> lastProperty = null;
 
         for (String arg : args) {
             try {
@@ -499,7 +498,7 @@ public class JPService {
 
                 if (arg.startsWith("-") || arg.startsWith("--")) { // handle property
                     boolean unknownProperty = true;
-                    for (AbstractJavaProperty property : initializedProperties.values()) {
+                    for (AbstractJavaProperty<?> property : initializedProperties.values()) {
 
                         if (property.match(arg)) {
                             lastProperty = property;
@@ -528,7 +527,7 @@ public class JPService {
      *
      * @throws JPBadArgumentException
      */
-    private static void parseProperty(final AbstractJavaProperty property) throws JPBadArgumentException {
+    private static void parseProperty(final AbstractJavaProperty<?> property) throws JPBadArgumentException {
         if (property.neetToBeParsed()) {
             try {
                 property.parseArguments();
@@ -612,7 +611,7 @@ public class JPService {
      *
      * @throws org.openbase.jps.exception.JPNotAvailableException thrown if the given property could not be found.
      */
-    private static synchronized <C extends AbstractJavaProperty> C getProperty(Class<C> propertyClass, final boolean errorReport) throws JPNotAvailableException {
+    private static synchronized <C extends AbstractJavaProperty<?>> C getProperty(Class<C> propertyClass, final boolean errorReport) throws JPNotAvailableException {
         try {
             if (propertyClass == null) {
                 throw new JPNotAvailableException(propertyClass, new JPServiceException("Given propertyClass is a Nullpointer!"));
@@ -632,16 +631,16 @@ public class JPService {
         }
     }
 
-    private static List<AbstractJavaProperty> loadAllProperties(final boolean errorReport) throws JPServiceException {
-        List<AbstractJavaProperty> properties = new ArrayList<>();
-        Collection<Class<? extends AbstractJavaProperty>> currentlyRegisteredPropertyClasses = new HashSet(registeredPropertyClasses);
+    private static List<AbstractJavaProperty<?>> loadAllProperties(final boolean errorReport) throws JPServiceException {
+        List<AbstractJavaProperty<?>> properties = new ArrayList<>();
+        Collection<Class<? extends AbstractJavaProperty<?>>> currentlyRegisteredPropertyClasses = new HashSet(registeredPropertyClasses);
         boolean modification = true;
 
         // load recursive all properties which are not already loaded.
         while (modification) {
             modification = false;
 
-            for (Class<? extends AbstractJavaProperty> propertyClass : currentlyRegisteredPropertyClasses) {
+            for (Class<? extends AbstractJavaProperty<?>> propertyClass : currentlyRegisteredPropertyClasses) {
                 try {
                     properties.add(getProperty(propertyClass, errorReport));
                 } catch (Exception ex) {
@@ -665,15 +664,15 @@ public class JPService {
 
         String help = "\n\nusage: " + applicationName;
         String header = "";
-        List<AbstractJavaProperty> propertyList = new ArrayList(initializedProperties.values());
+        List<AbstractJavaProperty<?>> propertyList = new ArrayList(initializedProperties.values());
         Collections.sort(propertyList);
         header = propertyList.stream().map((property) -> " [" + property.getSyntax() + "]").reduce(header, (s, str) -> s.concat(str));
         help += newLineFormatter(header, "\n\t", 100);
         help += "\nwhere:\n";
 
-        List<AbstractJavaProperty> properties = loadAllProperties(false);
+        List<AbstractJavaProperty<?>> properties = loadAllProperties(false);
 
-        Collections.sort(properties, (AbstractJavaProperty o1, AbstractJavaProperty o2) -> {
+        Collections.sort(properties, (AbstractJavaProperty<?> o1, AbstractJavaProperty<?> o2) -> {
             try {
                 return o1.getDefaultExample().compareTo(o2.getDefaultExample());
             } catch (Exception ex) {
@@ -682,7 +681,7 @@ public class JPService {
             }
         });
 
-        for (AbstractJavaProperty property : properties) {
+        for (AbstractJavaProperty<?> property : properties) {
             help += "\t" + property.getSyntax() + " " + getDefault(property);
             help += "\n ";
             help += "\t\t" + newLineFormatter(property.getDescription(), "\n\t\t", 100);
@@ -718,7 +717,7 @@ public class JPService {
      *
      * @return
      */
-    private static String getDefault(AbstractJavaProperty property) {
+    private static String getDefault(AbstractJavaProperty<?> property) {
         return "[Default: " + property.getDefaultExample() + "]";
     }
 
@@ -788,7 +787,7 @@ public class JPService {
 //	public void saveProperties() {
 //		Properties properties = new Properties();
 //
-//		for (AbstractJavaProperty property : runProperties.values()) {
+//		for (AbstractJavaProperty<?> property : runProperties.values()) {
 //
 //			/* check if property is modifiered */
 //			if (property.getPropertyDefaultValue() != property.getValue()) {
