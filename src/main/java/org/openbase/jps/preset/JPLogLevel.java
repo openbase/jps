@@ -37,7 +37,7 @@ public class JPLogLevel extends AbstractJPEnum<LogLevel> {
 
     public final static String[] COMMAND_IDENTIFIERS = {"--log-level"};
 
-    enum LogLevel {
+    public enum LogLevel {
         TRACE, DEBUG, INFO, WARN, ERROR, OFF
     }
 
