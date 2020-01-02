@@ -68,9 +68,12 @@ public class JPLogLevel extends AbstractJPEnum<LogLevel> {
     }
 
     @Override
-    protected LogLevel parse(List<String> arguments) throws JPServiceException {
-        LogLevel logLevel = super.parse(arguments);
-        getRootLogger().setLevel(Level.valueOf(logLevel.name()));
-        return logLevel;
+    protected void loadAction() {
+        super.loadAction();
+        try {
+            getRootLogger().setLevel(Level.valueOf(getValue().name()));
+        } catch (JPServiceException e) {
+            logger.error("Could not apply log level!", e);
+        }
     }
 }

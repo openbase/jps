@@ -30,7 +30,7 @@ import org.openbase.jps.core.AbstractJavaProperty;
  */
 public class JPNotAvailableException extends JPServiceException {
 
-    public JPNotAvailableException(Class<? extends AbstractJavaProperty> propertyClass, final Throwable cause) {
+    public JPNotAvailableException(Class<? extends AbstractJavaProperty<?>> propertyClass, final Throwable cause) {
         super("Property["+propertyClass.getSimpleName()+"] is not available!", cause);
     }
 

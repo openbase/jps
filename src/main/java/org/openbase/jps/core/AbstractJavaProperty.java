@@ -45,7 +45,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
     protected final String[] argumentIdentifiers;
     protected final List<String> arguments;
     private final TreeMap<ValueType, Exception> errorReportMap;
-    private final List<Class<? extends AbstractJavaProperty>> dependencyList;
+    private final List<Class<? extends AbstractJavaProperty<?>>> dependencyList;
     protected String identifier;
     private V value;
     private V parsedValue;
@@ -287,11 +287,11 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
      *
      * @return a list of java properties.
      */
-    public final List<Class<? extends AbstractJavaProperty>> getDependencyList() {
+    public final List<Class<? extends AbstractJavaProperty<?>>> getDependencyList() {
         return dependencyList;
     }
 
-    protected final void registerDependingProperty(final Class<? extends AbstractJavaProperty> dependency) {
+    protected final void registerDependingProperty(final Class<? extends AbstractJavaProperty<?>> dependency) {
         assert dependency != null;
         dependencyList.add(dependency);
     }
