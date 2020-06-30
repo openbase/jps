@@ -4,7 +4,7 @@
 
     <groupId>org.openbase</groupId>
     <artifactId>jps</artifactId>
-    <version>3.4.20-SNAPSHOT</version>
+    <version>3.4.20</version>
     
     <name>JPS</name>
     <inceptionYear>2014</inceptionYear>
@@ -58,7 +58,7 @@
         <connection>scm:git:https://github.com/openbase/jps.git</connection>
         <developerConnection>scm:git:https://github.com/openbase/jps.git</developerConnection>
         <url>https://github.com/openbase/jps.git</url>
-      <tag>HEAD</tag>
+      <tag>v3.4.20</tag>
   </scm>
 
     <build>
