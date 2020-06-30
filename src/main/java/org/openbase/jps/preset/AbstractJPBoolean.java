@@ -29,10 +29,10 @@ package org.openbase.jps.preset;
 import org.openbase.jps.core.AbstractJavaProperty;
 import org.openbase.jps.exception.JPBadArgumentException;
 import org.openbase.jps.exception.JPNotAvailableException;
+
 import java.util.List;
 
 /**
- *
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
  */
 public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
@@ -40,11 +40,31 @@ public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
     public final static String[] ARGUMENT_IDENTIFIERS = {"BOOLEAN"};
 
     /**
-     *
      * @param commandIdentifier
      */
     public AbstractJPBoolean(String[] commandIdentifier) {
         super(commandIdentifier);
+    }
+
+    /**
+     * This is a advanced resolution implementation of multi properties
+     *
+     * @param commandIdentifier the possible command identifier.
+     *
+     * @return true if the property could be matched via an multi property declaration.
+     */
+    protected final boolean customMatch(final String commandIdentifier) {
+        // check if command identifier is a combination out of different property identifies passed as single chars
+        if (commandIdentifier.startsWith("-", 0) && !commandIdentifier.startsWith("-", 1) && commandIdentifier.length() > 2) {
+            // skip initial "-" and therefor start by index 1 till end
+            for (int i = 1; i < commandIdentifier.length(); i++) {
+                // check if single char is know as property
+                if (super.match("-" + commandIdentifier.substring(i, i + 1))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

@@ -484,6 +484,7 @@ public class JPService {
      */
     private static void parseArguments(final String[] args, final boolean skipUnknownProperties) throws JPServiceException {
         AbstractJavaProperty<?> lastProperty = null;
+        boolean unknownProperty = true;
 
         for (String arg : args) {
             try {
@@ -512,7 +513,7 @@ public class JPService {
                 }
 
                 if (arg.startsWith("-") || arg.startsWith("--")) { // handle property
-                    boolean unknownProperty = true;
+                    unknownProperty = true;
                     for (AbstractJavaProperty<?> property : initializedProperties.values()) {
 
                         if (property.match(arg)) {
@@ -526,8 +527,15 @@ public class JPService {
                         throw new JPParsingException("unknown property: " + arg);
                     }
                 } else {
+
+                    // skip arguments of unknown properties in case they should be skipped.
+                    if (skipUnknownProperties && unknownProperty) {
+                        continue;
+                    }
+
+                    // fail if value was found without any property declaration
                     if (lastProperty == null) {
-                        throw new JPParsingException("= bad property: " + arg);
+                        throw new JPParsingException("found value without property assignment: " + arg);
                     }
                     lastProperty.addArgument(arg);
                 }
@@ -605,17 +613,18 @@ public class JPService {
      *
      * @param <C>           the property type.
      * @param <V>           the value type.
-     * @param alternative   the value used if the property could not be resolved.
      * @param propertyClass property class which defines the property.
+     * @param args          Arguments given by the main method.
+     * @param alternative   the value used if the property could not be resolved.
      *
      * @return the current value of the given property type.
      *
      * @throws RuntimeException when method is called after application arguments were parsed.
      */
-    public static synchronized <V, C extends AbstractJavaProperty<V>> V getPreEvaluatedValue(Class<C> propertyClass, final V alternative) {
+    public static synchronized <V, C extends AbstractJavaProperty<V>> V getPreEvaluatedValue(Class<C> propertyClass, final String[] args, final V alternative) {
         try {
-            return getPreEvaluatedValue(propertyClass);
-        } catch (JPNotAvailableException e) {
+            return getPreEvaluatedValue(propertyClass, args);
+        } catch (JPServiceException e) {
             return alternative;
         }
     }
@@ -629,24 +638,27 @@ public class JPService {
      * @param <C>           the property type.
      * @param <V>           the value type.
      * @param propertyClass property class which defines the property.
+     * @param args          Arguments given by the main method.
      *
      * @return the current value of the given property type.
      *
-     * @throws org.openbase.jps.exception.JPNotAvailableException if the given property or value could not be found.
-     * @throws RuntimeException when method is called after application arguments were parsed.
+     * @throws JPNotAvailableException if the given property or value could not be found.
+     * @throws JPServiceException      if something went wrong during the pre-evaluation.
+     * @throws RuntimeException        when method is called after application arguments were parsed.
      */
-    public static synchronized <V, C extends AbstractJavaProperty<V>> V getPreEvaluatedValue(Class<C> propertyClass) throws JPNotAvailableException {
+    public static synchronized <V, C extends AbstractJavaProperty<V>> V getPreEvaluatedValue(final Class<C> propertyClass, final String[] args) throws JPServiceException {
 
         // validate that properties are not already parsed.
         if (argumentsAnalyzed) {
             throw new RuntimeException("Pre evaluated java property value was requested after the application arguments were parsed!");
         }
 
-        final Set<Class<? extends AbstractJavaProperty<?>>>  previouslyRegisteredPropertyClasses = new HashSet<>(registeredPropertyClasses);
+        final Set<Class<? extends AbstractJavaProperty<?>>> previouslyRegisteredPropertyClasses = new HashSet<>(registeredPropertyClasses);
         final HashMap<Class<? extends AbstractJavaProperty<?>>, Object> previouslyOverwrittenDefaultValueMap = new HashMap<>(overwrittenDefaultValueMap);
         final V value;
         try {
             JPService.registerProperty(propertyClass);
+            parse(args, true);
             value = getProperty(propertyClass).getValue();
         } finally {
 

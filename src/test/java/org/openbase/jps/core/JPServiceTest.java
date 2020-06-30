@@ -25,6 +25,7 @@ package org.openbase.jps.core;
 import org.junit.*;
 import org.openbase.jps.core.AbstractJavaProperty.ValueType;
 import org.openbase.jps.core.helper.*;
+import org.openbase.jps.core.helper.JPEnumTestProperty.TestEnum;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.preset.*;
 import org.openbase.jps.preset.JPLogLevel.LogLevel;
@@ -335,5 +336,75 @@ public class JPServiceTest {
         } catch (JPServiceException ex) {
             // finish
         }
+    }
+
+    @Test
+    public void testSkipUnknownPropertiesDuringParsing() throws Exception {
+        String[] testArgs = {"--xyz", "unknown", "-t", "custom"};
+        JPService.registerProperty(JPTestProperty.class);
+        try {
+            JPService.parse(testArgs, true);
+        } catch (JPServiceException ex) {
+            ex.printStackTrace(System.err);
+            Assert.fail("Should not fail!");
+        }
+    }
+
+    @Test
+    public void testGetPreEvaluatedValue() throws Exception {
+        final String magicValue = "custom";
+        String[] testArgs = {"--xyz", "unknown", "-t", magicValue};
+        JPService.registerProperty(JPTestProperty.class);
+        try {
+            Assert.assertEquals("Pre-evaluation returned wrong value!", magicValue, JPService.getPreEvaluatedValue(JPTestProperty.class, testArgs));
+        } catch (JPServiceException ex) {
+            Assert.fail("Should not fail!");
+        }
+    }
+
+    @Test
+    public void testGetPreEvaluatedValueWhenWrong() throws Exception {
+        final String magicValue = "custom";
+        String[] testArgs = {"--xyz", "unknown", "-t"};
+        JPService.registerProperty(JPTestProperty.class);
+        try {
+            Assert.assertEquals("Pre-evaluation returned wrong value!", magicValue, JPService.getPreEvaluatedValue(JPTestProperty.class, testArgs));
+            Assert.fail("Did not fail after property is missing!");
+        } catch (JPServiceException ex) {
+            // should fail since property value is missing
+        }
+    }
+
+    @Test
+    public void testGetPreEvaluatedValueAlternative() throws Exception {
+        final String alternative = "alternative";
+        String[] testArgs = {"--enum", "INVALID"};
+        JPService.registerProperty(JPEnumTestProperty.class);
+        Assert.assertEquals("Pre-evaluation returned wrong value!", alternative, JPService.getPreEvaluatedValue(JPTestProperty.class, testArgs, alternative));
+    }
+
+    @Test
+    public void testGetPreEvaluatedValueAfterParsing() throws Exception {
+        String[] testArgs = {"--enum", "GAMMA"};
+        JPService.registerProperty(JPEnumTestProperty.class);
+        JPService.parse(testArgs);
+        // after parsing an exception should be thrown.
+        try {
+            JPService.getPreEvaluatedValue(JPEnumTestProperty.class, testArgs,  TestEnum.BETA);
+            Assert.fail("Did not fail while pre evaluation was requested after parsing!");
+        } catch (RuntimeException ex) {
+            // should be thrown
+        }
+    }
+
+    @Test
+    public void testShortProperties() throws Exception {
+        String[] testArgs = {"-bs"};
+        JPService.registerProperty(JPBooleanTestProperty.class);
+        JPService.registerProperty(JPBooleanSecondTestProperty.class);
+        JPService.parse(testArgs);
+
+        Assert.assertTrue("Primary flag was not set!", JPService.getValue(JPBooleanTestProperty.class));
+        Assert.assertTrue("Secondary flag was not set!", JPService.getValue(JPBooleanSecondTestProperty.class));
     }
 }
