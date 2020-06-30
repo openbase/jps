@@ -396,4 +396,15 @@ public class JPServiceTest {
             // should be thrown
         }
     }
+
+    @Test
+    public void testShortProperties() throws Exception {
+        String[] testArgs = {"-bs"};
+        JPService.registerProperty(JPBooleanTestProperty.class);
+        JPService.registerProperty(JPBooleanSecondTestProperty.class);
+        JPService.parse(testArgs);
+
+        Assert.assertTrue("Primary flag was not set!", JPService.getValue(JPBooleanTestProperty.class));
+        Assert.assertTrue("Secondary flag was not set!", JPService.getValue(JPBooleanSecondTestProperty.class));
+    }
 }

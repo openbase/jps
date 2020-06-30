@@ -67,13 +67,26 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
         this.reset();
     }
 
-    protected final boolean match(String commandIdentifier) {
+    protected final boolean match(final String commandIdentifier) {
         for (String command : propertyIdentifiers) {
             if (command.equals(commandIdentifier)) {
                 identifier = commandIdentifier;
                 return true;
             }
         }
+
+        return customMatch(commandIdentifier);
+    }
+
+    /**
+     * Method can be overwritten by any sub class in order to implement and advanced matching strategy.
+     *
+     * @param commandIdentifier the possible command identifier.
+     *
+     * @return true if the given {@code commandIdentifier} matches with this property, otherwise false.
+     */
+    protected boolean customMatch(final String commandIdentifier) {
+        // method can be overwritten in order to support a custom matching implementation.
         return false;
     }
 
