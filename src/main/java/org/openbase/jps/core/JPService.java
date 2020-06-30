@@ -107,11 +107,7 @@ public class JPService {
      * @param defaultValue
      */
     public static synchronized <V, C extends AbstractJavaProperty<V>> void registerProperty(Class<C> propertyClass, V defaultValue) {
-        if (argumentsAnalyzed) {
-            LOGGER.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
-
-        }
-        registeredPropertyClasses.add(propertyClass);
+        registerProperty(propertyClass);
         overwrittenDefaultValueMap.put(propertyClass, defaultValue);
     }
 
@@ -128,7 +124,7 @@ public class JPService {
      */
     public static synchronized <V, C extends AbstractJavaProperty<V>> void overwriteDefaultValue(Class<C> propertyClass, V defaultValue) {
         if (argumentsAnalyzed) {
-            LOGGER.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
+            LOGGER.warn("Property modification after argument analysis detected! Read JPService doc for more information.");
         }
         overwrittenDefaultValueMap.put(propertyClass, defaultValue);
     }
@@ -140,7 +136,7 @@ public class JPService {
      */
     public static void registerProperty(Class<? extends AbstractJavaProperty<?>> propertyClass) {
         if (argumentsAnalyzed) {
-            LOGGER.warn("Property modification after argumend analysis detected! Read JPService doc for more information.");
+            LOGGER.warn("Property modification after argument analysis detected! Read JPService doc for more information.");
         }
         registeredPropertyClasses.add(propertyClass);
     }
@@ -266,6 +262,7 @@ public class JPService {
         try {
             printValueModification(args);
             initRegisteredProperties(args, skipUnknownProperties);
+            loadAllProperties(true);
         } catch (Exception ex) {
             throw new JPServiceException("Could not analyse arguments: " + ex.getMessage(), ex);
         }
@@ -368,15 +365,13 @@ public class JPService {
                 // unload all properties to apply recursive parsed changes.
                 loadedProperties.clear();
             }
-
-            loadAllProperties(true);
-
         } catch (JPServiceException ex) {
             throw new JPServiceException("Could not init registered properties!", ex);
         }
 
+        // section seems to be outdated since the JPHelp action does not print the help page anymore.
         //print help if required.
-        getProperty(JPHelp.class);
+        //getProperty(JPHelp.class);
     }
 
     /**
@@ -486,13 +481,13 @@ public class JPService {
         AbstractJavaProperty<?> lastProperty = null;
         boolean unknownProperty = true;
 
-        for (String arg : args) {
+        mainLoop : for (String arg : args) {
             try {
                 arg = arg.trim();
 
                 // handle final pattern
                 if (arg.equals("--")) {
-                    break;
+                    break mainLoop;
                 }
 
                 // handle default properties
@@ -506,23 +501,57 @@ public class JPService {
                         } else {
                             System.setProperty(propertyString, "");
                         }
-                        continue;
+                        continue mainLoop;
                     } catch (IllegalArgumentException | IndexOutOfBoundsException | SecurityException | NullPointerException ex) {
                         throw new JPParsingException("invalid system property syntax: " + arg);
                     }
                 }
 
                 if (arg.startsWith("-") || arg.startsWith("--")) { // handle property
+
+                    // init property related variables
                     unknownProperty = true;
+                    lastProperty = null;
+
+                    // detect single properties such as "-t" or "--test"
                     for (AbstractJavaProperty<?> property : initializedProperties.values()) {
 
                         if (property.match(arg)) {
+                            property.reset(); // In case of property overwriting during script recursion. Example: -p 5 -p 9
                             lastProperty = property;
-                            lastProperty.reset(); // In case of property overwriting during script recursion. Example: -p 5 -p 9
                             unknownProperty = false;
-                            break;
+                            continue mainLoop;
                         }
                     }
+
+                    // detect multi properties such as "-abc" where a, b, and c are different properties.
+                    if (arg.startsWith("-", 0) && !arg.startsWith("-", 1) && arg.length() > 2) {
+
+                        // reset unknown property flag which is set in the end as soon as one property could not be identified.
+                        unknownProperty = false;
+
+                        // skip initial "-" and therefor start by index 1 till end
+                        charLoop : for (int i = 1; i < arg.length(); i++) {
+                            final String singleArg = "-" + arg.substring(i, i + 1);
+                            // check if single char is know as property
+                            for (AbstractJavaProperty<?> property : initializedProperties.values()) {
+
+                                if (property.match(singleArg)) {
+                                    property.reset(); // In case of property overwriting during script recursion. Example: -p 5 -p 9
+                                    continue charLoop;
+                                }
+                            }
+
+                            // found at least one unknown property
+                            unknownProperty = true;
+
+                            if(!skipUnknownProperties) {
+                                throw new JPParsingException("unknown property: " + singleArg);
+                            }
+                        }
+                    }
+
+                    // handle unknown properties
                     if (!skipUnknownProperties && unknownProperty) {
                         throw new JPParsingException("unknown property: " + arg);
                     }
@@ -658,7 +687,7 @@ public class JPService {
         final V value;
         try {
             JPService.registerProperty(propertyClass);
-            parse(args, true);
+            initRegisteredProperties(args, true);
             value = getProperty(propertyClass).getValue();
         } finally {
 
@@ -758,7 +787,7 @@ public class JPService {
      */
     public static void printHelp() throws JPServiceException {
 
-        String help = "\n\nusage: " + applicationName;
+        String help = "Help Page:\n\nusage: " + applicationName;
         String header = "";
         List<AbstractJavaProperty<?>> propertyList = new ArrayList(initializedProperties.values());
         Collections.sort(propertyList);
@@ -902,7 +931,7 @@ public class JPService {
     /**
      *
      */
-    public static void reset() {
+    public static void reset() { //todo: make reset non public in next major release
         registeredPropertyClasses.clear();
         initializedProperties.clear();
         loadedProperties.clear();

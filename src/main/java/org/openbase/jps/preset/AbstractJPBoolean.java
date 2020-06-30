@@ -46,27 +46,6 @@ public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
         super(commandIdentifier);
     }
 
-    /**
-     * This is a advanced resolution implementation of multi properties
-     *
-     * @param commandIdentifier the possible command identifier.
-     *
-     * @return true if the property could be matched via an multi property declaration.
-     */
-    protected final boolean customMatch(final String commandIdentifier) {
-        // check if command identifier is a combination out of different property identifies passed as single chars
-        if (commandIdentifier.startsWith("-", 0) && !commandIdentifier.startsWith("-", 1) && commandIdentifier.length() > 2) {
-            // skip initial "-" and therefor start by index 1 till end
-            for (int i = 1; i < commandIdentifier.length(); i++) {
-                // check if single char is know as property
-                if (super.match("-" + commandIdentifier.substring(i, i + 1))) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     @Override
     protected String[] generateArgumentIdentifiers() {
         return ARGUMENT_IDENTIFIERS;
@@ -78,6 +57,7 @@ public abstract class AbstractJPBoolean extends AbstractJavaProperty<Boolean> {
         if (arguments.isEmpty()) { // parse as flag
             return true;
         }
+        // todo: provide a custom implementation since the default implementation even accepts stupid input as false e.g. "aoesnuth" -> false. Users may wont to get feedback in case there is a typo in "truoe" which would be otherwise just matched as false without any warning.
         return Boolean.parseBoolean(arguments.get(0)); // parse as argument
     }
 
