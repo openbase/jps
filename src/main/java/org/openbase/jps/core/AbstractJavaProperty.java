@@ -54,7 +54,7 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
     private boolean parsed;
 
     public AbstractJavaProperty(String[] propertyIdentifier) {
-        this.propertyIdentifiers = propertyIdentifier;
+        this.propertyIdentifiers = propertyIdentifier; //todo: pre-validate identifier in next major release by automatically generate the "-" on single char and "--" prefix and multi char identifier. Validate if prefix are already declared that they are conform.
         this.argumentIdentifiers = generateArgumentIdentifiers();
         this.arguments = new ArrayList<>(argumentIdentifiers.length);
         this.dependencyList = new ArrayList<>();
@@ -74,19 +74,6 @@ public abstract class AbstractJavaProperty<V> implements Comparable<AbstractJava
                 return true;
             }
         }
-
-        return customMatch(commandIdentifier);
-    }
-
-    /**
-     * Method can be overwritten by any sub class in order to implement and advanced matching strategy.
-     *
-     * @param commandIdentifier the possible command identifier.
-     *
-     * @return true if the given {@code commandIdentifier} matches with this property, otherwise false.
-     */
-    protected boolean customMatch(final String commandIdentifier) {
-        // method can be overwritten in order to support a custom matching implementation.
         return false;
     }
 
