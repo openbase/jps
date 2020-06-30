@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Console;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.Map.Entry;
 
 
 /**
@@ -174,6 +174,7 @@ public class JPService {
             JPService.parse(args);
         } catch (JPServiceException ex) {
             try {
+                // print help in any error case
                 JPService.printHelp();
             } catch (JPServiceException ex1) {
                 getApplicationLogger().error("Could not print help text!");
@@ -244,13 +245,27 @@ public class JPService {
      *
      * @param args Arguments given by the main method.
      *
-     * @throws JPServiceException
+     * @throws JPServiceException in case the {@code args} could not be parsed.
      */
     public static void parse(final String[] args) throws JPServiceException {
+        parse(args, false);
+    }
+
+    /**
+     * Analyze the input arguments and setup all registered Properties.
+     * <p>
+     * Make sure all desired properties are registered before calling this method. Otherwise the properties will not be listed in the help screen.
+     *
+     * @param args                  Arguments given by the main method.
+     * @param skipUnknownProperties flag defines if an exception should be thrown in case an unknown property is parsed, otherwise unknown properties are just skiped.
+     *
+     * @throws JPServiceException in case the {@code args} could not be parsed.
+     */
+    public static void parse(final String[] args, final boolean skipUnknownProperties) throws JPServiceException {
         argumentsAnalyzed = true;
         try {
             printValueModification(args);
-            initRegisteredProperties(args);
+            initRegisteredProperties(args, skipUnknownProperties);
         } catch (Exception ex) {
             throw new JPServiceException("Could not analyse arguments: " + ex.getMessage(), ex);
         }
@@ -320,7 +335,7 @@ public class JPService {
      * @throws JPServiceException is thrown if at least one property could not be initialized.
      */
     private static void initRegisteredProperties() throws JPServiceException {
-        initRegisteredProperties(null);
+        initRegisteredProperties(null, false);
     }
 
     /**
@@ -328,7 +343,7 @@ public class JPService {
      *
      * @throws JPServiceException
      */
-    private static void initRegisteredProperties(final String[] args) throws JPServiceException {
+    private static void initRegisteredProperties(final String[] args, final boolean skipUnknownProperties) throws JPServiceException {
 
         // reset already loaded properties.
         loadedProperties.clear();
@@ -348,7 +363,7 @@ public class JPService {
             }
 
             if (args != null) {
-                parseArguments(args);
+                parseArguments(args, skipUnknownProperties);
 
                 // unload all properties to apply recursive parsed changes.
                 loadedProperties.clear();
@@ -467,7 +482,7 @@ public class JPService {
      *
      * @throws JPServiceException
      */
-    private static void parseArguments(String[] args) throws JPServiceException {
+    private static void parseArguments(final String[] args, final boolean skipUnknownProperties) throws JPServiceException {
         AbstractJavaProperty<?> lastProperty = null;
 
         for (String arg : args) {
@@ -507,7 +522,7 @@ public class JPService {
                             break;
                         }
                     }
-                    if (unknownProperty) {
+                    if (!skipUnknownProperties && unknownProperty) {
                         throw new JPParsingException("unknown property: " + arg);
                     }
                 } else {
@@ -580,6 +595,75 @@ public class JPService {
      */
     public static synchronized <V, C extends AbstractJavaProperty<V>> V getValue(Class<C> propertyClass) throws JPNotAvailableException {
         return getProperty(propertyClass).getValue();
+    }
+
+    /**
+     * Returns a pre evaluated value of the property related to the given {@code propertyClass}.
+     * <p>
+     * Method is similar to the {@code getValue(..)} method, while this method temporarly registers the property, evaluates its value and resets jpsservice afterwards.
+     * Therefore, this method is only useful when property values are required but the parse method was not yet called.
+     *
+     * @param <C>           the property type.
+     * @param <V>           the value type.
+     * @param alternative   the value used if the property could not be resolved.
+     * @param propertyClass property class which defines the property.
+     *
+     * @return the current value of the given property type.
+     *
+     * @throws RuntimeException when method is called after application arguments were parsed.
+     */
+    public static synchronized <V, C extends AbstractJavaProperty<V>> V getPreEvaluatedValue(Class<C> propertyClass, final V alternative) {
+        try {
+            return getPreEvaluatedValue(propertyClass);
+        } catch (JPNotAvailableException e) {
+            return alternative;
+        }
+    }
+
+    /**
+     * Returns a pre evaluated value of the property related to the given {@code propertyClass}.
+     * <p>
+     * Method is similar to the {@code getValue(..)} method, while this method temporarly registers the property, evaluates its value and resets jpsservice afterwards.
+     * Therefore, this method is only useful when property values are required but the parse method was not yet called.
+     *
+     * @param <C>           the property type.
+     * @param <V>           the value type.
+     * @param propertyClass property class which defines the property.
+     *
+     * @return the current value of the given property type.
+     *
+     * @throws org.openbase.jps.exception.JPNotAvailableException if the given property or value could not be found.
+     * @throws RuntimeException when method is called after application arguments were parsed.
+     */
+    public static synchronized <V, C extends AbstractJavaProperty<V>> V getPreEvaluatedValue(Class<C> propertyClass) throws JPNotAvailableException {
+
+        // validate that properties are not already parsed.
+        if (argumentsAnalyzed) {
+            throw new RuntimeException("Pre evaluated java property value was requested after the application arguments were parsed!");
+        }
+
+        final Set<Class<? extends AbstractJavaProperty<?>>>  previouslyRegisteredPropertyClasses = new HashSet<>(registeredPropertyClasses);
+        final HashMap<Class<? extends AbstractJavaProperty<?>>, Object> previouslyOverwrittenDefaultValueMap = new HashMap<>(overwrittenDefaultValueMap);
+        final V value;
+        try {
+            JPService.registerProperty(propertyClass);
+            value = getProperty(propertyClass).getValue();
+        } finally {
+
+            // reset jpservice
+            JPService.reset();
+
+            // restore registered properties
+            for (final Class<? extends AbstractJavaProperty<?>> clazz : previouslyRegisteredPropertyClasses) {
+                JPService.registerProperty(clazz);
+            }
+
+            // restore application default values
+            for (Entry<Class<? extends AbstractJavaProperty<?>>, Object> defaultValuePair : previouslyOverwrittenDefaultValueMap.entrySet()) {
+                overwrittenDefaultValueMap.put(defaultValuePair.getKey(), defaultValuePair.getValue());
+            }
+        }
+        return value;
     }
 
     /**
