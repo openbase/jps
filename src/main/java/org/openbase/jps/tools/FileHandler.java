@@ -61,7 +61,7 @@ public class FileHandler {
     }
 
     public static File handle(String uri, FileType type, ExistenceHandling existenceHandling, AutoMode autoMode, FileCreator creator) throws Exception {
-        return handle(new File(uri), type, existenceHandling, autoMode);
+        return handle(new File(uri), type, existenceHandling, autoMode, creator);
     }
 
     public static File handle(File file, FileType type, ExistenceHandling existenceHandling, AutoMode autoMode) throws Exception {
