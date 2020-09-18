@@ -50,7 +50,8 @@ public class JPLogLevel extends AbstractJPEnum<LogLevel> {
         try {
             return LogLevel.valueOf(getRootLogger().getLevel().toString());
         } catch (Exception ex) {
-            throw new JPNotAvailableException(getClass(), ex);
+            logger.warn("Could detect default log level: {}", ex.getMessage());
+            return LogLevel.INFO;
         }
     }
 
@@ -64,6 +65,8 @@ public class JPLogLevel extends AbstractJPEnum<LogLevel> {
             return (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
         } catch (Exception ex) {
             throw new JPServiceException("RootLogger is not available!", ex);
+        } catch (NoClassDefFoundError ex) {
+            throw new JPServiceException("Logback logger framework seems not to be supported by this platform.", ex);
         }
     }
 
@@ -72,8 +75,8 @@ public class JPLogLevel extends AbstractJPEnum<LogLevel> {
         super.loadAction();
         try {
             getRootLogger().setLevel(Level.valueOf(getValue().name()));
-        } catch (JPServiceException e) {
-            logger.error("Could not apply log level!", e);
+        } catch (JPServiceException ex) {
+            logger.warn("Could not apply log level: {}", ex.getMessage());
         }
     }
 }
