@@ -56,6 +56,7 @@ public class JPService {
     private static Class<?> applicationMainClass;
     private static Class<?> submoduleMainClass;
     private static boolean argumentsAnalyzed = false;
+    private static String[] args = new String[0];
 
     static {
         initJPSDefaultProperties();
@@ -75,10 +76,11 @@ public class JPService {
     public static void setApplicationName(String name) {
 
         // remove Launcher and Controller suffixes
-        name.replaceAll("Launcher", "");
-        name.replaceAll("Controller", "");
+        final String[] prefixFilters = {"-"};
+        final String[] suffixFilters = {"launcher", "controller", "-"};
 
-        applicationName = name;
+        // store
+        applicationName = generateName(name, prefixFilters, suffixFilters);
     }
 
     /**
@@ -102,7 +104,7 @@ public class JPService {
         applicationMainClass = mainclass;
 
         // format and setup application name
-        setApplicationName(mainclass.getSimpleName().replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase());
+        setApplicationName(transformToKebabCase(mainclass.getSimpleName()));
     }
 
     /**
@@ -112,11 +114,11 @@ public class JPService {
      */
     public static void setSubmoduleName(String name) {
 
-        // remove Launcher and Controller suffixes
-        name.replaceAll("Launcher", "");
-        name.replaceAll("Controller", "");
+        final String[] prefixFilters = {getApplicationName().toLowerCase(), "-"};
+        final String[] suffixFilters = {"launcher", "controller", "-"};
 
-        submoduleName = name;
+        // store
+        submoduleName = generateName(name, prefixFilters, suffixFilters);
     }
 
     /**
@@ -139,7 +141,28 @@ public class JPService {
         submoduleMainClass = mainClass;
 
         // format and setup application name
-        setSubmoduleName(submoduleMainClass.getSimpleName().replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase());
+        setSubmoduleName(transformToKebabCase(submoduleMainClass.getSimpleName()));
+    }
+
+    private static String transformToKebabCase(String string) {
+        // to kebab case
+        return string.replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase();
+    }
+
+    private static String generateName(String name, final String[] prefixFilters, final String[] suffixFilters) {
+
+        // remove prefixes
+        for (String prefix : prefixFilters) {
+            name = name.toLowerCase().startsWith(prefix) ? name.substring(prefix.length()) : name;
+        }
+
+        // remove suffixes
+        for (String suffix : suffixFilters) {
+            name = name.toLowerCase().endsWith(suffix) ? name.substring(0, name.length() - suffix.length()) : name;
+        }
+
+        // trim
+        return name.trim();
     }
 
     /**
@@ -304,6 +327,7 @@ public class JPService {
      * @throws JPServiceException in case the {@code args} could not be parsed.
      */
     public static void parse(final String[] args, final boolean skipUnknownProperties) throws JPServiceException {
+        JPService.args = args;
         argumentsAnalyzed = true;
         try {
             printValueModification(args);
@@ -982,6 +1006,16 @@ public class JPService {
 //			}
 //		}
 //	}
+
+
+    /**
+     * Method delivers the pure arguments that has been passed during application startup.
+     *
+     * @return the application arguments as string array.
+     */
+    public static String[] getArgs() {
+        return args;
+    }
 
     /**
      *

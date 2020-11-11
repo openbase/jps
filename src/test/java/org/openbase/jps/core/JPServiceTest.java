@@ -466,4 +466,19 @@ public class JPServiceTest {
         JPService.registerProperty(JPBooleanSecondTestProperty.class);
         JPService.parseAndExitOnError(testArgs);
     }
+
+    @Test
+    public void testAppNameGeneration() throws Exception {
+        JPService.setApplicationName(JPService.class);
+        JPService.setSubmoduleName(JPServiceTest.class);
+
+        Assert.assertEquals("wrong application name generated", "jpservice", JPService.getApplicationName());
+        Assert.assertEquals("wrong submodule name generated", "test", JPService.getSubmoduleName());
+
+        JPService.setApplicationName("my-bad-controller");
+        JPService.setSubmoduleName("sub-module-launcher");
+
+        Assert.assertEquals("wrong application name generated", "my-bad", JPService.getApplicationName());
+        Assert.assertEquals("wrong submodule name generated", "sub-module", JPService.getSubmoduleName());
+    }
 }
