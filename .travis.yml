@@ -83,6 +83,6 @@ jobs:
 
           # trigger upstream projects
           for PROJECT in ${UPSTREAM_PROJECTS}; do
-              sh trigger-travis.sh openbase ${PROJECT} $TRAVIS_ACCESS_TOKEN
+              sh trigger-travis.sh --pro openbase ${PROJECT} $TRAVIS_ACCESS_TOKEN
           done
         fi
