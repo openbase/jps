@@ -6,8 +6,6 @@ dist: focal
 
 jdk:
   - openjdk11
-  - openjdk8
-  - openjdk-ea
 
 # cache disabled since it cause many issues where artifacts are not correctly updated.
 #cache:
