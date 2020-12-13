@@ -7,8 +7,7 @@ name: Maven Build and Deploy
 #  release:
 #    types: [created]
 on:
-  push:
-    branches:
+  push:  branches:
       - main
 
 jobs:
