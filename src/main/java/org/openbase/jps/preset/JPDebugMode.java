@@ -9,7 +9,7 @@ package org.openbase.jps.preset;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2020 openbase.org
+ * Copyright (C) 2014 - 2022 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -27,7 +27,6 @@ package org.openbase.jps.preset;
  * #L%
  */
 
-import ch.qos.logback.classic.Level;
 import org.openbase.jps.exception.JPValidationException;
 
 /**
