@@ -27,7 +27,6 @@ package org.openbase.jps.preset;
  * #L%
  */
 
-import ch.qos.logback.classic.Level;
 import org.openbase.jps.exception.JPValidationException;
 
 /**

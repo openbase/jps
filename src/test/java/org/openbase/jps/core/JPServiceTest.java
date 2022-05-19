@@ -22,20 +22,20 @@ package org.openbase.jps.core;
  * #L%
  */
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.openbase.jps.core.AbstractJavaProperty.ValueType;
 import org.openbase.jps.core.helper.*;
 import org.openbase.jps.core.helper.JPEnumTestProperty.TestEnum;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.preset.*;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 import org.openbase.jps.preset.JPLogLevel.LogLevel;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author <a href="mailto:divine@openbase.org">Divine Threepwood</a>
@@ -45,23 +45,23 @@ public class JPServiceTest {
     public JPServiceTest() {
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws JPServiceException {
         JPService.registerProperty(JPLogLevel.class, LogLevel.DEBUG);
         JPService.setupJUnitTestMode();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         JPService.setApplicationName("JPService UnitTest");
         JPService.registerProperty(JPTestMode.class, true);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         JPService.reset();
     }
@@ -75,7 +75,7 @@ public class JPServiceTest {
     public void testDebugFlagNotSet() throws Exception {
         String[] args = {"-v"};
         JPService.parse(args);
-        assertEquals(true, JPService.getProperty(JPVerbose.class).getValue());
+        Assertions.assertEquals(true, JPService.getProperty(JPVerbose.class).getValue());
     }
 
     /**
@@ -99,7 +99,7 @@ public class JPServiceTest {
         try {
             String[] args = {"UNKNOWNcOMMAND"};
             JPService.parse(args);
-            assertTrue("No error catched!", false);
+            fail("No error caught!");
         } catch (Exception ex) {
             assertTrue(true);
         }
@@ -296,10 +296,10 @@ public class JPServiceTest {
         String[] args = {"--locale", "uhthe"};
         try {
             JPService.parse(args);
-            Assert.fail("JPServiceException should be thrown!");
+            fail("JPServiceException should be thrown!");
         } catch (JPServiceException ex) {
             // finish
-            Assert.assertEquals("Wrong exception message!", "Given Language is unknown!", getInitialExceptionMessage(ex));
+            assertEquals("Given Language is unknown!", getInitialExceptionMessage(ex), "Wrong exception message!");
         }
     }
 
@@ -309,7 +309,7 @@ public class JPServiceTest {
         JPService.registerProperty(JPTestProperty.class);
         try {
             JPService.parseAndExitOnError(testArgs);
-            Assert.fail("Should have exited!");
+            fail("Should have exited!");
         } catch (RuntimeException ex) {
             // finish
         }
@@ -321,10 +321,10 @@ public class JPServiceTest {
         JPService.registerProperty(JPTestProperty.class);
         try {
             JPService.parse(testArgs);
-            Assert.fail("Should have exited!");
+            fail("Should have exited!");
         } catch (JPServiceException ex) {
             // finish
-            Assert.assertEquals("Wrong exception message!", "Missing property arguments!", getInitialExceptionMessage(ex));
+            assertEquals("Missing property arguments!", getInitialExceptionMessage(ex), "Wrong exception message!");
         }
     }
 
@@ -332,11 +332,11 @@ public class JPServiceTest {
     public void testBooleanPropertyDefaultValue() throws Exception {
         String[] testArgs = {"--"};
         try {
-            Assert.assertEquals("Type need to be property default.", ValueType.PropertyDefault, JPService.getProperty(JPBooleanTestProperty.class).getValueType());
-            Assert.assertEquals("Default value should have been true!", true, JPService.getProperty(JPBooleanTestProperty.class).getValue());
+            assertEquals(ValueType.PropertyDefault, JPService.getProperty(JPBooleanTestProperty.class).getValueType(), "Type need to be property default.");
+            assertEquals(true, JPService.getProperty(JPBooleanTestProperty.class).getValue(), "Default value should have been true!");
         } catch (JPServiceException ex) {
             // finish
-            Assert.fail("Should not fail!");
+            fail("Should not fail!");
         }
     }
 
@@ -348,7 +348,7 @@ public class JPServiceTest {
             JPService.parse(testArgs, true);
         } catch (JPServiceException ex) {
             ex.printStackTrace(System.err);
-            Assert.fail("Should not fail!");
+            fail("Should not fail!");
         }
     }
 
@@ -358,9 +358,9 @@ public class JPServiceTest {
         String[] testArgs = {"--xyz", "unknown", "-t", magicValue};
         JPService.registerProperty(JPTestProperty.class);
         try {
-            Assert.assertEquals("Pre-evaluation returned wrong value!", magicValue, JPService.getPreEvaluatedValue(JPTestProperty.class, testArgs));
+            assertEquals(magicValue, JPService.getPreEvaluatedValue(JPTestProperty.class, testArgs), "Pre-evaluation returned wrong value!");
         } catch (JPServiceException ex) {
-            Assert.fail("Should not fail!");
+            fail("Should not fail!");
         }
     }
 
@@ -370,11 +370,11 @@ public class JPServiceTest {
         String[] testArgs = {"--xyz", "unknown", "-t"};
         JPService.registerProperty(JPTestProperty.class);
         try {
-            Assert.assertEquals("Pre-evaluation returned wrong value!", magicValue, JPService.getPreEvaluatedValue(JPTestProperty.class, testArgs));
-            Assert.fail("Did not fail after property is missing!");
+            assertEquals(magicValue, JPService.getPreEvaluatedValue(JPTestProperty.class, testArgs), "Pre-evaluation returned wrong value!");
+            fail("Did not fail after property is missing!");
         } catch (JPServiceException ex) {
             // should fail since property value is missing
-            Assert.assertEquals("Wrong exception message!", "Missing property arguments!", getInitialExceptionMessage(ex));
+            assertEquals("Missing property arguments!", getInitialExceptionMessage(ex), "Wrong exception message!");
         }
     }
 
@@ -383,7 +383,7 @@ public class JPServiceTest {
         final TestEnum alternative = TestEnum.GAMMA;
         String[] testArgs = {"--enum", "INVALID"};
         JPService.registerProperty(JPEnumTestProperty.class);
-        Assert.assertEquals("Pre-evaluation returned wrong value!", alternative, JPService.getPreEvaluatedValue(JPEnumTestProperty.class, testArgs, alternative));
+        assertEquals(alternative, JPService.getPreEvaluatedValue(JPEnumTestProperty.class, testArgs, alternative),"Pre-evaluation returned wrong value!");
     }
 
     @Test
@@ -394,10 +394,10 @@ public class JPServiceTest {
         // after parsing an exception should be thrown.
         try {
             JPService.getPreEvaluatedValue(JPEnumTestProperty.class, testArgs,  TestEnum.BETA);
-            Assert.fail("Did not fail while pre evaluation was requested after parsing!");
+            fail("Did not fail while pre evaluation was requested after parsing!");
         } catch (RuntimeException ex) {
             // should be thrown
-            Assert.assertEquals("Wrong exception message!", "Pre evaluated java property value was requested after the application arguments were parsed!", getInitialExceptionMessage(ex));
+            assertEquals("Pre evaluated java property value was requested after the application arguments were parsed!", getInitialExceptionMessage(ex), "Wrong exception message!");
         }
     }
 
@@ -408,8 +408,8 @@ public class JPServiceTest {
         JPService.registerProperty(JPBooleanSecondTestProperty.class);
         JPService.parse(testArgs);
 
-        Assert.assertTrue("Primary flag was not set!", JPService.getValue(JPBooleanTestProperty.class));
-        Assert.assertTrue("Secondary flag was not set!", JPService.getValue(JPBooleanSecondTestProperty.class));
+        assertTrue(JPService.getValue(JPBooleanTestProperty.class), "Primary flag was not set!");
+        assertTrue(JPService.getValue(JPBooleanSecondTestProperty.class), "Secondary flag was not set!");
     }
 
     @Test
@@ -419,10 +419,10 @@ public class JPServiceTest {
         JPService.registerProperty(JPTestProperty.class);
         try {
             JPService.parse(testArgs);
-            Assert.fail("Did not fail while parsing invalid command line arguments");
+            fail("Did not fail while parsing invalid command line arguments");
         } catch (JPServiceException ex) {
             // should be thrown
-            Assert.assertEquals("Wrong exception message!", "unknown property: -o", getInitialExceptionMessage(ex));
+            assertEquals("unknown property: -o", getInitialExceptionMessage(ex), "Wrong exception message!");
         }
     }
 
@@ -439,10 +439,10 @@ public class JPServiceTest {
         JPService.registerProperty(JPEnumTestProperty.class);
         try {
             JPService.parse(testArgs);
-            Assert.fail("Did not fail while parsing invalid command line arguments");
+            fail("Did not fail while parsing invalid command line arguments");
         } catch (JPServiceException ex) {
             // should be thrown
-            Assert.assertEquals("Wrong exception message!", "unknown property: --invalid", getInitialExceptionMessage(ex));
+            assertEquals("unknown property: --invalid", getInitialExceptionMessage(ex), "Wrong exception message!");
         }
     }
 
@@ -452,10 +452,10 @@ public class JPServiceTest {
         JPService.registerProperty(JPEnumTestProperty.class);
         try {
             JPService.parse(testArgs);
-            Assert.fail("Did not fail while parsing invalid command line arguments");
+            fail("Did not fail while parsing invalid command line arguments");
         } catch (JPServiceException ex) {
             // should be thrown
-            Assert.assertEquals("Wrong exception message!", "No enum constant org.openbase.jps.core.helper.JPEnumTestProperty.TestEnum.OAEIUOEU", getInitialExceptionMessage(ex));
+            assertEquals("No enum constant org.openbase.jps.core.helper.JPEnumTestProperty.TestEnum.OAEIUOEU", getInitialExceptionMessage(ex), "Wrong exception message!");
         }
     }
 
@@ -468,17 +468,17 @@ public class JPServiceTest {
     }
 
     @Test
-    public void testAppNameGeneration() throws Exception {
+    public void testAppNameGeneration() {
         JPService.setApplicationName(JPService.class);
         JPService.setSubmoduleName(JPServiceTest.class);
 
-        Assert.assertEquals("wrong application name generated", "jpservice", JPService.getApplicationName());
-        Assert.assertEquals("wrong submodule name generated", "test", JPService.getSubmoduleName());
+        assertEquals("jpservice", JPService.getApplicationName(), "wrong application name generated");
+        assertEquals("test", JPService.getSubmoduleName(), "wrong submodule name generated");
 
         JPService.setApplicationName("my-bad-controller");
         JPService.setSubmoduleName("sub-module-launcher");
 
-        Assert.assertEquals("wrong application name generated", "my-bad", JPService.getApplicationName());
-        Assert.assertEquals("wrong submodule name generated", "sub-module", JPService.getSubmoduleName());
+        assertEquals("my-bad", JPService.getApplicationName(), "wrong application name generated");
+        assertEquals("sub-module", JPService.getSubmoduleName(), "wrong submodule name generated");
     }
 }
