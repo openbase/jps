@@ -23,6 +23,8 @@ package org.openbase.jps.preset;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+
 import org.apache.commons.io.FileUtils;
 import org.openbase.jps.core.JPService;
 import org.openbase.jps.exception.JPValidationException;
@@ -39,6 +41,7 @@ public class JPTmpDirectory extends AbstractJPDirectory {
     public final static String SYSTEM_TMP_DIRECTORY = System.getProperty("java.io.tmpdir", "/tmp");
     public final static String TEST_DIRECTORY = "test";
     public final static String[] COMMAND_IDENTIFIERS = {"--tmp"};
+    private final static Object deletionLock = new Object();
     
     private File tmpDefaultDirectory;
 
@@ -47,44 +50,55 @@ public class JPTmpDirectory extends AbstractJPDirectory {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                try {
-                    
-                    // just exit if not yet available
-                    if(getValue() == null) {
-                        return;
-                    }
+                synchronized (deletionLock) {
+                    try {
 
-                    // cleanup tmp folder
-                    if (getValue().exists()) {
-                        FileUtils.deleteQuietly(getValue());
-                    }
-                    // cleanup parent folder if structure is known
-                    if (getValue().getAbsolutePath().equals(tmpDefaultDirectory.getAbsolutePath())) {
-                        if (JPService.testMode()) {
-                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
-                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY));
-                        } else {
-                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
+                        // just exit if not yet available
+                        if (getValue() == null) {
+                            return;
                         }
-                    }
 
-                } catch (IllegalArgumentException ex) {
-                    JPService.printError("Could not delete tmp directory!", ex);
+                        // cleanup tmp folder
+                        if (getValue().exists()) {
+                            FileUtils.deleteQuietly(getValue());
+                        }
+                        // cleanup parent folder if structure is known
+                        if (getValue().getAbsolutePath().equals(tmpDefaultDirectory.getAbsolutePath())) {
+                            if (JPService.testMode()) {
+                                deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
+                                deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY));
+                            } else {
+                                deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
+                            }
+                        }
+
+                    } catch (IllegalArgumentException ex) {
+                        JPService.printError("Could not delete tmp directory!", ex);
+                    }
                 }
             }
         });
     }
 
     private void deleteDirectoryIfEmpty(final File file) {
-        if (!file.isDirectory()) {
+        if (file == null || !file.isDirectory()) {
             return;
         }
-        for (File child : file.listFiles()) {
-            deleteDirectoryIfEmpty(child);
+
+        // recursive deletion of empty folders.
+        final File[] subfiles = file.listFiles();
+        if(subfiles != null && subfiles.length > 0) {
+            for (File child : Objects.requireNonNull(subfiles)) {
+                deleteDirectoryIfEmpty(child);
+            }
         }
 
-        if (file.listFiles().length == 0) {
-            FileUtils.deleteQuietly(file);
+        try {
+            if (FileUtils.isEmptyDirectory(file)) {
+                FileUtils.deleteQuietly(file);
+            }
+        } catch (IOException ex) {
+            // do nothing if empty check fails.
         }
     }
 
