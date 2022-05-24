@@ -47,37 +47,34 @@ public class JPTmpDirectory extends AbstractJPDirectory {
 
     public JPTmpDirectory() {
         super(COMMAND_IDENTIFIERS, ExistenceHandling.Must, AutoMode.Off);
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                synchronized (deletionLock) {
-                    try {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            synchronized (deletionLock) {
+                try {
 
-                        // just exit if not yet available
-                        if (getValue() == null) {
-                            return;
-                        }
-
-                        // cleanup tmp folder
-                        if (getValue().exists()) {
-                            FileUtils.deleteQuietly(getValue());
-                        }
-                        // cleanup parent folder if structure is known
-                        if (getValue().getAbsolutePath().equals(tmpDefaultDirectory.getAbsolutePath())) {
-                            if (JPService.testMode()) {
-                                deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
-                                deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY));
-                            } else {
-                                deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
-                            }
-                        }
-
-                    } catch (IllegalArgumentException ex) {
-                        JPService.printError("Could not delete tmp directory!", ex);
+                    // just exit if not yet available
+                    if (getValue() == null) {
+                        return;
                     }
+
+                    // cleanup tmp folder
+                    if (getValue().exists()) {
+                        FileUtils.deleteQuietly(getValue());
+                    }
+                    // cleanup parent folder if structure is known
+                    if (getValue().getAbsolutePath().equals(tmpDefaultDirectory.getAbsolutePath())) {
+                        if (JPService.testMode()) {
+                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
+                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + TEST_DIRECTORY));
+                        } else {
+                            deleteDirectoryIfEmpty(new File(SYSTEM_TMP_DIRECTORY + File.separatorChar + convertIntoValidFileName(JPService.getApplicationName())));
+                        }
+                    }
+
+                } catch (IllegalArgumentException ex) {
+                    JPService.printError("Could not delete tmp directory!", ex);
                 }
             }
-        });
+        }));
     }
 
     private void deleteDirectoryIfEmpty(final File file) {
