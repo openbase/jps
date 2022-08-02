@@ -46,10 +46,10 @@ import java.util.Map.Entry;
  */
 public class JPService {
 
-    private static final Set<Class<? extends AbstractJavaProperty<?>>> registeredPropertyClasses = new HashSet<>();
-    private static final HashMap<Class<? extends AbstractJavaProperty<?>>, AbstractJavaProperty<?>> initializedProperties = new HashMap<>();
-    private static final HashMap<Class<? extends AbstractJavaProperty<?>>, AbstractJavaProperty<?>> loadedProperties = new HashMap<>();
-    private static final HashMap<Class<? extends AbstractJavaProperty<?>>, Object> overwrittenDefaultValueMap = new HashMap<>();
+    private static final Set<Class<? extends AbstractJavaProperty<?>>> registeredPropertyClasses = Collections.synchronizedSet(new HashSet<>());
+    private static final Map<Class<? extends AbstractJavaProperty<?>>, AbstractJavaProperty<?>> initializedProperties = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<Class<? extends AbstractJavaProperty<?>>, AbstractJavaProperty<?>> loadedProperties = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<Class<? extends AbstractJavaProperty<?>>, Object> overwrittenDefaultValueMap = Collections.synchronizedMap(new HashMap<>());
     private static Logger LOGGER = LoggerFactory.getLogger(JPService.class);
     private static String applicationName = "";
     private static String submoduleName = "";
