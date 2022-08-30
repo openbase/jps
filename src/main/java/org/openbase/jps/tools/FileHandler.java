@@ -178,6 +178,6 @@ public class FileHandler {
 
     public interface FileCreator {
 
-        public abstract boolean create(File file) throws Exception;
+        boolean create(File file) throws Exception;
     }
 }
