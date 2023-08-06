@@ -8,7 +8,7 @@ package org.openbase.jps.tools;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2022 openbase.org
+ * Copyright (C) 2014 - 2023 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -178,6 +178,6 @@ public class FileHandler {
 
     public interface FileCreator {
 
-        public abstract boolean create(File file) throws Exception;
+        boolean create(File file) throws Exception;
     }
 }

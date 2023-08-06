@@ -4,7 +4,7 @@ package org.openbase.jps.core;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2022 openbase.org
+ * Copyright (C) 2014 - 2023 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -59,10 +59,10 @@ public class JPService {
     private static String[] args = new String[0];
 
     static {
-        initJPSDefaultProperties();
+        registerJPSDefaultProperties();
     }
 
-    private static void initJPSDefaultProperties() {
+    private static void registerJPSDefaultProperties() {
         registerProperty(JPHelp.class);
         registerProperty(JPVerbose.class);
         registerProperty(JPLogLevel.class);
@@ -959,7 +959,7 @@ public class JPService {
 
     /**
      * Method prints the info message and blocks the system input until the user confirms the message.
-     * Otherwise the cancel message will be printed and System.exit is called with the given exit code.
+     * Otherwise, the cancel message will be printed and System.exit is called with the given exit code.
      *
      * @param infoMessage   the message to inform the user about the situation to confirm.
      * @param cancelMessage the message which is printed in case the user rejects the action.
@@ -1018,50 +1018,30 @@ public class JPService {
     }
 
     /**
-     *
+     * Reset the entire property configuration.
      */
-    public static void reset() { //todo: make reset non public in next major release
+    public static void reset() {
         registeredPropertyClasses.clear();
         initializedProperties.clear();
         loadedProperties.clear();
         overwrittenDefaultValueMap.clear();
         argumentsAnalyzed = false;
-        initJPSDefaultProperties();
+        registerJPSDefaultProperties();
     }
 
     public static boolean testMode() {
-        try {
-            return JPService.getProperty(JPTestMode.class).getValue();
-        } catch (JPServiceException ex) {
-            printError("Could not detect TestMode!", ex);
-        }
-        return false;
+        return JPService.getValue(JPTestMode.class, false);
     }
 
     public static boolean verboseMode() {
-        try {
-            return JPService.getProperty(JPVerbose.class).getValue();
-        } catch (JPServiceException ex) {
-            printError("Could not detect VerboseMode!", ex);
-        }
-        return false;
+        return JPService.getValue(JPVerbose.class, false);
     }
 
     public static boolean forceMode() {
-        try {
-            return JPService.getProperty(JPForce.class).getValue();
-        } catch (JPServiceException ex) {
-            printError("Could not detect ForceMode!", ex);
-        }
-        return false;
+        return JPService.getValue(JPForce.class, false);
     }
 
     public static boolean debugMode() {
-        try {
-            return JPService.getProperty(JPDebugMode.class).getValue();
-        } catch (JPServiceException ex) {
-            printError("Could not detect DebugMode!", ex);
-        }
-        return false;
+        return JPService.getValue(JPDebugMode.class, false);
     }
 }

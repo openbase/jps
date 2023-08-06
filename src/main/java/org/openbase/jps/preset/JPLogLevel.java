@@ -4,7 +4,7 @@ package org.openbase.jps.preset;
  * #%L
  * JPS
  * %%
- * Copyright (C) 2014 - 2022 openbase.org
+ * Copyright (C) 2014 - 2023 openbase.org
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,7 +23,6 @@ package org.openbase.jps.preset;
  */
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import java.util.List;
 import org.openbase.jps.exception.JPNotAvailableException;
 import org.openbase.jps.exception.JPServiceException;
 import org.openbase.jps.preset.JPLogLevel.LogLevel;
